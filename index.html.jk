@@ -1,0 +1,51 @@
+<html>
+        <head>
+        <title>This Website is Hosted by ProperHost</title>
+        <style type="text/css">
+                body { text-align: center; font-family: "Segoe UI", arial, sans-serif; background-color: #eaeaea; padding: 0; margin: 0; color: #505050; font-size: 1.2em; }
+                .header { padding: 30px; background: #fff url('http://www.properhost.com/img/gray-white-vertical-gradient.png') 0 0 repeat-x; }
+                .main { padding: 30px; background: #505050; color: #eaeaea;}
+                h1 { font-size: 1.3em; font-weight: normal; text-transform: uppercase; }
+                h2 { margin-top: 0; }
+                .solutions { margin-top: 50px; }
+                a { color: #505050; text-decoration: none; }
+                a:hover { text-decoration: underline; }
+                nav ul { list-style: none; }
+                nav ul li { display: inline; margin-left: 50px; }
+                nav ul li a { color: #c00; font-weight: bold; }
+        </style>
+        </head>
+
+        <body>
+
+        <div class="header">
+                <p>
+                <img src="http://www.properhost.com/img/properhost-large.png" alt="ProperHost" />
+                </p>
+
+                <h1>This Website is Hosted by <a href="http://www.properhost.com">ProperHost</a></h1>
+        </div>
+
+        <div class="main">
+        <h2>Congratulations!</h2>
+        <p>This hosting account has been activated, but no website has yet been uploaded.</p>
+
+        <p><em>If you are the owner of this website, please replace this <strong>index.html</strong> with your website using FTP or the cPanel File Manager.</em></p>
+
+        </div>
+
+        <h3 class="solutions">Premium Hosting Solutions</h3>
+        <nav>
+                <ul>
+                        <li><a href="http://www.properhost.com/magento-hosting">Best Magento Hosting</a></li>
+                        <li><a href="http://www.properhost.com/magento-reseller-hosting">Magento Reseller Hosting</a></li>
+                        <li><a href="http://www.properhost.com/dedicated-magento-hosting">Managed Magento Servers</a></li>
+                </ul>
+        </nav>
+
+        <p><br /><a href="http://www.properhost.com">www.properhost.com</a></p>
+
+        </body>
+
+</html>
+

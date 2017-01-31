@@ -1,0 +1,688 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<payment>
+			<groups>
+				<pbbinvoice translate="label" module="paybybill">
+					<label>PayByBill Invoice</label>
+					<sort_order>671</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<comment><![CDATA[
+<div class="custom-options">
+<div class="box">
+<br />
+<p class="grand-total">Opprett avtale med Gothia/PayByBill<br /><b></b></p>
+
+Kontakt oss helt gratis om du har spørsmål til søknadsskjemaene eller kostnadene rundt løsningen.<br />
+<label>Epost <a href="mailto:support@trollweb.no"><b>support@trollweb.no</b></a></label><br />
+Telefon <b>+47 51215300</b> (0800-1600, man-fre)<br />
+<br />
+<font size=1>Paybybill modulen er utviklet av <a href="http://www.trollweb.no">Trollweb Solutions AS</a> i Norge og er sertifisert og godkjent av Gothia. Videredistribusjon av noe slag er ikke tillatt uten etter avtale med Trollweb.</font><br />
+ <br />
+</div>
+</div>					
+]]></comment>
+					<fields>
+							<active translate="label">
+								<label>Aktiv</label>
+								<frontend_type>select</frontend_type>
+								<source_model>adminhtml/system_config_source_yesno</source_model>
+								<sort_order>1</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+							</active>
+	
+							<title translate="label">
+								<label>Tittel</label>
+								<frontend_type>text</frontend_type>
+								<sort_order>2</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>1</show_in_website>
+								<show_in_store>1</show_in_store>
+								<comment><![CDATA[Tekst som vises på PayByBill betalingsvalget i nettbutikken.]]></comment>
+              </title>
+<!-- 
+              <regcode translate="label">
+                  <label>Registreringskode</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>3</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment><![CDATA[Din registreringskode fra Trollweb. <a href="http://www.trollweb.no/paybybill/getregcode">Klikk her for å generere din registreringskode helt gratis</a>.]]></comment>
+              </regcode>
+ -->
+
+              <username translate="label">
+                  <label>Username</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>20</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </username>
+
+              <password translate="label">
+                  <label>Password</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>21</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </password>
+
+              <clientid translate="label">
+                  <label>Client ID</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>22</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </clientid>
+
+              <invoice_fee translate="label">
+                  <label>Invoice Fee</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>30</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_fee>
+
+              <invoice_fee_tax_class translate="label">
+                  <label>Invoice Fee Tax Class</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                  <sort_order>31</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_fee_tax_class>
+
+              <invoice_profile translate="label">
+                  <label>Invoice Profile</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>35</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_profile>
+
+              <invoice_duedate translate="label">
+                  <label>Invoice Due Date</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>36</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_duedate>
+
+              <invoice_late_fee translate="label">
+                <label>Late fee %</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>38</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+              </invoice_late_fee>
+
+              
+              <distribution_by translate="label">
+                  <label>Distribution by</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>paybybill/system_config_source_distribution</source_model>
+                  <sort_order>40</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>Who is going to distribute the invoice.</comment>
+              </distribution_by>
+
+              <distribution_type translate="label">
+                  <label>Distribution type</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>paybybill/system_config_source_distributiontype</source_model>
+                  <sort_order>40</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>How is the invoice sent.</comment>
+              </distribution_type>
+
+              <social_status_mapping>
+                <label>Social Status mapping</label>
+                <frontend_model>paybybill/adminhtml_form_field_socialtitle</frontend_model>
+                <backend_model>paybybill/system_config_backend_socialtitle</backend_model>
+                <sort_order>50</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+              </social_status_mapping>
+              
+              <external_erp>
+                <label>Eksternal ERP system</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>80</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <comment>Set this to YES if you got an external ERP system that is sending invoices and credit memos to PBB</comment>                
+              </external_erp>
+
+              <specificcountry translate="label">
+                  <label>Spesifiser hvilke land som kan bruke PayByBill</label>
+                  <frontend_type>multiselect</frontend_type>
+                  <sort_order>90</sort_order>
+                  <source_model>paybybill/system_config_source_country</source_model>  
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment><![CDATA[Velg utvalgte land som får lov å velge denne betalingsmetoden. Standard er alle land.]]></comment>
+                  <depends><allowspecific>1</allowspecific></depends>
+              </specificcountry>
+
+                <batch_capture>
+                    <label>Aktivera batch inlösen av fakturor</label>
+                    <frontend_type>select</frontend_type>
+                    <source_model>adminhtml/system_config_source_yesno</source_model>
+                    <sort_order>95</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                </batch_capture>
+
+
+              <enable_log translate="label">
+                <label>Aktiver logging</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>99</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>0</show_in_website>
+                <show_in_store>0</show_in_store>
+              </enable_log>
+                           
+              <sort_order translate="label">
+                  <label>Sort order</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>100</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </sort_order>
+              <disable_getcustomerlimit translate="label">
+                  <label>Disable GetCustomerLimit</label>
+                  <sort_order>110</sort_order>
+                  <frontend_type>select</frontend_type>
+                  <source_model>adminhtml/system_config_source_yesno</source_model>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>Disable use of GetCustomerLimit function in the PayByBill API</comment>
+              </disable_getcustomerlimit>
+            </fields>
+          </pbbinvoice>
+          
+        <pbbpartpay translate="label" module="paybybill">
+          <label>PayByBill Part Payment</label>
+          <sort_order>672</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <comment><![CDATA[
+<div class="custom-options">
+<div class="box">
+<br />
+<p class="grand-total">Opprett avtale med Gothia/PayByBill<br /><b></b></p>
+
+Kontakt oss helt gratis om du har spørsmål til søknadsskjemaene eller kostnadene rundt løsningen.<br />
+<label>Epost <a href="mailto:support@trollweb.no"><b>support@trollweb.no</b></a></label><br />
+Telefon <b>+47 51215300</b> (0800-1600, man-fre)<br />
+<br />
+<font size=1>Paybybill modulen er utviklet av <a href="http://www.trollweb.no">Trollweb Solutions AS</a> i Norge og er sertifisert og godkjent av Gothia. Videredistribusjon av noe slag er ikke tillatt uten etter avtale med Trollweb.</font><br />
+ <br />
+</div>
+</div>          
+]]></comment>
+          <fields>
+              <active translate="label">
+                <label>Aktiv</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>1</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+              </active>
+  
+              <title translate="label">
+                <label>Tittel</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>2</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <comment><![CDATA[Tekst som vises på PayByBill betalingsvalget i nettbutikken.]]></comment>
+              </title>
+<!--  
+              <regcode translate="label">
+                  <label>Registreringskode</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>3</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment><![CDATA[Din registreringskode fra Trollweb.]]></comment>
+              </regcode>
+-->
+
+              <username translate="label">
+                  <label>Username</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>20</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </username>
+
+              <password translate="label">
+                  <label>Password</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>21</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </password>
+
+              <clientid translate="label">
+                  <label>Client ID</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>22</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </clientid>
+
+              <invoice_fee translate="label">
+                  <label>Invoice Fee</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>30</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_fee>
+
+              <invoice_fee_tax_class translate="label">
+                  <label>Invoice Fee Tax Class</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                  <sort_order>31</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_fee_tax_class>
+
+              <invoice_profile translate="label">
+                  <label>Invoice Profile</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>35</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_profile>
+
+              <partpayment_late_fee translate="label">
+                <label>Late fee %</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>38</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+              </partpayment_late_fee>
+
+              <distribution_by translate="label">
+                  <label>Distribution by</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>paybybill/system_config_source_distribution</source_model>
+                  <sort_order>40</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>Who is going to distribute the invoice.</comment>
+              </distribution_by>
+
+              <distribution_type translate="label">
+                  <label>Distribution type</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>paybybill/system_config_source_distributiontype</source_model>
+                  <sort_order>40</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>How is the invoice sent.</comment>
+              </distribution_type>
+
+              <social_status_mapping>
+                <label>Social Status mapping</label>
+                <frontend_model>paybybill/adminhtml_form_field_socialtitle</frontend_model>
+                <backend_model>paybybill/system_config_backend_socialtitle</backend_model>
+                <sort_order>50</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+              </social_status_mapping>
+
+              <external_erp>
+                <label>Eksternal ERP system</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>80</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <comment>Set this to YES if you got an external ERP system that is sending invoices and credit memos to PBB</comment>                
+              </external_erp>
+
+              <specificcountry translate="label">
+                  <label>Spesifiser hvilke land som kan bruke PayByBill</label>
+                  <frontend_type>multiselect</frontend_type>
+                  <sort_order>90</sort_order>
+                  <source_model>paybybill/system_config_source_country</source_model>  
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment><![CDATA[Velg utvalgte land som får lov å velge denne betalingsmetoden. Standard er alle land.]]></comment>
+                  <depends><allowspecific>1</allowspecific></depends>
+              </specificcountry>
+
+              <batch_capture>
+                  <label>Aktivera batch inlösen av fakturor</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>adminhtml/system_config_source_yesno</source_model>
+                  <sort_order>95</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>0</show_in_store>
+              </batch_capture>
+
+              <enable_log translate="label">
+                <label>Aktiver logging</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>99</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>0</show_in_website>
+                <show_in_store>0</show_in_store>
+              </enable_log>
+                           
+              <sort_order translate="label">
+                  <label>Sort order</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>100</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </sort_order>
+              <disable_getcustomerlimit translate="label">
+                  <label>Disable GetCustomerLimit</label>
+                  <sort_order>110</sort_order>
+                  <frontend_type>select</frontend_type>
+                  <source_model>adminhtml/system_config_source_yesno</source_model>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>Disable use of GetCustomerLimit function in the PayByBill API</comment>
+              </disable_getcustomerlimit>
+            </fields>
+          </pbbpartpay>
+
+        <pbbdirect translate="label" module="paybybill">
+          <label>PayByBill Direct Debet</label>
+          <sort_order>673</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <comment><![CDATA[
+<div class="custom-options">
+<div class="box">
+This payment method is only available for Germany.
+<br />
+<font size=1>The PayByBill module is developed by <a href="http://www.trollweb.no">Trollweb Solutions AS</a> in Norway and certified and approved by Gothia.</font><br />
+ <br />
+</div>
+</div>          
+]]></comment>
+          <fields>
+              <active translate="label">
+                <label>Aktiv</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>1</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+              </active>
+  
+              <title translate="label">
+                <label>Tittel</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>2</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <comment><![CDATA[Tekst som vises på PayByBill betalingsvalget i nettbutikken.]]></comment>
+              </title>
+<!--  
+              <regcode translate="label">
+                  <label>Registreringskode</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>3</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment><![CDATA[Din registreringskode fra Trollweb.]]></comment>
+              </regcode>
+-->
+
+              <username translate="label">
+                  <label>Username</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>20</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </username>
+
+              <password translate="label">
+                  <label>Password</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>21</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </password>
+
+              <clientid translate="label">
+                  <label>Client ID</label>
+                  <frontend_type>text</frontend_type>
+                  <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                  <sort_order>22</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </clientid>
+
+              <invoice_profile translate="label">
+                  <label>Invoice Profile</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>35</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </invoice_profile>
+
+              <distribution_by translate="label">
+                  <label>Distribution by</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>paybybill/system_config_source_distribution</source_model>
+                  <sort_order>40</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>Who is going to distribute the invoice.</comment>
+              </distribution_by>
+
+              <distribution_type translate="label">
+                  <label>Distribution type</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>paybybill/system_config_source_distributiontype</source_model>
+                  <sort_order>40</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>How is the invoice sent.</comment>
+              </distribution_type>
+
+              <social_status_mapping>
+                <label>Social Status mapping</label>
+                <frontend_model>paybybill/adminhtml_form_field_socialtitle</frontend_model>
+                <backend_model>paybybill/system_config_backend_socialtitle</backend_model>
+                <sort_order>50</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+              </social_status_mapping>
+              
+<!-- 
+              <specificcountry translate="label">
+                  <label>Spesifiser hvilke land som kan bruke PayByBill</label>
+                  <frontend_type>multiselect</frontend_type>
+                  <sort_order>90</sort_order>
+                  <source_model>paybybill/system_config_source_country</source_model>  
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment><![CDATA[Velg utvalgte land som får lov å velge denne betalingsmetoden. Standard er alle land.]]></comment>
+                  <depends><allowspecific>1</allowspecific></depends>
+              </specificcountry>
+ -->
+
+              <batch_capture>
+                  <label>Aktivera batch inlösen av fakturor</label>
+                  <frontend_type>select</frontend_type>
+                  <source_model>adminhtml/system_config_source_yesno</source_model>
+                  <sort_order>95</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>0</show_in_store>
+              </batch_capture>
+
+              <enable_log translate="label">
+                <label>Aktiver logging</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>99</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>0</show_in_website>
+                <show_in_store>0</show_in_store>
+              </enable_log>
+                           
+              <sort_order translate="label">
+                  <label>Sort order</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>100</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+              </sort_order>
+              <disable_getcustomerlimit translate="label">
+                  <label>Disable GetCustomerLimit</label>
+                  <sort_order>110</sort_order>
+                  <frontend_type>select</frontend_type>
+                  <source_model>adminhtml/system_config_source_yesno</source_model>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>1</show_in_store>
+                  <comment>Disable use of GetCustomerLimit function in the PayByBill API</comment>
+              </disable_getcustomerlimit>
+            </fields>
+          </pbbdirect>
+
+          
+       </groups>
+    </payment>
+    <sales>
+      <groups>
+        <totals_sort>
+          <fields>
+            <paybybill_fee translate="label" module="paybybill">
+                <label>PayByBill Invoice Fee</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>10</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+            </paybybill_fee>  
+          </fields>
+        </totals_sort>
+      </groups>
+    </sales>
+    
+    <advanced>
+      <groups>
+        <paybybill translate="label" module="paybybill">
+          <label>PayByBill</label>
+          <sort_order>100</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store></show_in_store>
+          <fields>
+              <demo translate="label">
+                <label>Demo mode</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>1</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>0</show_in_website>
+                <show_in_store>0</show_in_store>
+              </demo>
+              <rawlog translate="label">
+                <label>Enable Raw log</label>
+                <frontend_type>select</frontend_type>
+                <source_model>adminhtml/system_config_source_yesno</source_model>
+                <sort_order>1</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>0</show_in_website>
+                <show_in_store>0</show_in_store>
+                <comment><![CDATA[This might generate alot of data, and should not be enabled for long periodes.]]></comment>
+              </rawlog>
+              <batch_error_email>
+                  <label>Email to report errors</label>
+                  <frontend_type>text</frontend_type>
+                  <sort_order>10</sort_order>
+                  <show_in_default>1</show_in_default>
+                  <show_in_website>1</show_in_website>
+                  <show_in_store>0</show_in_store>
+                  <comment><![CDATA[]]></comment>
+              </batch_error_email>
+           </fields>
+         </paybybill>
+       </groups>
+    </advanced>  
+</sections>
+</config>

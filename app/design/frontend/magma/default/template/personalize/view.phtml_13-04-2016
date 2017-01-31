@@ -1,0 +1,2984 @@
+<?php
+/**
+ * Tasol
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     personalize_personalize
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<style type="text/css">
+  .labelexvat{ display:none;}
+</style>
+<?php
+
+
+
+/*Code to Open Popup*/
+$myParams = Mage::app()->getRequest()->getParams();
+$popUpQ = 0;
+if(isset($myParams['popup']) && $myParams['popup'] == 1 && !isset($myParams['edit']))
+    $popUpQ = 1;
+
+$uagent = $_SERVER['HTTP_USER_AGENT'];
+function os_info($uagent)
+{
+    // the order of this array is important
+    global $uagent;
+    $oses   = array(
+        'Windows' => 'Win16',
+        'Windows' => '(Windows 95)|(Win95)|(Windows_95)',
+        'Windows' => '(Windows 98)|(Win 9x 4.90)|(Windows ME)',
+        'Windows' => '(Windows 98)|(Win98)',
+        'Windows' => '(Windows NT 5.0)|(Windows 2000)',
+        'Windows' => '(Windows NT 5.1)|(Windows XP)',
+        'Windows' => '(Windows NT 5.2)',
+        'Windows' => '(Windows NT 6.0)',
+        'Windows' => '(Windows NT 6.1)',
+        'Windows' => '(Windows NT 6.2)',
+        'Windows' => '(Windows NT 4.0)|(WinNT4.0)|(WinNT)|(Windows NT)',
+        'OpenBSD' => 'OpenBSD',
+        'SunOS' => 'SunOS',
+        'Ubuntu' => 'Ubuntu',
+        'Android' => 'Android',
+        'Linux' => '(Linux)|(X11)',
+        'iPhone' => 'iPhone',
+        'iPad' => 'iPad',
+        'MacOS' => '(Mac_PowerPC)|(Macintosh)',
+        'QNX' => 'QNX',
+        'BeOS' => 'BeOS',
+        'OS2' => 'OS/2',
+        'SearchBot' => '(nuhk)|(Googlebot)|(Yammybot)|(Openbot)|(Slurp)|(MSNBot)|(Ask Jeeves/Teoma)|(ia_archiver)'
+    );
+    $uagent = strtolower($uagent ? $uagent : $_SERVER['HTTP_USER_AGENT']);
+    foreach ($oses as $os => $pattern)
+        if (preg_match('/' . $pattern . '/i', $uagent))
+            return $os;
+    return 'Unknown';
+}
+
+$os = os_info($uagent);
+
+$logoImageDir = "js/PHP/Samples_ImageUploaderFlashPHP/UploadedFiles";
+$logoImagePath = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)."js/PHP/Samples_ImageUploaderFlashPHP/UploadedFiles";
+require_once ('js/PHP/phpfileuploader/include_phpuploader.php');
+
+//Cart Edit Mode : Parth 27-06-14
+$cartEditMode = isset($_REQUEST['edit']) ? $_REQUEST['edit'] :'';
+$cartEditData = '';
+
+if (isset($cartEditMode) and $cartEditMode == 1)
+{
+    $cartEditId = $_REQUEST['itemId'];
+    $item = Mage::getModel('sales/quote_item')->load($cartEditId);
+    $options = Mage::getResourceModel('sales/quote_item_option_collection');
+    $options->addItemFilter($item->getId());
+
+    foreach ($options as $option) {
+        $item->addOption($option);
+    }
+    $buyRequest   = $item->getBuyRequest();
+    $cartEditData = $buyRequest->getData();
+
+    $prbEditImgWidth   = $cartEditData['h_image_width'];
+    $prbEditImgHeight  = $cartEditData['h_image_height'];
+    $prbEditImgUrl  = $cartEditData['prb_product_image_path'];
+
+}
+
+$prbSciImgUrl  = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'scissor_1.png';
+list($sciWidth, $sciHeight)  = getimagesize($prbSciImgUrl);
+
+$id = $_GET['product'];
+$qty = $_GET['qty'];
+$_product = Mage::getModel('catalog/product')->load($id);
+// echo '<pre>';print_r($_product->getFinalPrice());exit;
+$attributeSetName = Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getAttributeSetName();
+
+if((strcmp($attributeSetName, 'Product Builder One Scissors') == 0)
+  ||(strcmp($attributeSetName, 'Product Builder Scissor Pen Penlight') == 0)
+  ||(strcmp($attributeSetName, 'Product Builder Scissor Pen Penlight Tweezers') == 0))
+  $useScissors ='1';
+else
+  $useScissors ='0';
+
+$usePen = (strcmp($attributeSetName, 'Product Builder Scissor Pen Penlight') == 0) ? '1' : '0';
+$useTweezers = (strcmp($attributeSetName, 'Product Builder Scissor Pen Penlight Tweezers') == 0) ? '1' : '0';
+
+$_helper = Mage::helper('catalog/output');
+$_taxHelper  = new Mage_Tax_Helper_Data;
+//Price change as per the Store
+$price = $_taxHelper->getPrice($_product, $_product->getFinalPrice(), true) * $qty;
+
+$finalprice = Mage::helper('core')->currency($price, true, false);
+
+/*Custom Option for Just Label*/
+/***************************/
+$is_lable               = false;
+$is_image               = false;
+$is_icon                = false;
+
+$label_price            = '';
+$image_price            = '';
+$image_price_currency   = '';
+$icon_price             = '';
+$icon_price_currency    = '';
+
+$customOptionId         = '';
+$labelOptionTypeId      = '';
+$imageOptionTypeId      = '';
+$iconOptionTypeId       = '';
+
+/****************************/
+
+// echo '<pre>';print_r($_product->getId());exit;
+$CustomOptions = $_product->getOptions();
+$optionsAvail = count($CustomOptions);
+if ($optionsAvail && $optionsAvail == 1){
+    foreach($CustomOptions as $optionKey => $optionVal)
+    {
+        foreach($optionVal->getValues() as $valuesKey => $valuesVal)
+        {
+            $optionPrice            = $valuesVal->getPrice(); // -208
+            if($valuesVal->getSku() == Mage::helper('personalize')->getLableSku()){
+                $is_lable               = true;
+                $label_price            = $_taxHelper->getPrice($_product,$optionPrice,true);
+                $label_price            = Mage::helper('core')->currency($label_price, false, false);
+                $labelOptionTypeId      = $valuesVal->getOptionTypeId();
+                $customOptionId         = $valuesVal->getOptionId();
+            }
+
+            if($valuesVal->getSku() == Mage::helper('personalize')->getImageSku()){
+                $is_image               = true;
+                $image_price            = $_taxHelper->getPrice($_product,$optionPrice,true);
+                $image_price_currency   = Mage::helper('core')->currency($image_price, true, false);
+                $image_price            = Mage::helper('core')->currency($image_price, false, false);
+                $imageOptionTypeId      = $valuesVal->getOptionTypeId();
+                $customOptionId         = $valuesVal->getOptionId();
+            }
+
+            if($valuesVal->getSku() == 'add_icon'){
+                $is_icon                = true;
+                $icon_price             = $_taxHelper->getPrice($_product,$optionPrice,true);
+                $icon_price_currency    = Mage::helper('core')->currency($icon_price, true, false);
+                $icon_price             = Mage::helper('core')->currency($icon_price, false, false);
+                $iconOptionTypeId       = $valuesVal->getOptionTypeId();
+                $customOptionId         = $valuesVal->getOptionId();
+            }
+        }
+    }
+}
+
+$isOnlyLabel = false;
+if(isset($cartEditData['options']) && !empty($cartEditData['options'])){
+    foreach ($cartEditData['options'] as $_data) {
+        if(!empty($_data)){
+            foreach ($_data as $value) {
+                if($value == $labelOptionTypeId){
+                    $isOnlyLabel = true;
+                }
+            }
+        }
+    }
+}
+
+/*Custom Option for Just Label*/
+
+$currencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+$addToUrl = Mage::helper('checkout/cart')->getAddUrl($_product);
+$attributes = Mage::getSingleton('personalize/personalize');
+$attributesData = $attributes->getData('attributesData');
+
+// Code to get the default option text of the Attribute
+$defAttr = Mage::getResourceModel('eav/entity_attribute_collection')->setCodeFilter($attributeCode)->getFirstItem();
+$defval = $defAttr->getDefaultValue();
+$defAttr->getSource()->getOptionText($defval);
+// Code to get the default option text of the Attribute
+
+foreach($attributesData as $attribute) {
+	$attributeInfo[$attribute['attribute_code']] = $attributes->getAttributeData($attribute['attribute_id'],$attribute['attribute_code'],$attribute['frontend_label'],$attribute['frontend_input'],$attribute['default_value'],$attribute['frontend_class'],$_product->getStoreId());
+}
+$clipArtFolderList = $attributes->getData('clipArtFolderList');
+?>
+
+<div>
+<h2><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></h2>
+<script type="text/javascript">
+<?php /*SOF - Parth Edited Dynamic Work Area for Select*/ ?>
+var myX  = <?php echo $_product->getPrbImgX1(); ?>;
+var myY  = <?php echo $_product->getPrbImgY1(); ?>;
+var x2 = <?php echo $_product->getPrbImgX2(); ?>;
+var y2 = <?php echo $_product->getPrbImgY2(); ?> ;
+
+var myW  = x2-myX;
+var myH  = y2-myY;
+var useScissors = <?php echo $useScissors; ?>;
+var noScissors = 0;
+var usePen = <?php echo $usePen; ?>;
+var useTweezers = <?php echo $useTweezers; ?>;
+<?php if($useScissors){?>
+
+  var mySciX  = <?php echo $_product->getPrbImgSciX1(); ?>;
+  var mySciY  = <?php echo $_product->getPrbImgSciY1(); ?>;
+  var scix2 = <?php echo $_product->getPrbImgSciX2(); ?>;
+  var sciy2 = <?php echo $_product->getPrbImgSciY2(); ?> ;
+  var mySciW  = scix2-mySciX;
+  var mySciH  = sciy2-mySciY;
+
+  var mySciSelX  = <?php echo $_product->getPrbImgSciselX1(); ?>;
+  var mySciSelY  = <?php echo $_product->getPrbImgSciselY1(); ?>;
+  var sciselx2      = <?php echo $_product->getPrbImgSciselX2(); ?>;
+  var scisely2      = <?php echo $_product->getPrbImgSciselY2(); ?> ;
+  var mySciSelW  = scix2-mySciSelX;
+  var mySciSelH  = sciy2-mySciSelY;
+
+  var sciImageWidth  = '<?php echo $sciWidth  ?>';
+  var sciImageHeight = '<?php echo $sciHeight ?>';
+
+  var origmyX = myX;
+  var origmyY = myY;
+  var origmyW = myW;
+  var origmyH = myH;
+
+  myX = mySciX;
+  myY = mySciY;
+  myW = mySciW;
+  myH = mySciH;
+
+<?php } ?>
+// EOC
+var fontcolorflag  = 1;
+var ImageEditflag  = 0;
+var addTextFlag    = 0;
+var addTitleFlag   = 0;
+var addExtraFlag   = 0;
+var addFaFlag      = 0;
+var addImageFlag   = 0;
+var addScissorFlag = 0;
+var addLabelFlag   = 0;
+var isOnlyLabel    = '<?php echo $isOnlyLabel; ?>';
+window.isImageAdded = false;
+window.isFaAdded = false;
+window.isExtraPriceAdded = false;
+window.faClass = 'FAImage';
+window.imageClass = 'smileyImage';
+window.logoClass = 'logoImage new';
+window.hexcode = 'transparent';
+window.uploadedLogoFileName = '';
+window.uploadedLogoWidth = '';
+window.uploadedLogoHeight = '';
+window.logoImagePath = '<?php echo $logoImagePath; ?>';
+window.titlehexcode = '';
+window.imgExists = '';
+window.svgflag=0;
+window.cartEditMode = '<?php echo $cartEditMode ? 1 : 0;?>';
+window.cartEditData = '<?php echo $cartEditData ? json_encode($cartEditData) : 0;?>';
+window.cartEditId   = '<?php echo $cartEditId   ? $cartEditId : ""; ?>'
+window.logXPad = 10;
+window.logYPad = 10;
+window.isDomLoading = true;
+window.rootSvgHeight = '';
+window.OldExtraText = '';
+window.isScissorsColorAdd = false;
+window.isScissorsPatternAdd = false;
+window.isPenColorAdded = false;
+window.isPenlightColorAdded = false;
+window.isTweezerColorAdded = false;
+
+var prbYourText = '<?php echo $this->__("Your Text");?>'
+var prbYourTitle = '<?php echo $this->__("Your Title");?>'
+var prbExtraText = '<?php echo $this->__("Your Text");?>'
+var chgPrdText = '<?php echo $this->__("Choosing new product will scrap your existing design in design area. Do you want to proceed?")?>';
+var chgPrdOk = '<?php echo $this->__("OK")?>';
+var chgPrdCnc = '<?php echo $this->__("Cancel")?>';
+var pid = '<?php echo $id; ?>';
+var curOs = '<?php echo $os; ?>';
+var scissorPath = '<?php echo $prbSciImgUrl;?>';
+var logoImageMsg = '<?php echo $this->__("Minimum upload size of image is 500px * 200px."); ?>';
+var requiredScissorsColor = '<?php echo $this->__("Please choose Scissor color."); ?>';
+var requiredPenColor = '<?php echo $this->__("Please choose Pen color."); ?>';
+var requiredPenlightColor = '<?php echo $this->__("Please choose Penlight color."); ?>';
+var requiredTweezerColor = '<?php echo $this->__("Please choose Tweezers color."); ?>';
+</script>
+
+<style type="text/css">
+  #svgcontent .FAImage{ font-family: FontAwesome;}
+  #screenshot{position:absolute;border:1px solid #ccc;background:#333;padding:5px;display:none;color:#fff;}
+</style>
+
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/css/default.css'?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/css/jquery.loader.css'?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/css/JQuerySpinBtn.css'?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/css/jPicker.css'?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/css/jgraduate.css'?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'skin/frontend/default/vaktrommet/css/bootstrap-responsive.css'?>" media="all" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'skin/frontend/base/default/css/widgets.css'?>" media="all" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'skin/frontend/default/vaktrommet/magentothem/colortool/css/ma.cltool.css'?>" media="all" />
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'skin/frontend/default/vaktrommet/magentothem/colortool/css/colorpicker.css'?>" media="all" />
+
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/magentothem/ma.jq.slide.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/magentothem/ma.flexslider.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/bootstrap/bootstrap.min.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/magentothem/ma.mobilemenu.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/magentothem/ma.menu.effect.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/magentothem/backtotop.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/magentothem/colortool/colorpicker.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/magentothem/colortool/jquery.cookie.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jquery.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/pathsvg.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/js-hotkeys/jquery.hotkeys.min.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jquerybbq/jquery.bbq.min.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/svgicons/jquery.svgicons.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jquery-ui/jquery-ui-1.8.17.custom.min.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jgraduate/jpicker.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jgraduate/jquery.jgraduate.min.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/spinbtn/JQuerySpinBtn.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/touch.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/contextmenu/jquery.contextMenu.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/browser.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/svgtransformlist.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/math.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/units.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/svgutils.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/sanitize.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/select.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/history.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/draw.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/path.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/tooltip-screenshot.js'?>"></script>
+<script type="text/javascript">//<![CDATA[
+  var Translator = new Translate([]);
+//]]></script>
+
+<script type='text/javascript' src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/bootstrap/bootstrap-collapse.js'?>"></script>
+<script type='text/javascript' src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/bootstrap/bootstrap-transition.js'?>"></script>
+
+<script type='text/javascript'>
+    jQuery.fn.collapse.Constructor.prototype.transition = function (method, startEvent, completeEvent) {
+      var that = this
+        , complete = function () {
+            if (startEvent.type == 'show') that.reset();
+            that.transitioning = 0;
+            that.$element.trigger(completeEvent);
+          }
+      this.transitioning = 1;
+      this.$element[method]('in');
+      (jQuery.support.transition && this.$element.hasClass('collapse')) ?this.$element.one(jQuery.support.transition.end, complete):complete();
+    };
+
+    jQuery.noConflict();
+    function savePersonalize(){
+        var isValidated = true;
+        if(useScissors){
+            if(!isScissorsPatternAdd && !isScissorsColorAdd){
+                alert(requiredScissorsColor);
+                isValidated = false;
+                return false;
+            }
+        }
+
+        if(usePen){
+            if(!isPenColorAdded){
+                alert(requiredPenColor);    
+                isValidated = false;
+                return false;
+            }
+            else if(!isPenlightColorAdded){
+                alert(requiredPenlightColor);
+                isValidated = false;
+                return false;
+            }
+        }
+
+        if(useTweezers){
+
+            if(!isPenColorAdded){
+                alert(requiredPenColor);    
+                isValidated = false;
+                return false;
+            }
+            else if(!isPenlightColorAdded){
+                alert(requiredPenlightColor);
+                isValidated = false;
+            }
+            else if(!isTweezerColorAdded){
+                alert(requiredTweezerColor);
+                isValidated = false;
+                return false;
+            }  
+        }
+
+        if(isValidated){
+            previewImage();
+            downloadPreview();    
+        }
+        
+    }
+</script>
+
+<input type="hidden" name="superattributeidcolor" id="superattributeidcolor" value="92" />
+<input type="hidden" name="superattributeidsize" id="superattributeidsize" value="135" />
+
+<?php /* **************************************Fonts CSS Start**************************************** */?>
+<link rel="stylesheet" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'media/font/font-selector/font-selector.css'?>">
+<?php /* **************************************Fonts CSS End**************************************** */?>
+
+<script type="text/javascript">
+	var webpath = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>js/';
+    var baseUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>index.php/';
+    var mediaUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);?>';
+	var jspath = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>js/html5/';
+
+	var mediapath = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>';
+	var cofigcatid = '';
+	var confignotfound = 'Item Not Found';
+	var jsonList = '';
+	jsonList = $j.parseJSON(jsonList);
+	var sizeList = '{"sizearr":{"7":{"sizeid":[40],"sizename":["L"]},"4":{"sizeid":[42],"sizename":["M"]},"29":{"sizeid":[40],"sizename":["L"]},"3":{"sizeid":[40,42,47],"sizename":["L","M","S"]},"28":{"sizeid":[42],"sizename":["M"]},"66":{"sizeid":[42],"sizename":["M"]},"24":{"sizeid":[40],"sizename":["L"]},"23":{"sizeid":[42],"sizename":["M"]},"21":{"sizeid":[40],"sizename":["L"]},"75":{"sizeid":[47],"sizename":["S"]}}}';
+	jsonsizeList = $j.parseJSON(sizeList);
+	var fontlist = '{"BrushScript":{"cssFile":"BrushScript.css","loadType":"custom","loaded":false},"Interceptor":{"cssFile":"Interceptor.css","loadType":"custom","loaded":false},"Source Sans Pro":{"cssFile":"Source Sans Pro.css","loadType":"custom","loaded":false},"Alex Brush":{"cssFile":"Alex Brush.css","loadType":"custom","loaded":false},"Quicksand":{"cssFile":"Quicksand.css","loadType":"custom","loaded":false},"Kaushan Script":{"cssFile":"Kaushan Script.css","loadType":"custom","loaded":false},"Allstar":{"cssFile":"Allstar.css","loadType":"custom","loaded":false},"Kroftsmann":{"cssFile":"Kroftsmann.css","loadType":"custom","loaded":false},"Rainy days":{"cssFile":"Rainy days.css","loadType":"custom","loaded":false},"Pacifico":{"cssFile":"Pacifico.css","loadType":"custom","loaded":false},"Bebas Neue":{"cssFile":"Bebas Neue.css","loadType":"custom","loaded":false},"Lobster":{"cssFile":"Lobster.css","loadType":"custom","loaded":false},"sansation":{"cssFile":"sansation.css","loadType":"custom","loaded":false},"Walkway Black":{"cssFile":"Walkway Black.css","loadType":"custom","loaded":false},"Black Jack":{"cssFile":"Black Jack.css","loadType":"custom","loaded":false},"Cantarell":{"cssFile":"Cantarell.css","loadType":"custom","loaded":false},"Daniel":{"cssFile":"Daniel.css","loadType":"custom","loaded":false},"Sail":{"cssFile":"Sail.css","loadType":"custom","loaded":false},"Molot":{"cssFile":"Molot.css","loadType":"custom","loaded":false},"Exo":{"cssFile":"Exo.css","loadType":"custom","loaded":false},"Fingerpaint":{"cssFile":"Fingerpaint.css","loadType":"custom","loaded":false},"Ostrich Sans Inline":{"cssFile":"Ostrich Sans Inline.css","loadType":"custom","loaded":false},"Barrio":{"cssFile":"Barrio.css","loadType":"custom","loaded":false},"3Dumb":{"cssFile":"3Dumb.css","loadType":"custom","loaded":false},"Afta sans":{"cssFile":"Afta sans.css","loadType":"custom","loaded":false},"After Shok":{"cssFile":"After Shok.css","loadType":"custom","loaded":false},"Aguafina Script":{"cssFile":"Aguafina Script.css","loadType":"custom","loaded":false},"Aldo Open":{"cssFile":"Aldo Open.css","loadType":"custom","loaded":false},"Aleo":{"cssFile":"Aleo.css","loadType":"custom","loaded":false},"Allura":{"cssFile":"Allura.css","loadType":"custom","loaded":false},"Almendra":{"cssFile":"Almendra.css","loadType":"custom","loaded":false},"Amadeus":{"cssFile":"Amadeus.css","loadType":"custom","loaded":false},"Anagram":{"cssFile":"Anagram.css","loadType":"custom","loaded":false},"Belligerent":{"cssFile":"Belligerent.css","loadType":"custom","loaded":false},"Bellota":{"cssFile":"Bellota.css","loadType":"custom","loaded":false},"Bonston Traffic":{"cssFile":"Bonston Traffic.css","loadType":"custom","loaded":false},"BPdotsUnicase Plus":{"cssFile":"BPdotsUnicase Plus.css","loadType":"custom","loaded":false},"Cherryswash":{"cssFile":"Cherryswash.css","loadType":"custom","loaded":false},"Dymaxion Script":{"cssFile":"Dymaxion Script.css","loadType":"custom","loaded":false},"ElliotSix":{"cssFile":"ElliotSix.css","loadType":"custom","loaded":false},"Euphoria Script":{"cssFile":"Euphoria Script.css","loadType":"custom","loaded":false},"SF Collegiate":{"cssFile":"SF Collegiate.css","loadType":"custom","loaded":false}}';
+	jsonfontList = $j.parseJSON(fontlist);
+	var no_of_side = '1';
+	var first_font = 'SF Collegiate';
+	var text_svg1,text_svg2,text_svg3,text_svg4 = '';
+	var side_1 = 1;
+	var side_2 = 0;
+	var side_3 = 0;
+	var side_4 = 0;
+	var png_data;
+	var configsku = 'Leader Custom Micrompoly';
+	var filearray = new Array();
+	var is_multicolor = 'no';
+	var customer_id = '';
+	var productid = '141';
+	var added_images = '';
+	var fonts_used = '';
+	var configtotalprice = 'Total Price';
+	var configselectedsize = 'Selected Size';
+	var configqtymessage = 'Please choose appropriate Quantity.';
+    var clipartsloaded = 0;
+    var faloaded = 0;
+	var designIdeasloaded = 0;
+	var curr_side_id = 1;
+    var productLabelImageCan;
+    var customizationLabelCan;
+	var datauri;
+	var productImageCan;
+	var customizationCan;
+	var priceInterval;
+	var action;
+	var shareType;
+	var sideNameAry = ['Front','Back','Left','Right'];
+</script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/galleria-1.2.9.js'?>"></script>
+
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/script.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jquery.lazy.min.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/svgcanvas.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/svg-editor.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/locale/locale.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/contextmenu.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/canvg/rgbcolor.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/canvg/StackBlur.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/canvg/canvg.js'?>"></script>
+<!-- you can load extensions here -->
+<!-- Font Loader Start -->
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/font_jsapi.js'?>"></script>
+<script type="text/javascript">google.load("webfont", "1");</script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/font-selector.js'?>"></script>
+<script>$j(function(){Smm.init('tool_font_family');});</script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jQuery.min.1.10.2.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/toggleDD/ddslick.js'?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/jquery.form.js' ?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/jquery.form.min.js' ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/style/imageUpload.css'?>" />
+
+<?php if($popUpQ){ ?>
+
+    <script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/fancybox/jquery.fancybox.js?v=2.1.5'?>"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/fancybox/jquery.fancybox.css?v=2.1.5'?>" media="screen" />
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            jQuery('.fancybox').fancybox();
+            jQuery(".anchorFrame a") .trigger("click");
+            jQuery(".fancybox.iframe").click(function() {
+                jQuery.fancybox.open({
+                    href : mediapath+'product-builder',
+                    type : 'iframe',
+                    padding : 5
+                });
+            });
+
+
+        });
+    </script>
+
+<?php } ?>
+
+<script type='text/javascript'>
+
+    function CuteWebUI_AjaxUploader_OnTaskComplete()
+    {
+        var logoFileName = $j("#output").html();
+
+        var imgPath = '<?php echo $logoImagePath ?>';
+        var htmldata = '<li class="imgloader"><a href="javascript:void(0);" onclick="javascript:loadImageONCanvas(this)" class ="imageclass" rel="'+imgPath+'/'+encodeURIComponent(logoFileName)+ '" ><img class ="lazy" data="'+imgPath+'/'+encodeURIComponent(logoFileName)+ '" src="http://192.168.5.10/vaktrommet/js/ipaduploadtool/Libraries/fancybox/loading.gif" onload="lazyLoaderImg(this)" /></a></li>';
+
+        $j(htmldata).appendTo($j('#flickerresult'));
+        $j('#flickerresult').html(htmldata);
+        $j("#flickerresult li.imgloader a").trigger({type:"click",});
+    }
+</script>
+
+<script type="text/javascript">
+$g = jQuery.noConflict();
+
+$g(window).ready(function(){
+  $g("#selectorParentGroup").hide();
+  var popUpQ = <?php echo $popUpQ ?>;
+  if(!popUpQ)
+    showLoadingAnimation();
+});
+
+//$j('.showhide')
+/* Parth Added : 17-06-14 Scroll Prd. Builder (Removed #Url)*/
+$g(window).load(function() {
+    $g("html, body").animate({ scrollTop: $g(".header-wrapper").height() }, 10);
+    $g('#canvasBackground').find('rect').attr('stroke', "#d3d3d3");
+
+    var panelHt = $g(".wraper_dt").height();
+    var panelHt1 = $g(".mainleftpanel").height();
+
+    if(window.innerWidth >= 768 && window.innerWidth <= 1024){
+	   $g(".mainrightpanel").height(panelHt1);
+	   $g(".mainrightpanel .right-panel").height(panelHt1);
+    }
+    if(window.innerWidth >= 1200){
+	   $g(".mainrightpanel").height(panelHt);
+	   $g(".panelinfo").height(panelHt);
+	   $g(".mainrightpanel .right-panel").height(panelHt);
+    }
+    var popUpQ = <?php echo $popUpQ ?>;
+    if(!popUpQ)
+        hideLoadingAnimation();
+});
+
+$g( window ).resize(function() {
+    $g("html, body").animate({ scrollTop: $g(".header-wrapper").height() }, 10);
+    var panelHt = $g(".wraper_dt").height();
+    var panelHt1 = $g(".mainleftpanel").height();
+
+    if(window.innerWidth >= 768 && window.innerWidth <= 1024){
+        $g(".mainrightpanel").height(panelHt1);
+        $g(".mainrightpanel .right-panel").height(panelHt1);
+    }
+    if(window.innerWidth >= 1200){
+        $g(".mainrightpanel").height(panelHt);
+        $g(".panelinfo").height(panelHt);
+        $g(".mainrightpanel .right-panel").height(panelHt);
+    }
+    var popUpQ = <?php echo $popUpQ ?>;
+    if(!popUpQ)
+        hideLoadingAnimation();
+});
+
+
+
+$g(document).ready(function(){
+
+    var docWidth = $g(document).width();
+    if(docWidth >= 600)
+    {
+        $g(".left-share-panel").show();
+    }
+
+	/*Parth Added : 17-07-14 Canvas Background Issue in Safari-Windows*/
+	if (useScissors == 1){
+	    var rectht = (docWidth > 650) ? origmyH : origmyH/2;
+	    $g('#canvasBackground').find('rect').attr('height', rectht);
+	}
+    else{
+
+        rootSvgHeight = $g('#svgroot').attr('height');
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('safari') != -1) {
+            if (ua.indexOf('chrome') > -1) {
+                console.log('Crome');
+            } else {
+                $g('#svgroot').removeAttr('height');
+            }
+
+        }
+    }
+
+
+    $g( "#addtext-panel .myTextBox" ).addClass("noheight");
+    $g( "#addart-panel .input-area" ).addClass("noheight");
+    $g( "#addextra-panel .myTextBox" ).addClass("noheight");
+    $g( "#addOneScissors-panel .myTextBox" ).addClass("noheight");
+    $g( "#addlabel-panel .myTextBox" ).addClass("noheight");
+
+    $g("#images_loaded").addClass("noheight");
+    $g("#prb_img_x1").val(myX);
+    $g("#prb_img_x2").val(x2);
+    $g("#prb_img_y1").val(myY);
+    $g("#prb_img_y2").val(y2);
+
+    var textVal     = $g('select[name=prb_text_size]').val();
+    var titleVal    = $g('select[name=prb_title_size]').val();
+    var extraVal    = $g('select[name=prb_extra_size]').val();
+    var textexists  = false;
+    var titleexists = false;
+
+    $g('.prb_text_size option').each(function(){
+        if (this.value == '16') {
+            textexists = true;
+            return false;
+        }
+    });
+
+    $g('.prb_title_size option').each(function(){
+        if (this.value == '10') {
+            titleexists = true;
+            return false;
+        }
+    });
+
+    if ($g(document).width() < 650)
+    {
+        if(textexists){
+            $g(".prb_text_size option[value='"+textVal+"']").attr('selected', null);
+            $g(".prb_text_size option[value='16']").attr('selected', 'selected');
+        }
+        if(titleexists){
+            $g(".prb_title_size option[value='"+titleVal+"']").attr('selected', null);
+            $g(".prb_title_size option[value='10']").attr('selected', 'selected');
+        }
+    }
+
+    $g(".showhide").click(function(){
+		$g("#toggleleftbar").toggle();
+		$g('.showhide').toggleClass('slideropen');
+	});
+
+	$g("#prb_name_title_textarea").blur(function(e) {
+		$g("#prb_name_title").val($g("textarea[name=prb_name_title]").val());
+	});
+
+    $g("#prb_extra_field_textarea").keyup(function() {
+        var keyed = $g(this).val().replace(/\n/g, '<br/>');
+        addExtraTextfield(keyed);
+    });
+
+    $g("#prb_extra_field_textarea").blur(function(e) {
+        $g("#prb_extra_field").val($g("textarea[name=prb_extra_field]").val());
+    });
+
+    $g("#prb_title_textarea").blur(function(e) {
+        $g("#prb_title").val($g("textarea[name=prb_title]").val());
+    });
+
+	$g(".font-item").click(function(e) {
+		var tmp = $(this).text();
+		$g("#prb_fonts").val(tmp);
+	});
+
+    /*Image upload functioanlity : Start - 09-08-14*/
+    var options = {
+        target:   "#output",
+        beforeSubmit:  beforeSubmit,
+        success:       afterSuccess,
+        uploadProgress: OnProgress,
+        resetForm: true
+    };
+
+    $g('#MyUploadForm').submit(function() {
+        $g(this).ajaxSubmit(options);
+        return false;
+    });
+
+    $g('#FileInput').change(function(e){
+        $g( "#MyUploadForm" ).trigger( "submit" );
+    });
+
+function afterSuccess()
+{
+    uploadedLogoFileName = $g('#output').html();
+
+    $g.ajax({
+        url:baseUrl + 'personalize/index/getImageResolution',
+        type: 'POST',
+        data: 'url='+ logoImagePath + '/' + uploadedLogoFileName,
+        success:function(res){
+            res = JSON.parse(res);
+            uploadedLogoWidth = parseFloat(res.width);
+            uploadedLogoHeight = parseFloat(res.height);
+
+            if(uploadedLogoWidth < 500){
+                alert(logoImageMsg);
+                return false;
+            }
+            else if(uploadedLogoHeight < 200){
+                alert(logoImageMsg);
+                return false;
+            }
+            else{
+                CuteWebUI_AjaxUploader_OnTaskComplete();
+            }
+            // CuteWebUI_AjaxUploader_OnTaskComplete();
+        }
+    });
+    $g('#loading-img').hide();
+    $g('#progressbox').delay( 1000 ).fadeOut();
+}
+
+//function to check file size before uploading.
+var isImgResolutionCheck = false;
+function beforeSubmit(){
+    if( !$g('#FileInput').val())
+    {
+        alert('Image not found');
+        return false
+    }
+    // var _URL = window.URL || window.webkitURL;
+    var fsize = $g('#FileInput')[0].files[0].size;
+    var ftype = $g('#FileInput')[0].files[0].type;
+
+    // var img = new Image();
+    // var w = '';
+    // img.onload = function() {
+    //     if(img.width < 500){
+    //         alert('Image must be 500px * 200px.');
+
+    //     }
+    //     if(img.height < 200){
+    //         alert('Image must be 500px * 200px.');
+    //     }
+    //     isImgResolutionCheck = true;
+    // }
+    // img.src = _URL.createObjectURL($g('#FileInput')[0].files[0]);
+
+    switch(ftype)
+    {
+      case 'image/png':
+      case 'image/gif':
+      case 'image/jpeg':
+      case 'image/pjpeg':
+        break;
+      default:
+        alert("<b>"+ftype+"</b> Unsupported file type!");
+        return false
+    }
+
+    if(fsize>5242880)
+    {
+        alert("<b>"+bytesToSize(fsize) +"</b> Too big file! <br />File is too big, it should be less than 5 MB.");
+        return false
+    }
+
+
+
+    $g('#submit-btn').hide();
+    $g('#loading-img').show();
+    $g("#output").html("");
+}
+
+function OnProgress(event, position, total, percentComplete)
+{
+    $g('#progressbox').show();
+    $g('#progressbar').width(percentComplete + '%')
+    $g('#statustxt').html(percentComplete + '%');
+    if(percentComplete>50)
+    {
+        $g('#statustxt').css('color','#000');
+    }
+}
+
+function bytesToSize(bytes) {
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 Bytes';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+});
+
+</script>
+<?php //Edited : Ashesh 27-2-2014?>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/jquery.ui.-1.10.4.js'?>"></script>
+<style>
+.toggler { width: 500px; height: 200px; position: relative; }
+#button { padding: .5em 1em; text-decoration: none; }
+#effect { width: 240px; height: 135px; padding: 0.4em; position: relative; }
+#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
+.ui-effects-transfer { border: 2px dashed #58B8E0; }
+</style>
+<script>
+$(function() {
+// run the currently selected effect
+function runEffect() {
+// get effect type from
+var selectedEffect = 'transfer';
+// most effect types need no options passed by default
+var options = {};
+// some effects have required parameters
+if ( selectedEffect === "scale" ) {
+options = { percent: 0 };
+} else if ( selectedEffect === "transfer" ) {
+options = { to: "#addtocart_btn", className: "ui-effects-transfer" };
+} else if ( selectedEffect === "size" ) {
+options = { to: { width: 200, height: 60 } };
+}
+// run the effect
+$( "#workarea" ).effect( selectedEffect, options, 1000, callback );
+};
+// callback function to bring a hidden box back
+function callback() {
+//setTimeout(function() {
+//$( "#workarea" ).removeAttr( "style" ).hide().fadeIn();
+//}, 1000 );
+};
+// set effect from select menu value
+$( "#continueshop" ).click(function() {
+	$j('#svg_beforeaddtocart').hide();
+runEffect();
+return false;
+});
+});
+</script>
+<?php //Edited : End?>
+<!-- Font Loader End -->
+
+
+
+<div class="anchorFrame" style="display:none;">
+    <a class="fancybox fancybox.iframe" rel="productBuilderLink" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'product-builder'?>"><span>Product Builder</span></a>
+</div>
+
+<div id="highresolutioncanvasdiv"></div>
+<canvas id="customizationLabelCan" style="display: none;"></canvas>
+<canvas id="highresolutioncanvas" style="display: none;"></canvas>
+<div id="container_dt">
+
+    <div id="loaderImage-overlay" style="display:none;"></div>
+
+    <div id="loaderImage">
+        <div id="loaderImage-loader"></div>
+    </div>
+
+    <div class="wraper_dt">
+        <!-- Left Panel -->
+        <div class="mainleftpanel">
+            <div class="main_dt">
+                <div class="align_heading_div"></div>
+
+                <!-- Preview Button :- Start -->
+                <section class="left-share-panel" style="display:none;">
+                    <div class="button-area">
+                        <ul>
+                            <li>
+                                <button id="preview" title="Preview">
+                                    <div><span class="d_preview">&nbsp;</span></div>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <!-- Preview Button :- End -->
+
+                <!-- SVG Editor -->
+                <section class="product-area">
+
+                    <!-- Dont Delete this, Its used in Edit Image  Parth 29-06-14 -->
+                    <form id="manage_side" method="post">
+
+                        <?php if (isset($cartEditMode) and $cartEditMode == 1) : ?>
+                            <canvas style="display:none;"  width="<?php echo $prbEditImgWidth;?>px" height="<?php echo $prbEditImgHeight;?>px" id="canvas_prb" ></canvas>
+                            <img style="display:none;"  id="preview_prb_product_image_path" src="<?php echo $prbEditImgUrl;?>">
+                        <?php endif;?>
+
+                        <?php if($useScissors) : ?>
+                            <canvas style="display:none;"  id="canvas_prb_scissor" ></canvas>
+                            <img style="display:none;"  id="preview_prb_scissor_image_path" src="<?php echo $prbSciImgUrl;?>">
+                            <a style="display:none;" id="prb_scissor_image_url" rel="<?php echo $prbSciImgUrl;?>" onclick="loadScissorONCanvas(this)" href="javascript:void(0);"><img src="<?php echo $prbSciImgUrl;?>" data="<?php echo $prbSciImgUrl;?>"></a>
+                        <?php endif; ?>
+
+                        <input type="hidden" value="2" id="number_of_pages" name="number_of_pages" autocomplete="off">
+                        <input type="hidden" value="1" id="current_page" name="current_page" autocomplete="off">
+
+                        <div style="display:none;" title="" id="pages_data">
+                            <textarea style="display:none;" id="textsvg_1" name="textsvg_1"></textarea>
+                            <textarea style="display:none;" id="prev_textsvg_1" name="prev_textsvg_1"></textarea>
+                            <li>
+                                <button id="sideButton_1" onmousedown="showSide(this)" title="Front">
+                                    <svg viewBox="0 0 30 30" height="30" width="30" id="svg-doc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <defs>
+                                            <filter id="colorMatrixIcon1">
+                                                <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" type="matrix" id="feColorMatrixIcon1"/>
+                                            </filter>
+                                        </defs>
+                                        <image filter="url(#colorMatrixIcon1)" xlink:href="" height="30" width="30"/>
+                                    </svg>
+                                </button>
+                                <label>Front</label>
+                            </li>
+
+                            <textarea style="display:none;" id="textsvg_2" name="textsvg_2"></textarea>
+                            <li>
+                                <button id="sideButton_2" onmousedown="showSide(this)" title="Back">
+                                    <svg viewBox="0 0 30 30" height="30" width="30" id="svg-doc" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <defs>
+                                            <filter id="colorMatrixIcon2">
+                                                <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" type="matrix" id="feColorMatrixIcon2"/>
+                                            </filter>
+                                        </defs>
+                                        <image filter="url(#colorMatrixIcon2)" xlink:href="" height="30" width="30"/>
+                                    </svg>
+                                </button>
+                                <label>Back</label>
+                            </li>
+                        </div>
+
+                        <textarea id="svg_source_textarea" style="display:none;" spellcheck="false"></textarea>
+                    </form>
+
+                    <div id="svg_editor">
+                        <div id="rulers">
+                            <div id="ruler_corner"></div>
+                            <div id="ruler_x"><div>
+                            <canvas height="15"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="ruler_y"><div>
+                    <canvas width="15"></canvas>
+                    </div>
+                    </div>
+                    </div>
+
+                    <div id="workarea">
+                        <style id="styleoverrides" type="text/css" media="screen" scoped="scoped"></style>
+                        <div id="svgcanvas" style="position:relative">
+                            <div id="product-image" class="svg-container" >
+                                <svg height="242" width="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg-content">
+                                    <defs>
+                                        <filter id="colorMat">
+                                            <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" type="matrix" id="feColorMatrix"/>
+                                        </filter>
+                                    </defs>
+
+                                    <?php list($Imgwidth, $Imgheight)  = getimagesize(Mage::helper('catalog/image')->init($_product, 'image'));
+
+                                    if($Imgwidth > 395 && $Imgheight >770) {?>
+
+                                        <image  class="main_image" id="img_1" xlink:href="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize(395,770); ?>"   style="position:relative;" width="200px" height="226px"/>
+
+                                    <?php $Imgwidth  = '395'; $Imgheight = '770';}
+
+                                    elseif($Imgwidth > 395 && $Imgheight < 770) { ?>
+
+                                        <image  class="main_image" id="img_1" xlink:href="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize(395,$Imgheight);?>"   style="position:relative;" width="200px" height="226px"/>
+
+                                    <?php $Imgwidth  = '395';}
+
+                                    elseif($Imgwidth < 395 && $Imgheight > 770) { ?>
+
+                                        <image  class="main_image" id="img_1" xlink:href="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize($Imgwidth,770);?>"   style="position:relative;" width="200px" height="226px"/>
+
+                                    <?php $Imgheight  = '770'; }
+
+                                    else { ?>
+
+                                        <image  class="main_image" id="img_1" xlink:href="<?php echo Mage::helper('catalog/image')->init($_product, 'image');?>"   style="position:relative;" width="200px" height="226px"/>
+
+                                    <?php } ?>
+
+                                    <filter id="scissorMat"><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" type="matrix" id="scissorMatMatrix"/></filter>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </section>
+                <!-- SVG Editor End -->
+            </div>
+        </div>
+        <!-- Left Panel End -->
+
+        <!-- Right Panel -->
+        <div class="mainrightpanel">
+            <!-- Menu Section -->
+            <section class="right-panel">
+                <button id="pickcolor">
+                    <div><span class="icon-2"></span><?php echo $this->__('Apply Background');?></div>
+                </button>
+                <button id="addtext">
+                    <div><span class="icon-4"></span><?php echo $this->__('Add Text');?></div>
+                </button>
+                <button id="addtitle">
+                    <div><span class="icon-4"></span><?php echo $this->__('Add Title');?></div>
+                </button>
+                <button id="addextra">
+                    <div><span class="icon-4"></span><?php echo $this->__('Extra Text');?></div>
+                </button>
+                <button id="addart">
+                    <div><span class="icon-3"></span><?php echo $this->__('Choose FA icons');?></div>
+                </button>
+                <button id="addtimage">
+                    <div><span class="icon-5"></span><?php echo $this->__('Add Image');?></div>
+                </button>
+
+                <?php if ($useScissors == 1) : ?>
+                <button id="addOneScissors">
+                    <div><span class="icon-6"></span><?php echo $this->__('Change Scissor Color');?></div>
+                </button>
+                <?php endif; ?>
+
+                <?php if ($usePen == 1 || $useTweezers == 1) : ?>
+                <button id="addPenTweezers">
+                    <div><span class="icon-7"></span><?php echo $this->__('Change Pen Color');?></div>
+                </button>
+                <?php endif; ?>
+
+                <?php /*if ($is_lable) : ?>
+                <button id="addlabel">
+                    <div><span class="icon-5"></span><?php echo $this->__('Just Label');?></div>
+                </button>
+                <?php endif; */ ?>
+            </section>
+            <!-- Menu Section End -->
+
+            <section class="right-panel-property"  >
+
+                <!-- common property panel -->
+                <nav class="cbp-spmenu-vertical cbp-spmenu-right" id="edit-panel">
+                    <div class="box-outer">
+                        <div class="boxtop">
+                            <label class="label"><?php echo $this->__('Edit Panel');?></label>
+                            <div class="inst" id="inst_edit_panel"><a href="javascript:void(0)">i</a></div>
+                            <div style="display:none;" id="design_tooltip_edit_panel" class="tooltip">
+                                1. <?php echo $this->__('Ungroup does one level layering, so to do further layering, ungroup again until you can select the element you want to change color for.')?> <br><br>
+                                2. <?php echo $this->__('Select any layer to change color of complete layer.');?>
+                            </div>
+                        </div>
+                        <button id="tool_edit_close"></button>
+                        <div id="images_loaded"  class="myrange listing scroll-area-uploadimage" style="display:none;">
+                            <div class="listing scroll-area-uploadimage">
+                                <div class="tabcntent">
+                                    <ul id="flickerresult" style="display:none;"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <!-- /common property panel -->
+
+                <!-- common property -->
+                <nav class="ranger-panel cbp-spmenu-right" id="common-panel">
+                    <div class="range-blocks">
+                        <div class="co-tw-dl">
+                            <ul>
+                                <li id="tool_fill" > <span class="label">color</span>
+                                    <div class="color_tool" >
+                                        <div class="color_block">
+                                            <div id="fill_bg"></div>
+                                            <div id="fill_color" class="color_block"></div>
+                                        </div>
+                                    </div>
+                                    <div id="color_picker"></div>
+                                </li>
+                                <li>
+                                    <span class="label"><?php echo $this->__('Delete');?></span>
+                                    <div class="color_tool" id="tool_opacity_delete" title="Delete">
+                                        <button title="Delete Element" id="tool_delete">
+                                            <div><span class="icon-10">&nbsp;</span></div>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="smileyalert" style="display: none;">
+                            <span><?php echo $this->__('You can add only one element (i.e. Smiley, Text, Image) at a time.');?></span>
+                            <br/>
+                            <span><?php echo $this->__('Please select the element to edit/delete it.');?></span>
+                            <br/>
+                        </div>
+                    </div>
+
+                    <div class="range-blocks" id="border_box">
+                        <div class="border-box" style="display: none !important;">
+                            <div class="color_tool" id="tool_stroke">
+                                <label class="icon_label no-padding" title="Change stroke color" ></label>
+                                <div class="color_block">
+                                    <div id="stroke_bg"></div>
+                                    <div id="stroke_color" class="color_block" title="Change stroke color"></div>
+                                </div>
+                                <div id="toggle_stroke_tools" title="Show/hide more stroke tools" style="display:none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="pickcolor-panel">
+                    <div class="box-outer">
+                        <div class="tshirt-product scroll-area">
+                            <label class="label"><?php echo $this->__('APPLY BACKGROUND COLOR') ?></label>
+                            <div class="inst" id="back_color_panel"><a href="javascript:void(0)">i</a></div>
+                            <div style="display:none;" id="back_color_tooltip" class="tooltip"> 1. <?php echo $this->__('Select any color from the dropdown to change color of the design area. ');?>
+                                <br>
+                                <br>
+                                2. <?php echo $this->__('Ungroup does one level layering, so to do further layering, ungroup again until you select the final color you want to change.');?> </div>
+                                <button id="tool_pick_color_close"></button>
+
+                                <div class="scroll-area-pickcolor">
+                                    <?php
+                                        echo $this->__($attributeInfo['prb_back_colour']['lable']);
+                        				echo $attributeInfo['prb_back_colour']['data'];
+                        			?>
+
+                                    <div class="pms-div">
+                                        <div class="outer-pms">
+                                            <div class="inst" id="pms_color_panel">
+                                                <a class="" href="javascript:void(0)"><?php echo $this->__('Available PMS codes') ?></a>
+                                                <!-- <input class="inst" type="button" value="<?php echo $this->__('Available PMS codes') ?>"> -->
+                                            </div>
+                                        </div>
+
+                                        <div id="pms_fancy" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;">
+                                            <div id="fancy-inner" class="fancybox-wrap fancybox-desktop fancybox-type-iframe fancybox-opened" tabindex="-1">
+                                                <div class="fancybox-skin" style="padding: 15px; width: auto; height: auto;">
+                                                    <div class="fancybox-outer">
+                                                        <div class="fancybox-inner" style="overflow: auto; width: 815px; height: 264px;">
+                                                            <h4><?php echo $this->__('Available PMS codes') ?></h4>
+                                                            <?php $availablePms = $this->getAvailablePmsCodes(); ?>
+                                                            <ul id="pms_ul">
+                                                                <?php foreach($availablePms as $pms) : ?>
+                                                                    <a onclick="setPmsColor('<?php echo $pms['hex']; ?>','<?php echo $pms['pms'] ?>')" class="pmsLink">
+                                                                        <li>
+                                                                            <?php echo $pms['pms']; ?>
+                                                                        </li>
+                                                                        <span style="background-color: <?php echo $pms['hex']; ?>"></span>
+                                                                    </a>
+
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <a title="Close" id="pms-fancy-close" class="fancybox-item fancybox-close" href="javascript:;"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <input type="text" name="pmsColor" id="pmsColor" value="" />
+                                            <button class="button mybtn-cart" id="applypms" name="applypms" value="<?php echo $this->__('Use PMS');?>"><?php echo $this->__('Use PMS');?></button>
+                                            <input type="hidden" value="66" name="current_product_colorid" id="current_product_colorid" />
+                                            <input type="hidden" value="#FFFFFF" name="current_product_colorhash" id="current_product_colorhash" />
+                                        </div>
+
+                                        <button id="tool_pms_color_close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="next-button">
+                                <input class="button mybtn-cart step2" type="button" name="step2" id="" value="<?php echo $this->__('Continue'); ?>" />
+                                <input class="button mybtn-cart" type="button" name="reset" id="reset" value="Reset" />
+                            </div>
+                        </div>
+                </nav>
+
+                <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="addart-panel">
+                    <div class="box-outer">
+                        <label class="label"><?php echo $this->__('Add Art');?></label>
+                        <div class="inst" id="inst"><a href="javascript:void(0)">i</a></div>
+                        <div style="display:none;" id="design_tooltip" class="tooltip">
+                            1. <?php echo $this->__('Ungroup does one level layering, so to do further layering, ungroup again until you can select the element you want to change color for.');?> <br>
+                            <br>
+                            2. <?php echo $this->__('Select any layer to change color of complete layer.');?> </div>
+                            <button id="tool_add_art_close"></button>
+                            <div class="input-area">
+                              <div class="scroll-area-chooseart">
+                                <div class="add-art-product">
+                                  <ul id="facontainer" class="art-list">
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+
+                            <style type="text/css">
+                            .fa {
+                              display: inline-block;
+                              font-family: FontAwesome;
+                              font-feature-settings: normal;
+                              font-kerning: auto;
+                              font-language-override: normal;
+                              font-size: inherit;
+                              font-size-adjust: none;
+                              font-stretch: normal;
+                              font-style: normal;
+                              font-synthesis: weight style;
+                              font-variant: normal;
+                              font-weight: normal;
+                              line-height: 1;
+                              text-rendering: auto;
+                            }
+                            </style>
+
+                            <div class="">
+
+                                <div class="prb_fa_content"><!-- prb_fa_color -->
+                                    <label class="myLabel"><?php echo $this->__($attributeInfo['prb_fa_color']['lable']);?></label>
+                                        <?php echo $attributeInfo['prb_fa_color']['data'];?>
+                                        <div class="prb_fa_size">
+                                            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_fa_size']['lable']);?></label>
+                                            <?php echo $attributeInfo['prb_fa_size']['data'];?>
+                                        </div>
+
+                                        <input type="hidden" name="productId" id="productId" value="<?php echo $id; ?>">
+                                        <input type="hidden" name="currencySymbol" id="currencySymbol" value="<?php echo $currencySymbol; ?>">
+                                        <input type="hidden" name="label_price" id="label_price" value="<?php echo $label_price; ?>">
+                                        <input type="hidden" name="image_price" id="image_price" value="<?php echo $image_price; ?>">
+                                        <input type="hidden" name="icon_price" id="icon_price" value="<?php echo $icon_price; ?>">
+
+                                        <div class="price_text_msg">
+                                            <h4><?php echo $this->__('%s is added to your cart for choosing this icon.', $icon_price_currency);?></h4>
+                                        </div>
+
+                                        <div class="next-button">
+                                            <input class="button mybtn-back-cart4 mybtn-cart step5" type="button" name="step5" id="" value="<?php echo $this->__('Back'); ?>" />
+                                            <input class="button mybtn-cart step6" type="button" name="step6" id="" value="<?php echo $this->__('Continue'); ?>" />
+                                        </div>
+
+                                        <div class="prb_fa_text">
+                                            <?php echo $attributeInfo['prb_fa_text']['data'];?>
+                                        </div>
+                                        <br />
+                                </div>
+                            </div>
+                </nav>
+
+    <nav class="cbp-spmenu-vertical cbp-spmenu-right" id="addtext-panel">
+      <div class="box-outer">
+        <div class="boxtop">
+          <label class="label"><?php echo $this->__('Add Text');?></label>
+          <div class="inst" id="add_text_panel"><a href="javascript:void(0)">i</a></div>
+          <div style="display:none;" id="add_text_tooltip" class="tooltip"> 1. <?php echo $this->__('You can add text from here');?><br>
+            <br>
+            2. <?php echo $this->__('You can also change the font and the color of the font.');?> </div>
+        </div>
+        <button id="tool_add_art_close"></button>
+        <div class="myTextBox">
+          <div class="prb_text_colour">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_text_colour']['lable']);?></label>
+            <?php echo $attributeInfo['prb_text_colour']['data'];?>
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_colorpicker']['lable']);?></label>
+            <?php echo $attributeInfo['prb_colorpicker']['data'];?> </div>
+          <div class="prb_text_size">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_text_size']['lable']);?></label>
+            <?php echo $attributeInfo['prb_text_size']['data'];?> </div>
+          <div class="prbnametitle">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_name_title']['lable']);?></label>
+            <?php	echo $attributeInfo['prb_name_title']['data'];?>
+          </div>
+          <div class="toolset_fontfamily changeFont">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_fonts']['lable']); ?></label>
+            <div class="scroll-area-choosetext">
+				<?php
+                    /*Parth Edited New Dropdown attribute for Size -Start 27-05-2014*/
+                    echo $attributeInfo['prb_fonts']['data'];?>
+            </div>
+          </div>
+          <br />
+        </div>
+
+        <div class="next-button">
+            <input class="button mybtn-back-cart1 mybtn-cart step2" type="button" name="step2" id="" value="<?php echo $this->__('Back'); ?>" />
+            <input class="button mybtn-cart step3" type="button" name="step3" id="" value="<?php echo $this->__('Continue'); ?>" />
+        </div>
+      </div>
+    </nav>
+
+    <nav class="cbp-spmenu-vertical cbp-spmenu-right" id="addextra-panel">
+      <div class="box-outer">
+        <div class="boxtop">
+          <label class="label"><?php echo $this->__('Add Extra');?></label>
+          <div class="inst" id="add_extra_panel"><a href="javascript:void(0)">i</a></div>
+          <div style="display:none;" id="add_extra_tooltip" class="tooltip"> 1. <?php echo $this->__('You can add text from here');?><br>
+            <br>
+            2. <?php echo $this->__('You can also change the font and the color of the font.');?> </div>
+        </div>
+        <button id="tool_add_art_close"></button>
+        <div class="myTextBox">
+        <div class="prb_extra_color">
+          <label class="myLabel"><?php echo $this->__($attributeInfo['prb_extra_color']['lable']);?></label>
+          <?php echo $attributeInfo['prb_extra_color']['data'];?>
+        </div>
+          <div class="prb_extra_size">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_extra_size']['lable']);?></label>
+            <?php echo $attributeInfo['prb_extra_size']['data'];?>
+        </div>
+          <div class="prbextrafield">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_extra_field']['lable']);?></label>
+            <?php echo $attributeInfo['prb_extra_field']['data'];?>
+          </div>
+        <div class="toolset_fontfamily changeExtraFont">
+          <label class="myLabel"><?php echo $this->__($attributeInfo['prb_extra_font']['lable']); ?></label>
+          <div class="scroll-area-choosetext">
+          <?php
+                echo $attributeInfo['prb_extra_font']['data'];?>
+          </div>
+        </div>
+
+        </div>
+
+        <div class="next-button">
+        <input class="button mybtn-back-cart3 mybtn-cart step4" type="button" name="step4" id="" value="<?php echo $this->__('Back'); ?>" />
+        <input class="button mybtn-cart step5" type="button" name="step5" id="" value="<?php echo $this->__('Continue'); ?>" />
+        </div>
+
+      </div>
+    </nav>
+
+    <nav class="cbp-spmenu-vertical cbp-spmenu-right" id="addtitle-panel">
+    <div class="box-outer">
+      <div class="boxtop">
+        <label class="label"><?php echo $this->__('Add Title');?></label>
+        <div class="inst" id="add_title_panel"><a href="javascript:void(0)">i</a></div>
+        <div style="display:none;" id="add_title_tooltip" class="tooltip"> 1. <?php echo $this->__('You can add title from here');?><br>
+          <br>
+          2. <?php echo $this->__('You can also change the font and the color of the font.');?> </div>
+      </div>
+      <div class="myTextBox">
+        <div class="prb_title_colour">
+          <label class="myLabel"><?php echo $this->__($attributeInfo['prb_title_colour']['lable']);?></label>
+          <?php echo $attributeInfo['prb_title_colour']['data'];?> </div>
+        <div class="prb_title_size">
+          <label class="myLabel"><?php echo $this->__($attributeInfo['prb_title_size']['lable']);?></label>
+          <?php echo $attributeInfo['prb_title_size']['data'];?> </div>
+        <div class="prbtitle">
+          <?php   //print"<pre>";print_r($attributeInfo);print"</pre>"; ?>
+          <label class="myLabel"><?php echo $this->__($attributeInfo['prb_title']['lable']);?></label>
+          <?php echo $attributeInfo['prb_title']['data'];?> </div>
+        <div class="toolset_fontfamily changeTitleFont">
+          <label class="myLabel"><?php echo $this->__($attributeInfo['prb_title_fonts']['lable']); ?></label>
+          <div class="scroll-area-choosetext">
+			  <?php
+            /*Parth Edited New Dropdown attribute for Size -Start 28-05-2014*/
+            echo $attributeInfo['prb_title_fonts']['data'];?>
+          </div>
+        </div>
+        </div>
+        <div class="next-button">
+       <input class="button mybtn-back-cart2 mybtn-cart step3" type="button" name="step3" id="" value="<?php echo $this->__('Back'); ?>" />
+       <input class="button mybtn-cart step4" type="button" name="step4" id="" value="<?php echo $this->__('Continue'); ?>" />
+        </div>
+        </div>
+        </nav>
+
+        <?php /*Add Image Navigation Start */ ?>
+        <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="addtimage-panel">
+        <div class="box-outer">
+          <label class="label"><?php echo $this->__('ADD IMAGE');?></label>
+          <div class="inst" id="inst_image"><a href="javascript:void(0)">i</a></div>
+
+          <div align="center" class="uploadimage-btn" >
+            <!-- <button id="upload_img_show" type="button" class="disable_imgd" >
+            <div><?php //echo $this->__('Upload Images');?></div>
+            </button> -->
+          </div>
+
+
+<script type="text/javascript">
+    $j(".step2").click(function(){
+        $j("#addtext").trigger({
+            type:"click",
+            button:0,
+        });
+    });
+
+
+    $j(".step3").click(function(){
+        $j("#addtitle").trigger({
+            type:"click",
+            button:0,
+        });
+    });
+
+    $j(".step4").click(function(){
+        $j("#addextra").trigger({
+            type:"click",
+            button:0,
+        });
+    });
+
+    $j(".step5").click(function(){
+        $j("#addart").trigger({
+            type:"click",
+            button:0,
+        });
+    });
+
+    $j(".step6").click(function(){
+        $j("#addtimage").trigger({
+            type:"mouseup",
+            button:0,
+        });
+    });
+
+</script>
+        <div id="upload-wrapper">
+          <div align="center">
+            <form action="<?php echo Mage::getBaseUrl().'/personalize/index/processupload/' ?>" method="post" enctype="multipart/form-data" id="MyUploadForm">
+              <label class="uploadimg"><?php echo $this->__('Upload Images');?></label>
+              <input name="FileInput" id="FileInput" type="file" value="<?php echo $this->__('Upload Images');?>" />
+              <input style="display:none;" type="submit"  id="submit-btn" value="Upload" />
+              <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/images/ajax-loader.gif';?>" id="loading-img" style="display:none;" alt="Please Wait"/>
+            </form>
+            <div id="progressbox" ><div id="progressbar"></div ><div id="statustxt"  style="display: none;">0%</div></div>
+            <div id="output" style="display: none;"></div>
+          </div>
+        </div>
+
+        <div class="notifyDiv">
+            <span><?php echo $this->__('Minimum upload size of image is 500px * 200px.') ?></span>
+        </div>
+
+        <div class="input-area">
+          <div class="field-raw">
+            <select name="clipart" id="clipartopt" class="select-main">
+              <?php foreach($clipArtFolderList as $clipArtFolder) { ?>
+              <option value="<?php echo $clipArtFolder; ?>" id="clipcatlist_<?php echo $clipArtFolder; ?>"><?php echo $this->__($clipArtFolder); ?></option>
+              <?php } ?>
+            </select>
+            <input type="hidden" id="firstclipartcat" name="firstclipartcat" value="28 "/>
+          </div>
+          <div class="scroll-area-chooseart">
+            <div class="add-art-product">
+              <ul id="clipartcontainer" class="art-list">
+              </ul>
+            </div>
+
+         <div class="price_text_msg1">
+          <h4><?php echo $this->__('%s is added to your cart for choosing this image.', $image_price_currency);?></h4>
+        </div>
+
+            <div id="container_panel">
+              <div class="tool_sep"></div>
+              <label id="group_title" title="Group identification label" style="display:none;"> <span>label:</span>
+                <input id="g_title" data-attr="title" size="10" type="text"/>
+              </label>
+            </div>
+          </div>
+        </div>
+
+          <div style="display:none;" id="inst_image_tooltip" class="tooltip"> 1. <?php echo $this->__('Upload images from your local storage.');?><br>
+            <br>
+            2. <?php echo $this->__('Choose and click the image you want to use in design.');?><br>
+            <br>
+            3. <?php echo $this->__('You can resize and rotate the image further using editing controls.');?> </div>
+          <div align="center" class="uploadimage-btn-gallery">
+            <button id="upload_img_show_gallery" type="button" class="disable_img" style="display:none;" >
+            <div><?php echo $this->__('Images Gallery');?></div>
+            </button>
+          </div>
+           <?php if ($useScissors == 1 || $is_lable == true){ ?>
+            <script type="text/javascript">
+            function step7Call()
+            {
+              if (addLabelFlag == 0)
+              {
+                  if (useScissors == 1)
+                  {
+                    $j("#addOneScissors").trigger({
+                          type:"click",
+                          button:0,
+                      });
+                  }
+                  else
+                  {
+                    $j("#addlabel").trigger({
+                          type:"click",
+                          button:0,
+                      });
+                  }
+
+              }
+              else
+              {
+                $j("#addlabel").trigger({
+                      type:"click",
+                      button:0,
+                  });
+              }
+            }
+            </script>
+            <div class="next-button">
+             <input class="button mybtn-back-cart5 mybtn-cart" type="button" name="step6" id="step6" value="<?php echo $this->__('Back'); ?>" />
+            <input class="button mybtn-cart" type="button" name="step7" id="step7" onclick="step7Call(); return false;" value="<?php echo $this->__('Continue'); ?>" />
+            </div>
+          <?php } ?>
+        </div>
+        <div id="image_panel">
+          <div class="toolset_image" style="display:none;">
+            <label><span id="iwidthLabel" class="icon_label"></span>
+              <input id="image_width" class="attr_changer" title="Change image width" size="3" data-attr="width"/>
+            </label>
+            <label><span id="iheightLabel" class="icon_label"></span>
+              <input id="image_height" class="attr_changer" title="Change image height" size="3" data-attr="height"/>
+            </label>
+          </div>
+        </div>
+
+      </nav>
+    <?php if ($useScissors == 1) : ?>
+    <nav class="cbp-spmenu-vertical cbp-spmenu-right" id="addOneScissors-panel">
+      <div class="box-outer">
+        <div class="boxtop">
+          <label class="label"><?php echo $this->__('Change Scissor Color');?></label>
+          <div class="inst" id="add_scissor_panel"><a href="javascript:void(0)">i</a></div>
+          <div style="display:none;" id="add_scissor_tooltip" class="tooltip"> 1. <?php echo $this->__('You can add Scissor from here');?><br>
+            <br>
+            2. <?php echo $this->__('You can also change the color of the Scissor.');?> </div>
+        </div>
+        <button id="tool_add_art_close"></button>
+        <div class="myTextBox">
+          <div class="prb_scissors_colour">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_scissors_colour']['lable']);?></label>
+            <?php echo $attributeInfo['prb_scissors_colour']['data'];?>
+          </div>
+          <div class="prb_scissors_patterns" style="margin-top=10px;">
+            <label class="myLabel"><?php echo $this->__("Choose Scissor Patterns"); ?></label>
+            <?php
+            $patterns = Mage::getModel("personalize/personalize")->getScissorPatterns();
+
+
+
+            $i = 1;
+            foreach ($patterns as $pattern) :  ?>
+
+                <?php if($pattern == 'preview') continue; ?>
+
+                <?php $patternPath = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'media/patterns/'.$pattern; ?>
+                <?php $patternNameArray = explode('.',$pattern); ?>
+                <?php $patternName = $patternNameArray[0]; ?>
+
+                <?php
+                    $previewImagePath = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'media/patterns/preview/'.$pattern;
+                    $previewFilePath = getcwd().'/media/patterns/preview/'.$pattern;
+                    if(!file_exists($previewFilePath)){
+                        $previewImagePath = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN).'frontend/magma/default/images/coming-soon.png';
+                    }
+                ?>
+
+                <a href="#" rel="<?php echo $previewImagePath; ?>" class="screenshot">
+                    <span>
+                        <img src="<?php echo $patternPath;?>" pattern-name="<?php echo $this->__($patternName); ?>" onclick="changePatterns('<?php echo $patternPath; ?>',this.id); return false;" class="colourClass scissors_patterns" id="prb_scissors_patterns_<?php echo $i; ?>">
+                    </span>
+                </a>
+                <?php
+                $i++;
+            endforeach ; ?>
+
+          </div>
+          <p style="display:none;" id="pattern_selection" class="selected_color">
+                    <span><?php echo $this->__('You have selected ') ?></span>
+                    <span id="selected_pattern"></span>
+                    <span><?php echo $this->__('pattern'); ?></span>
+                </p>
+         <p style="float:left;"><?php echo  $this->__("Pattern will not displayed in the preview");?></p>
+        </div>
+        <?php if ($is_lable == true || $usePen == 1 || $useTweezers == 1) { ?>
+        <?php if ($usePen == 1 || $useTweezers == 1) : ?>
+        <script type="text/javascript">
+          function step8Call()
+          {
+              $j("#addPenTweezers").trigger({
+                    type:"click",
+                    button:0,
+                });
+          }
+        </script>
+        <?php endif;
+        if (($usePen != 1 && $useTweezers != 1) && $is_lable == true) :
+        ?>
+        <script type="text/javascript">
+          function step8Call()
+          {
+              $j("#addlabel").trigger({
+                    type:"click",
+                    button:0,
+                });
+          }
+        </script>
+      <?php endif;?>
+          <div class="next-button">
+             <input class="button mybtn-back-cart6 mybtn-cart" type="button" name="step6" id="step6" value="<?php echo $this->__('Back'); ?>" />
+            <input class="button mybtn-cart" type="button" name="step8" id="step8" value="<?php echo $this->__('Continue'); ?>" onclick="step8Call();return false;" />
+          </div>
+        <?php } ?>
+      </div>
+    </nav>
+  <?php endif; ?>
+    <?php if ($usePen == 1 || $useTweezers == 1) : ?>
+    <nav class="cbp-spmenu-vertical cbp-spmenu-right" id="addPenTweezers-panel">
+      <div class="box-outer">
+        <div class="boxtop">
+          <label class="label"><?php echo $this->__('Change Pen Color');?></label>
+          <div class="inst" id="add_pentweezer_panel"><a href="javascript:void(0)">i</a></div>
+          <div style="display:none;" id="add_pentweezer_tooltip" class="tooltip"> 1. <?php echo $this->__('You can change the color of pen, penlight, tweezers from here');?> </div>
+        </div>
+        <button id="tool_add_art_close"></button>
+        <div class="scroll-area-pickcolor">
+          <div class="prb_pen_colour">
+            <label class="myLabel"><?php echo $this->__($attributeInfo['prb_pen_colour']['lable']);?></label>
+            <?php echo $attributeInfo['prb_pen_colour']['data'];?>
+            <p style="display:none;" id="pen_selected_color" class="selected_color">
+                    <span><?php echo $this->__('You have selected ') ?></span>
+                    <span id="pen_selected_color_span"></span>
+                    <span><?php echo $this->__('color'); ?></span>
+                </p>
+           <p style="float:left;"><?php echo  $this->__("Equipment will not appear in the preview.");?></p>
+          </div>
+
+          <div class="prb_penlight_color" >
+            <label style="margin-top:20px;" class="myLabel"><?php echo $this->__($attributeInfo['prb_penlight_color']['lable']);?></label>
+            <?php echo $attributeInfo['prb_penlight_color']['data'];?>
+            <p style="display:none;" id="penlight_selected_color" class="selected_color">
+                    <span><?php echo $this->__('You have selected ') ?></span>
+                    <span id="penlight_selected_color_span"></span>
+                    <span><?php echo $this->__('color'); ?></span>
+                </p>
+           <p style="float:left;"><?php echo  $this->__("Equipment will not appear in the preview.");?></p>
+          </div>
+          <?php if ($useTweezers == 1) : ?>
+            <div class="prb_tweezer_color " sstyle="margin-top:20px;">
+              <label style="margin-top:20px;" class="myLabel"><?php echo $this->__($attributeInfo['prb_tweezer_color']['lable']);?></label>
+              <?php echo $attributeInfo['prb_tweezer_color']['data'];?>
+            </div>
+            <p style="display:none;" id="tweezer_selected_color" class="selected_color">
+                    <span><?php echo $this->__('You have selected ') ?></span>
+                    <span id="tweezer_selected_color_span"></span>
+                    <span><?php echo $this->__('color'); ?></span>
+                </p>
+           <p style="float:left; width:100%;"><?php echo  $this->__("Equipment will not appear in the preview.");?></p>
+        <?php endif; ?>
+        </div>
+        <?php if ($is_lable == true) { ?>
+        <script type="text/javascript">
+          function step9Call()
+          {
+              $j("#addlabel").trigger({
+                    type:"click",
+                    button:0,
+                });
+          }
+        </script>
+          <div class="next-button" style="margin : 10px; padding: 10px; clear:both;">
+
+               <input class="button mybtn-back-cart7 mybtn-cart" type="button" name="step7" id="step7" value="<?php echo $this->__('Back'); ?>" />
+            <input class="button mybtn-cart" type="button" name="step9" id="step9" value="<?php echo $this->__('Continue');?>" onclick="step9Call();return false;" />
+          </div>
+        <?php } ?>
+      </div>
+    </nav>
+  <?php endif; ?>
+
+  <?php if ($is_lable) : ?>
+    <nav class="cbp-spmenu-vertical cbp-spmenu-right" id="addlabel-panel">
+      <div class="box-outer">
+        <div class="boxtop">
+          <label class="label"><?php echo $this->__('Just Label');?></label>
+          <div class="inst" id="add_label_panel"><a href="javascript:void(0)">i</a></div>
+          <div style="display:none;" id="add_label_tooltip" class="tooltip"> 1. <?php echo $this->__('You can add just the label from here');?><br>
+            </div>
+        </div>
+        <button id="tool_add_art_close"></button>
+        <div class="myTextBox">
+          <div class="just_label">
+            <input type="checkbox" class="hide" onclick="opConfig.reloadPrice()" name="options[<?php echo $customOptionId ?>][]" id="options_<?php echo $labelOptionTypeId ?>" value="<?php echo $labelOptionTypeId ?>" price="20">
+            <input type="checkbox" name="c_addLabel" id="c_addLabel" value="0" />
+            <label class="myLabel"><?php echo $this->__("Purchase just the label");?></label>
+          </div>
+        </div>
+      </div>
+    </nav>
+  <?php endif; ?>
+      <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="addshape-panel">
+        <div class="box-outer">
+          <label class="label">ADD SHAPES</label>
+          <div class="inst" id="inst_shape">i</div>
+          <div style="display:none;" id="inst_shape_tooltip" class="tooltip"> 1. Click any control to get more options.<br>
+            <br>
+            2. Please click the select pointer in left panel to exit shape mode. </div>
+          <button id="tool_add_shape_close"></button>
+          <div class="note-background">
+            <div id="tools_left" class="tools_panel">
+              <div class="tool_button" id="tool_fhpath" title="Pencil Tool"></div>
+              <div class="tool_button" id="tool_line" title="Line Tool"></div>
+              <div class="tool_button flyout_current" id="tools_rect_show" title="Square/Rect Tool">
+                <div class="flyout_arrow_horiz"></div>
+              </div>
+              <div class="tool_button flyout_current" id="tools_ellipse_show" title="Ellipse/Circle Tool">
+                <div class="flyout_arrow_horiz"></div>
+              </div>
+              <div style="display: none; position:relative; border:1px solid">
+                <div id="tool_rect" title="Rectangle"></div>
+                <div id="tool_square" title="Square"></div>
+                <div id="tool_fhrect" title="Free-Hand Rectangle"></div>
+                <div id="tool_ellipse" title="Ellipse"></div>
+                <div id="tool_circle" title="Circle"></div>
+                <div id="tool_fhellipse" title="Free-Hand Ellipse"></div>
+              </div>
+            </div>
+          </div>
+          <br class="clear" />
+          <br class="clear" />
+        </div>
+      </nav>
+      </section>
+     </div>
+     <div class="panelinfo">
+      <div class="panelinfobox">
+        <div class="infodiv">
+       <?php  // if (!(isset($cartEditMode) and $cartEditMode == 1)) : ?>
+      <div class="box-outer">
+        <div class="aproduct-data">
+          <label class="label"><?php echo $this->__('Change Product');?></label>
+          <div class="inst" id="change_prd_panel"><a href="javascript:void(0)">i</a></div>
+          <div style="display:none;" id="change_prd_tooltip" class="tooltip"> 1. <?php echo $this->__('You can change the designer product directly from here');?><br>
+            <br>
+            2. <?php echo $this->__('Note: But the changes you made in the previous product wont be saved.');?> </div>
+          <button id="tool_choose_prod_close"></button>
+          <div class="input-area">
+            <div class="field-raw">
+              <div class="product-type">
+                <?php $model = Mage::getModel("personalize/personalize");
+                        $collection = $model->getCustomProducts();
+                        if ($collection->count() and $collection->count() >= 2) :
+                  ?>
+                <select id="prod_type" class="select-small">
+                  <?php
+                        foreach ($collection as $_productEach)
+                        {
+                        ?>
+                          <option id="<?php echo $_productEach->getId() ?>" value="<?php echo Mage::getUrl('personalize',array('_secure'=>true)) ?>?product=<?php echo $_productEach->getId();?>&qty=1"
+                              <?php if ($_productEach->getId() == $id){?>selected="selected" <?php } ?> > <?php echo $_helper->productAttribute($_productEach, $_productEach->getName() , 'name'); ?> </option>
+                  <?php
+                        }
+                        ?>
+                </select>
+                <?php endif;?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+       <?php //endif; ?>
+          <div id="productprice" class="text1">
+		  <?php echo $this->getPriceHtml($_product); ?><?php //echo $finalprice; ?>
+         </div>
+       <?php /*?>
+          <div class="price_new">
+          <div class="price-box">
+           <span class="price-including-tax">
+
+            </span><br>
+           <span class="label">Inkl mva</span>
+           </span>
+           </div>
+          </div><?php */?>
+
+
+          <div class="text2"><?php  //echo $this->getTierPriceHtml();?></div>
+          <div class="text3"><?php echo $this->__('Item number');?>:<?php echo $_product->getSku();?></div >
+          <!-- <form name="productbuilderform" method="post"> -->
+          <form id="product_addtocart_form" name="productbuilderform" method="post" action="<?php echo $addToUrl;?>">
+            <div class="add-to-box">
+              <div class="add-to-cart">
+                <label for="qty"><?php echo $this->__('Qty')?>:</label>
+                <div class="product-qty">
+                  <input type="button" class="qty-decrease" onclick="var qty_el = document.getElementById('qty'); var qty = qty_el.value; if( !isNaN( qty ) && qty > 1 ) qty_el.value--;return false;">
+                  <input type="text" class="input-text qty" readonly="readonly" title="Qty" value="<?php echo $qty; ?>" maxlength="12" id="qty" name="qty">
+                  <input type="button" class="qty-increase" onclick="var qty_el = document.getElementById('qty'); var qty = qty_el.value; if( !isNaN( qty )) qty_el.value++;return false;">
+
+                  <input type="button" id="preview2" onclick="savePersonalize();" class="button mybtn-cart" title="<?php echo $this->__('ADD TO CART');?>" value="<?php echo $this->__('ADD TO CART');?>"/><span><span></span></span>
+
+                  <button style="display: none;" id="addCartId" onclick="productAddToCartForm.submit(this)" class="button btn-cart" title="Add to Cart" type="button"><span><span>Add to Cart</span></span><span class="btn-arrow"><i class="icon-angle-right"></i></span></button>
+
+                  <br/><br/>
+                  <a href="#" target="_blank" style="display:none;margin-top:15px;text-decoration: underline;" id="highResolutionImgLink">High Resolution Image</a>
+
+
+                  <?php // Hidden Values that we need to show at the Cart ?>
+                  <?php foreach($attributesData as $attribute) : ?>
+                    <input type="hidden" name="<?php echo $attribute['attribute_code']; ?>" id="<?php echo $attribute['attribute_code']; ?>" value="<?php echo $value?>" />
+                  <?php endforeach; ?>
+
+                  <input type="hidden" name="prb_scissors_sel_patterns" id="prb_scissors_sel_patterns" value="" />
+                  <input type="hidden" name="usePms" id="usePms" value="0" />
+                  <input type="hidden" name="pmsCode" id="pmsCode" value="0" />
+                  <input type="hidden" name="addLabel" id="addLabel" value="0" />
+
+                  <input type="hidden" name="logoFileName" id="logoFileName" value="" />
+                  <input type="hidden" name="h_text_X" id="h_text_X" value="" />
+                  <input type="hidden" name="h_text_Y" id="h_text_Y" value="" />
+                  <input type="hidden" name="h_text_transform" id="h_text_transform" value="" />
+
+                  <input type="hidden" name="h_title_X" id="h_title_X" value="" />
+                  <input type="hidden" name="h_title_Y" id="h_title_Y" value="" />
+                  <input type="hidden" name="h_title_transform" id="h_title_transform" value="" />
+
+                  <input type="hidden" name="h_extratext_X" id="h_extratext_X" value="" />
+                  <input type="hidden" name="h_extratext_Y" id="h_extratext_Y" value="" />
+                  <input type="hidden" name="h_extratext_transform" id="h_extratext_transform" value="" />
+
+                  <input type="hidden" name="h_smiley_X" id="h_smiley_X" value="" />
+                  <input type="hidden" name="h_smiley_Y" id="h_smiley_Y" value="" />
+                  <input type="hidden" name="h_smiley_width" id="h_smiley_width" value="" />
+                  <input type="hidden" name="h_smiley_height" id="h_smiley_height" value="" />
+
+                  <input type="hidden" name="h_FA_X" id="h_FA_X" value="" />
+                  <input type="hidden" name="h_FA_Y" id="h_FA_Y" value="" />
+                  <input type="hidden" name="h_FA_width" id="h_FA_width" value="" />
+                  <input type="hidden" name="h_FA_height" id="h_FA_height" value="" />
+
+                  <?php if ($useScissors == 1) : ?>
+                    <input type="hidden" name="h_scissor_Used" id="h_scissor_Used" value="" />
+                    <input type="hidden" name="h_scissor_X" id="h_scissor_X" value="" />
+                    <input type="hidden" name="h_scissor_Y" id="h_scissor_Y" value="" />
+                    <input type="hidden" name="h_scissor_width" id="h_scissor_width" value="" />
+                    <input type="hidden" name="h_scissor_height" id="h_scissor_height" value="" />
+                  <?php endif; ?>
+
+                    <input type="hidden" name="h_image_X" id="h_image_X" value="" />
+                    <input type="hidden" name="h_image_Y" id="h_image_Y" value="" />
+                    <input type="hidden" name="h_image_width" id="h_image_width" value="" />
+                    <input type="hidden" name="h_image_height" id="h_image_height" value="" />
+
+                    <input type="hidden" name="product" id="product" value="<?php echo $_GET['product']; ?>" />
+
+                    <input type="hidden" name="price" id="pprice" value="<?php echo $_taxHelper->getPrice($_product, $_product->getPrice(), true);?>" />
+                    <input type="hidden" name="cursym" id="cursym" value="<?php echo Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); ?>" />
+
+                    <?php /*Parth Added :- Start - Hidden to store the element object(Smiley,Text,etc) that can be used later*/ ?>
+                    <input type="hidden" name="replaceSmiley" id="replaceSmiley" value="" />
+                    <input type="hidden" name="replaceFA" id="replaceFA" value="" />
+                    <input type="hidden" name="replaceText" id="replaceText" value="" />
+                    <input type="hidden" name="replaceTitle" id="replaceTitle" value="" />
+                    <?php /*<!-- Parth Added :- End - Hidden to store the element object(Smiley,Text,etc) that can be used later-->*/ ?>
+
+                    <!-- Ankit Dobariya :: Custom option for price setting -->
+
+                    <?php if($imageOptionTypeId != '') : ?>
+                        <input type="checkbox" class="hide"  name="options[<?php echo $customOptionId ?>][]" id="cb_image" value="<?php echo $imageOptionTypeId ?>">
+                    <?php endif; ?>
+
+                    <?php if($iconOptionTypeId != '') : ?>
+                        <input type="checkbox" class="hide"  name="options[<?php echo $customOptionId ?>][]" id="cb_icon" value="<?php echo $iconOptionTypeId ?>">
+                    <?php endif; ?>
+
+                    <?php if($labelOptionTypeId != '') : ?>
+                        <input type="checkbox" class="hide"  name="options[<?php echo $customOptionId ?>][]" id="cb_lable" value="<?php echo $labelOptionTypeId ?>">
+                    <?php endif; ?>
+
+                    <!-- End -->
+
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </form>
+        </div >
+      </div>
+    </div>
+
+      <div class="clear"></div>
+    </div>
+
+    <?php //Edited : Ashesh 27-2-2014	?>
+    <div class="quantitysize" id="cartarea">
+      <div class="heading-quantitysize" id="qtySizeCaption"><?php echo $this->__('Information');?></div>
+      <div class="border-area">
+        <div class="infoarea">
+          <?php
+          $_product = Mage::getModel('catalog/product')->load($id);
+          $_helper = Mage::helper('catalog/output');
+          echo $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description') ?>
+    </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <?php //Edited : End?>
+    <div class="pre_related_slider">
+      <?php echo $this->getChildHtml('related_products') ?>
+    </div>
+    <div id="dialog_box">
+      <div id="dialog_box_overlay"></div>
+      <div id="dialog_container">
+        <div id="dialog_content" align="center"></div>
+        <div id="dialog_buttons" align="center"></div>
+      </div>
+    </div>
+    <div id="preview_window">
+      <div id="preview_window_overlay"></div>
+      <div id="preview_window_container" class="ui-draggable">
+        <div id="tool_save_design_window_back" class="toolbar_button">
+          <button id="tool_preview_window_cancel"></button>
+        </div>
+        <p class="headingtwo">Preview</p>
+        <div class="save-design-table">
+          <div class="preview_holder"></div>
+        </div>
+      </div>
+    </div>
+    <div class="hidSvg" style="display:none;">
+    </div>
+
+    <script src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/js/classie.js'?>"></script>
+    <script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/html5/slider.js'?>"></script>
+
+<script type="text/javascript">
+    $g(document).ready(function(){
+
+    $g("#reset").click(function(){resetAll();});
+    window.resetAll = function()
+    {
+        /*DEL NOW*/
+        if(document.getElementsByClassName('textClass').length == 1)
+        {
+            svgCanvas.selectOnly([Oldtext],true);
+            svgCanvas.setMode("select");
+            $g("#tool_delete").trigger({
+                type:"click",
+                button:0,
+            });
+        }
+
+        if(document.getElementsByClassName('titleClass').length == 1)
+        {
+            svgCanvas.selectOnly([Oldtitle],true);
+            svgCanvas.setMode("select");
+            $g("#tool_delete").trigger({
+                type:"click",
+                button:0,
+            });
+        }
+
+        if(document.getElementsByClassName('extraTextClass').length == 1)
+        {
+            svgCanvas.selectOnly([OldExtraText],true);
+            svgCanvas.setMode("select");
+            $g("#tool_delete").trigger({
+                type:"click",
+                button:0,
+            });
+        }
+
+        if(document.getElementsByClassName('smileyImage').length == 1)
+        {
+            svgCanvas.selectOnly(document.getElementsByClassName('smileyImage'));
+            svgCanvas.setMode("select");
+            $g("#tool_delete").trigger({
+                type:"click",
+                button:0,
+            });
+        }
+
+        if(document.getElementsByClassName('logoImage').length == 1)
+        {
+            svgCanvas.selectOnly(document.getElementsByClassName('logoImage'));
+            svgCanvas.setMode("select");
+            $g("#tool_delete").trigger({
+                type:"click",
+                button:0,
+            });
+        }
+
+        if(document.getElementsByClassName('FAImage').length == 1)
+        {
+            svgCanvas.selectOnly(document.getElementsByClassName('FAImage'));
+            svgCanvas.setMode("select");
+            $g("#tool_delete").trigger({
+                type:"click",
+                button:0,
+            });
+        }
+
+        if (addLabelFlag == 1)
+        {
+            $g("#c_addLabel").trigger({
+            type:"click",
+            button:0,
+        });
+    }
+
+    prb_back_colourclickColour("Default","","");
+    prb_scissors_colourclickColour("#FFFFFF","","");
+
+    /*NOW ADD*/
+    if ($g(document).width() < 650)
+    {
+        var wt  = myW/2;
+        if(!(typeof replaceSmileyId === 'undefined') && !(replaceSmileyId == '') || !(typeof imgExists === 'undefined') && !(imgExists == ''))
+          var ht  = (useScissors == 1) ? (Math.abs(origmyY-myY)+origmyH/2)/2 : myH/4;
+        else
+          var ht  = (useScissors == 1) ? (Math.abs(origmyY-myY)+(2*origmyH)/3)/2 : myH/3;
+        var font = 10;
+    }
+    else
+    {
+        var wt  = myW;
+        if(!(typeof replaceSmileyId === 'undefined') && !(replaceSmileyId == '') || !(typeof imgExists === 'undefined') && !(imgExists == ''))
+          var ht  = (useScissors == 1) ? Math.abs(origmyY-myY)+origmyH/2 : myH/2;
+        else
+          var ht  = (useScissors == 1) ? Math.abs(origmyY-myY)+(2*origmyH)/3 : 2*myH/3;
+        var font = 16;
+    }
+
+    $g( "#addtitle-panel" ).toggleClass("bounce");
+        var newTitle = svgCanvas.addSvgElementFromJson({
+          "element": "text",
+          "curStyles": true,
+          "attr": {
+            "x": wt/2 ,
+            "y": ht,
+            "id": svgCanvas.getNextId(),
+            "fill": "#000000",
+            "stroke-width": "0",
+            "font-size": font,
+            "font-family": "Arial",
+            "text-anchor": "middle",
+            "xml:space": "preserve",
+            "opacity": "1",
+            "class" : "titleClass",
+          }
+        });
+        newTitle.textContent = prbYourTitle;
+
+        svgCanvas.keep = true;
+        //svgCanvas.selectOnly([newTitle], true);
+        $g("#smileyalert").css("display","block");
+        addTitleFlag = 1;
+        $g("#prb_title").val(prbYourTitle);
+
+        if($g(document).width() < 650)
+            $g("#prb_title_size").val("10");
+        else
+            $g("#prb_title_size").val("16");
+
+        $g("#prb_title_fonts").val("Arial");
+
+        $g("#addtext").trigger({
+            type:"click",
+            button:0,
+        });
+
+        $g("#pickcolor").trigger({
+            type:"mouseup",
+            button:0,
+        });
+
+        /*svgCanvas.clearSvgContentElement();*/
+    }
+
+    $g("#applypms").click(function(){
+        var pmsColor = $j("#pmsColor").val();
+        if(!pmsColor || pmsColor == ''){
+            alert('<?php echo $this->__("Please enter the Pms code") ?>');
+            return false;
+        }
+
+        showLoader(true);
+        $g.ajax({
+            url:baseUrl+"personalize/index/getPMS",
+            data: "pmsColor=" + pmsColor,
+            success:function(result){
+                hideLoader();
+                if (result){
+                    $g('#canvasBackground').find('rect').attr('fill', result);
+                    hexcode = result;
+                    $g(".prb_back_colour").children().removeClass("selectedColor");
+                    $g("#usePms").val(1);
+                    $g("#pmsCode").val(pmsColor.trim());
+                    $g("#prb_back_colour").val(result);
+                    $g("#prb_printer_back_colour").val(result);
+                }
+                else
+                    alert('Input Pms color is invalid');
+            }});
+        });
+    });
+
+</script>
+    <script type="text/javascript">
+    window.borderApplied = 0;
+    function applyBorder()
+    {
+        var yDif = 30; /*Padding from sides */
+
+        var brdX = yDif;
+        var brdY = useScissors == 1 ? origmyY+yDif : yDif;
+        var brdW = useScissors == 1 ? origmyW-(2*brdX) : myW-(2*brdX);
+        var brdH = useScissors == 1 ? origmyH-(2*yDif) : myH-(2*yDif);
+
+        if(jQuery(document).width() < 650)
+        {
+            brdX = brdX/2;
+            brdY = brdY/2;
+            brdW = brdW/2;
+            brdH = brdH/2;
+        }
+
+        var rect = svgCanvas.addSvgElementFromJson({
+            "element": "rect",
+            "curStyles": true,
+            "attr": {
+                "x": brdX,
+                "y": brdY,
+                "width": brdW,
+                "height": brdH,
+                "id": "applyBorderRect",
+                "stroke" : "#000",
+                "fill": "transparent",
+                "style":"pointer-events:none;",
+                "overflow" : "hidden",
+                "class" : "applyBorderRect",
+            }
+        });
+
+        borderApplied = 1;
+        jQuery("#cancelBorder").show();
+        jQuery("#applyBorder").hide();
+    }
+
+    function cancelBorder()
+    {
+        if(borderApplied == 1)
+        {
+            jQuery('#applyBorderRect').attr('stroke', "transparent");
+            $g(".prb_border_color").children().removeClass("selectedColor");
+            $g("#prb_border_color").val();
+            $g("#prb_printer_border_color").val();
+            jQuery("#cancelBorder").hide();
+            jQuery("#applyBorder").show();
+            borderApplied = 0;
+        }
+    }
+
+    function prb_border_colorclickColour(colorCode,colorlabel,printerVal)
+    {
+        if(borderApplied == 1)
+        {
+            printerVal = typeof printerVal == 'undefined' ? null : printerVal;
+            jQuery('#applyBorderRect').attr('stroke', colorCode);
+            $g(".prb_border_color").children().removeClass("selectedColor");
+            $g("#prb_border_color_"+colorlabel).addClass('selectedColor');
+            $g("#prb_border_color").val(colorlabel);
+            $g("#prb_printer_border_color").val(printerVal);
+        }
+    }
+
+    function changePatterns(patternPath,id)
+    {
+		$g('#pattern_selection').show();
+        $g('#selected_pattern').html($g('#'+id).attr('pattern-name'));
+	    $g('.scissors_patterns').unbind("click", prb_scissors_colourclickColour());
+
+        $g(".prb_scissors_patterns span img").removeClass("selectedColor");
+        $g(".prb_scissors_colour span").removeClass("selectedColor");
+        $g("#"+id).addClass("selectedColor");
+        getScissorMatrix("#CCCCCC");
+        $g("#prb_scissors_colour").val('');
+        $g("#prb_scissors_patterns").val(patternPath);
+        // $g("#prb_scissors_sel_patterns").val(id);
+        $g("#prb_scissors_sel_patterns").val($g('#'+id).attr('pattern-name'));
+        isScissorsPatternAdd = true;
+	}
+
+    function prb_fa_colorclickColour(colorCode,colorlabel,printerVal)
+    {
+        printerVal = typeof printerVal == 'undefined' ? null : printerVal;
+        $g("#prb_fa_color").val(colorlabel);
+        svgCanvas.setColor('fill', colorCode);
+        $g(".prb_fa_color").children().removeClass("selectedColor");
+        $g("#prb_fa_color_"+colorlabel).addClass('selectedColor');
+        $g("#prb_printer_fa_colour").val($g("#prb_fa_color_"+colorlabel).attr('name'));
+    }
+
+    
+    function prb_text_colourclickColour(colorCode,colorlabel,printerVal)
+    {
+        printerVal = typeof printerVal == 'undefined' ? null : printerVal;
+        $g("#prb_text_colour").val(colorlabel);
+        svgCanvas.setColor('fill', colorCode);
+        $g(".prb_text_colour").children().removeClass("selectedColor");
+        $g("#prb_text_colour_"+colorlabel).addClass('selectedColor');
+        $g("#prb_printer_text_colour").val($g("#prb_text_colour_"+colorlabel).attr('name'));
+    }
+
+    function prb_title_colourclickColour(titleCode,titleTmp,printerVal)
+    {
+        printerVal = typeof printerVal == 'undefined' ? null : printerVal;
+        $g("#prb_title_colour").val(titleTmp);
+        svgCanvas.setColor('fill', titleCode);
+        $g(".prb_title_colour").children().removeClass("selectedColor");
+        $g("#prb_title_colour_"+titleTmp).addClass('selectedColor');
+        $g("#prb_printer_title_colour").val($g("#prb_title_colour_"+titleTmp).attr('name'));
+    }
+
+    function prb_extra_colorclickColour(titleCode,titleTmp,printerVal)
+    {
+        $g("#prb_extra_color").val(titleTmp);
+        svgCanvas.setColor('fill', titleCode);
+        $g(".prb_extra_color").children().removeClass("selectedColor");
+        $g("#prb_extra_color"+titleTmp).addClass('selectedColor');
+        $g("#prb_printer_extratext_colour").val($g("#prb_extra_color_"+titleTmp).attr('name'));
+    }
+
+    function prb_scissors_colourclickColour(colorCode,colorlabel)
+    {
+        getScissorMatrix(colorCode);
+        $g(".prb_scissors_patterns >span >img").removeClass("selectedColor");
+        $g("#prb_scissors_colour").val(colorlabel);
+        $g("#prb_scissors_patterns").val('');
+        $g("#prb_scissors_sel_patterns").val('');
+        $g(".prb_scissors_colour").children().removeClass("selectedColor");
+        $g("#prb_scissors_colour_"+colorlabel).addClass('selectedColor');
+        isScissorsColorAdd = true;
+    }
+
+    function prb_pen_colourclickColour(titleCode,titleTmp,printerVal)
+    {
+        $g('#pen_selected_color').show();
+        $g('#pen_selected_color_span').html(titleTmp);
+        $g("#prb_pen_colour").val(titleTmp);
+        $g(".prb_pen_colour").children().removeClass("selectedColor");
+        $g("#prb_pen_colour_"+titleTmp).addClass('selectedColor');
+        isPenColorAdded = true;
+    }
+
+    function prb_penlight_colorclickColour(titleCode,titleTmp,printerVal)
+    {
+
+        $g('#penlight_selected_color').show();
+        $g('#penlight_selected_color_span').html(titleTmp);
+        $g("#prb_penlight_color").val(titleTmp);
+        $g(".prb_penlight_color").children().removeClass("selectedColor");
+        $g("#prb_penlight_color_"+titleTmp).addClass('selectedColor');
+        isPenlightColorAdded = true;
+    }
+
+    function prb_tweezer_colorclickColour(titleCode,titleTmp,printerVal)
+    {
+        $g('#tweezer_selected_color').show();
+        $g('#tweezer_selected_color_span').html(titleTmp);
+        $g("#prb_tweezer_color").val(titleTmp);
+        $g(".prb_tweezer_color").children().removeClass("selectedColor");
+        $g("#prb_tweezer_color_"+titleTmp).addClass('selectedColor');
+        isTweezerColorAdded = true;
+    }
+
+    function setPmsColor(Hexcode,PMScode)
+    {
+        $g('#canvasBackground').find('rect').attr('fill', Hexcode);
+        hexcode = Hexcode;
+        $g(".prb_back_colour").children().removeClass("selectedColor");
+        $g("#usePms").val(1);
+        $g("#pmsCode").val(PMScode.trim());
+        $g("#prb_back_colour").val(Hexcode);
+        $g("#prb_printer_back_colour").val(Hexcode);
+        $g('#pmsColor').val(PMScode)
+        $g("#pms_fancy") .hide();
+    }
+
+    function prb_back_colourclickColour(colorCode,colorlabel,printerVal)
+    {
+        printerVal = typeof printerVal == 'undefined' ? null : printerVal;
+        var tmp = colorlabel;
+        hexcode = colorCode;
+
+        if (hexcode && hexcode !== 'transparent')
+        {
+            if (hexcode === 'Default')
+            {
+                hexcode = 'transparent';
+                $g("#prb_back_colour").val('');
+            }
+            else
+                $g("#prb_back_colour").val(tmp);
+        }
+
+        $g("#usePms").val(0);
+        $g("#pmsCode").val('');
+        $g('#canvasBackground').find('rect').attr('fill', hexcode);
+
+        $g(".prb_back_colour").children().removeClass("selectedColor");
+        $g("#prb_back_colour_"+colorlabel).addClass('selectedColor');
+        $g("#prb_printer_back_colour").val($g("#prb_back_colour_"+colorlabel).attr('name'));
+    }
+
+	var pos_x = new Array();
+	var pos_y = new Array();
+	var design_area_x = new Array();
+	var design_area_y = new Array();
+	for(var i=1; i<=no_of_side; i++)
+	{
+		if(i == 1)
+		{
+            // Edited by Parth 06-05-2014 (Dynamic svgcontent same as Canavas Background)
+            if($j(document).width()>650)
+            {
+                pos_x[i] = myX;
+                pos_y[i] = myY;
+                design_area_x[i] = myW;
+                design_area_y[i] = myH;
+            }
+            if($j(document).width()<650)
+            {
+                pos_x[i] = myX/2;
+                pos_y[i] = myY/2;
+                design_area_x[i] = myW/2;
+                design_area_y[i] = myH/2;
+            }
+            // Edited by Parth 06-05-2014 End
+		}
+		else if(i == 2)
+		{
+			pos_x[i] = 115.2;
+			pos_y[i] = 80.4;
+			design_area_x[i] = 176.1;
+			design_area_y[i] = 373.95;
+		}
+		else if(i == 3)
+		{
+			pos_x[i] = 0;
+			pos_y[i] = 0;
+			design_area_x[i] = 0;
+			design_area_y[i] = 0;
+		}
+		else if(i == 4)
+		{
+			pos_x[i] = 0;
+			pos_y[i] = 0;
+			design_area_x[i] = 0;
+			design_area_y[i] = 0;
+		}
+	}
+
+	$j(document).ready(function(){
+
+        imageLoader(cImageSrc, 'startAnimation()');
+		$j("#cur_position").click(function(){$j("#position_opts").show();});
+		$j("#stroke_color svg rect").attr('opacity', 0);
+		$j("#stroke_width").click(function(){$j("#stroke_dropdown-list").show();});
+		$j("#blur").click(function(){$j("#blur_dropdown-list").show();});
+
+        // Parth Edited : 26-05-2013 Change the Font Size Start
+        $j(".prb_text_size").change(function(e)
+        {
+            var fonttmp = $j("select[name=prb_text_size]").val();
+            fonttmp = parseInt(fonttmp,10);
+            svgCanvas.setFontSize(fonttmp);
+            $j("#prb_text_size").val(fonttmp);
+        });
+
+        $j(".prb_fa_size").change(function(e)
+        {
+            var fonttmp = $j("select[name=prb_fa_size]").val();
+            fonttmp = parseInt(fonttmp,10);
+            svgCanvas.setFontSize(fonttmp);
+            $j("#prb_fa_size").val(fonttmp);
+        });
+
+        $j(".prb_extra_size").change(function(e)
+        {
+            var fonttmp = $j("select[name=prb_extra_size]").val();
+            fonttmp = parseInt(fonttmp,10);
+            svgCanvas.setFontSize(fonttmp);
+            $j("#prb_extra_size").val(fonttmp);
+        });
+
+        // Parth Edited : 28-05-2013 Change the Font Size Start  
+        $j(".prb_title_size").change(function(e)
+        {
+            var fonttmp = $j("select[name=prb_title_size]").val();
+            fonttmp = parseInt(fonttmp,10);
+            svgCanvas.setFontSize(fonttmp);
+            $j("#prb_title_size").val(fonttmp);
+        });
+
+        // Parth Edited : 26-05-2013 Change the Font Size Start
+        $j(".changeFont").change(function(e)
+        {
+            var fontFam = $j("select[name=prb_fonts]").val();
+            svgCanvas.setFontFamily(fontFam);
+            $j("#prb_fonts").val(fontFam);
+        });
+
+        // Parth Edited : 28-05-2013 Change the Font Size Start
+        $j(".changeTitleFont").change(function(e)
+        {
+            var fontFam = $j("select[name=prb_title_fonts]").val();
+            svgCanvas.setFontFamily(fontFam);
+            $j("#prb_title_fonts").val(fontFam);
+        });
+
+        // Parth Edited : 28-05-2013 Change the Font Size End
+        $j(".changeExtraFont").change(function(e)
+        {
+            var fontFam = $j("select[name=prb_extra_font]").val();
+            svgCanvas.setFontFamily(fontFam);
+            $j("#prb_extra_font").val(fontFam);
+        });
+
+        /*Parth Added Start : Code for Scissors*/
+        $j("#addOneScissors").click(function()
+        {
+            if (addScissorFlag == 0)
+            {
+                $j("#prb_scissor_image_url").trigger({
+                type:"click",
+            });
+
+            $j("#h_scissor_Used").val(1);
+            $j("#prb_scissors_colour").val("Transparent");
+        }
+        disableOther('addOneScissors');
+        $j("#addOneScissors").addClass('active');
+        $j("#addOneScissors-panel").addClass('cbp-spmenu-open');
+    });
+
+    $j("#addPenTweezers").click(function(){
+        disableOther('addPenTweezers');
+        $j(this).addClass('active');
+        $j("#addPenTweezers-panel").addClass('cbp-spmenu-open');
+    });
+
+    $j("#addlabel").click(function()
+    {
+        disableOther('addlabel');
+        $j("#addlabel").addClass('active');
+        $j("#addlabel-panel").addClass('cbp-spmenu-open');
+    });
+
+    $j('.price_text_msg').hide();
+
+    $j("#addart").click(function()
+    {
+        var currencyCode11 = "<?php echo $currencySymbol;?>";
+        var origPrice11 = "<?php echo ($_taxHelper->getPrice($_product, $_product->getPrice(), true) * $qty) + 20;?>";
+        $j('.price_text_msg').show();
+    });
+
+    $j('.price_text_msg1').hide();
+
+    $j("#addtimage").click(function()
+    {
+        var currencyCode11 = "<?php echo $currencySymbol;?>";
+        var origPrice11 = "<?php echo ($_taxHelper->getPrice($_product, $_product->getPrice(), true) * $qty) + 20;?>";
+        $j('.price_text_msg1').show();
+    });
+
+    $j("#addtimage").click(function()
+    {
+        var currencyCode12 = "<?php echo $currencySymbol;?>";
+        var origPrice12 = "<?php echo $_taxHelper->getPrice($_product, $_product->getPrice(), true) * $qty;?>";
+    });
+
+    $j("#c_addLabel").click(function()
+    {
+        var currencySymbol = "<?php echo $currencySymbol;?>";
+        var main_price = jQuery('#price-including-tax-'+<?php echo $id; ?>).text();
+
+        var current_price = main_price.replace(',','.');
+        current_price = current_price.match(/\d+['.']+\d+/);
+        current_price = parseFloat(current_price);
+
+        var label_price = parseFloat(jQuery('#label_price').val());
+        var final_price = '';
+
+        if (addLabelFlag == 0){
+            final_price = current_price + label_price;
+        }
+        else{
+            final_price = current_price - label_price;
+        }
+
+        final_price = final_price.toFixed(2);
+
+        if(isNaN(main_price.trim().charAt(0))){
+            //First Symbol
+            final_price = currencySymbol +' '+ final_price;
+        }
+        else{
+            //After symbol
+            final_price = final_price +' '+ currencySymbol;
+        }
+
+        if(main_price.trim().indexOf(',') != '-1'){
+            final_price = final_price.replace('.',',');
+        }
+
+        if (addLabelFlag == 0){
+
+            jQuery("#cb_lable").prop('checked',true);
+            if(hexcode == "transparent")
+            jQuery('#canvasBackground').find('rect').attr('fill', "#FFFFFF");
+            jQuery("#product-price-"+<?php echo $id; ?>).text(final_price);
+            jQuery("#price-including-tax-"+<?php echo $id; ?>).text(final_price);
+            jQuery("#price-excluding-tax-"+<?php echo $id; ?>).text(final_price);
+            jQuery(".main_image").hide();
+            jQuery(".scissorImage").hide();
+            jQuery("#addOneScissors").hide();
+            jQuery("#addPenTweezers").hide();
+            addLabelFlag = 1;
+            noScissors = 1;
+            $j("#addLabel").val(1);
+        }else{
+
+            jQuery("#cb_lable").prop('checked',false);
+            jQuery("#product-price-"+<?php echo $id; ?>).text(final_price);
+            jQuery("#price-including-tax-"+<?php echo $id; ?>).text(final_price);
+            jQuery("#price-excluding-tax-"+<?php echo $id; ?>).text(final_price);
+            jQuery(".main_image").show();
+            jQuery(".scissorImage").show();
+            jQuery("#addOneScissors").show();
+            jQuery("#addPenTweezers").show();
+            addLabelFlag = 0;
+            noScissors = 0;
+            $j("#addLabel").val(0);
+        }
+    });
+
+    $j(".prb_scissors_colour").change(function(e)
+    {
+        var scissorColor = $j('.prb_scissors_colour').find('option:selected').text();
+        var scissorCode  = $j("select[name=prb_scissors_colour]").val();
+        if (!scissorCode){
+          scissorCode = "#FFFFFF";
+          scissorColor = '';
+        }
+        getScissorMatrix(scissorCode);
+        $j("#prb_scissors_colour").val(scissorColor);
+    });
+
+    /*Parth Added End : Code for Scissors*/
+
+	pageload_changecolor($j("#current_product_colorid").val(),$j("#current_product_colorhash").val(),is_multicolor);
+	$j('#svg_docprops_container,#svg_add_note_container,#svg_image_upload_container, #svg_beforeaddtocart_container, #svg_login_window_container, #svg_prefs_container').draggable({cancel:'button,fieldset', containment: 'window'});
+	$j("#addproduct").trigger('mousedown');
+	$j("#tool_docprops_cancel").live("click",function(){$j('#svg_docprops').hide();});
+	$j("#info").live("mousedown",function(){$j("#svg_docprops").show();});
+	$j("#addcart").mousedown(function(){insertaddtocartmessage();});
+
+	$j("#tool_preview_window_cancel").click(function(){
+        $j("#preview_window").hide();
+        var page_id = $j("#current_page").val();
+        $j(".preview_holder").empty();
+    });
+
+    $j("#btn_cancel").mousedown(function(){
+        $j("#svg_login_window").hide();
+        empty_formdata();
+        $j("#error_msg").hide();
+    });
+
+    $j("#btn_submit").mousedown(function(){submit_login_scr(1);});
+    $j("#clipartopt").live("change",function(){getrelatedclipart();});
+    $j("#tools_bottom_2").hide();
+
+	document.getElementById('svgroot').addEventListener('touchmove', function(event){event.preventDefault();}, false);
+
+	$j('#selected_panel, #g_panel, #rect_panel, #circle_panel, #ellipse_panel, #line_panel, #text_panel, #image_panel, #container_panel, #use_panel, #a_panel').hide();
+
+	svgEditor.processFile = function(str64, type) {
+		if(type != 'import_img')	var xmlstr = decode64(str64);
+		switch(type) {
+			case 'load_svg':
+				svgCanvas.setDesignIdea(xmlstr);
+				svgEditor.updateCanvas();
+
+				$j('#tool_unlink_use').trigger('click');
+				svgCanvas.ungroupSelectedElement();
+				svgCanvas.ungroupSelectedElement();
+				//$j('#tool_unlink_use').trigger('click');
+				svgCanvas.clearSelection();
+				svgEditor.updateCanvas()
+				break;
+			case 'import_svg':
+				svgCanvas.importSvgString(xmlstr);
+				svgEditor.updateCanvas();
+				break;
+			case 'import_img':
+				svgCanvas.setGoodImage(str64);
+				break;
+		}
+	}
+
+	svgEditor.canvas.setSvgString($j("#textsvg_1").val());
+
+	$j(window).bind('beforeunload', function() {
+
+		if(svgCanvas.undoMgr.getUndoStackSize() === 0) {
+			//return false;
+		}else{
+			return true;
+		}
+	});
+
+	$j(".product-area").css("left", ($j(window).width() - $j("#product-image").width())/2+'px');
+
+	$j(".left-share-panel").css("left", ($j(window).width() - $j(".left-share-panel").width())/2+'px');
+
+	LocalImport();
+	setSharePanel(true);
+
+	$j('#preview').on('click', function () {
+		$j('#preview_window').show();
+		previewImage();
+	});
+	
+    var dd = new DropDown( $j('#dd') );
+
+	$j(document).click(function() {
+		$j('.wrapper-dropdown-1').removeClass('active');
+	});
+
+	$j("#ihavetheright").checked =false;
+	});
+	svgEditor.setConfig({
+		dimensions: [design_area_x[1], design_area_y[1]],
+		position: [parseFloat(pos_x[1]),parseFloat(pos_y[1])],
+		canvas_expansion: 0,
+		showRulers: false,
+		initFill: {color:'0000FF'},
+		initStroke: {width: 1, color:'000000'},
+		no_save_warning:true,
+		show_outside_canvas:0
+	});
+</script>
+<script type="text/javascript">
+if($j(document).width()>650){
+  var ImgW = "<?php echo $Imgwidth.'px';?>";
+  var ImgH = "<?php echo $Imgheight.'px';?>";
+
+	$j('#img_1').attr('width',ImgW);
+	$j('#img_1').attr('height',ImgH);
+	$j('.svg-content').attr('width',ImgW);
+	$j('.svg-content').attr('height',ImgH);
+}
+if($j(document).width() < 650){
+  var ImgW = "<?php echo $Imgwidth;?>";
+  var ImgH = "<?php echo $Imgheight;?>";
+
+  ImgW = ImgW/2+'px';
+  ImgH = ImgH/2+'px';
+
+  $j('#img_1').attr('width',ImgW);
+  $j('#img_1').attr('height',ImgH);
+  $j('.svg-content').attr('width',ImgW);
+  $j('.svg-content').attr('height',ImgH);
+}
+
+$j(".prbfonts").hide();
+$j(".prbnametag").hide();
+function setSmileyPath(path) {
+    $j("#prb_smiley_image_path").val(path);
+    $j("#smileyalert").css("display","block");
+}
+function setFAPath(path) {
+    $j("#prb_fa_image_path").val(path);
+    $j("#smileyalert").css("display","block");
+}
+function changeText(fontFam,fontVal)
+{
+  svgCanvas.setFontFamily(fontFam);
+  $j("#prb_fonts").val(fontVal);
+}
+
+function changeTitle(fontFam,fontVal)
+{
+    svgCanvas.setFontFamily(fontFam);
+    $j("#prb_fonts").val(fontVal);
+}
+function changeExtra(fontFam)
+{
+    svgCanvas.setFontFamily(fontFam);
+    $j("#prb_extra_font").val(fontFam);
+}
+
+</script>
+</div>
+</div>
+    <script type="text/javascript">
+    //<![CDATA[
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+                if (url) {
+                   form.action = url;
+
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                // Remove custom datetime validators
+                for (var methodName in Validation.methods) {
+                    if (methodName.match(/^validate-datetime-.*/i)) {
+                        delete Validation.methods[methodName];
+                    }
+                }
+
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+<!--[if lt IE 9]>
+    <script src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/toggleDD/scroller/html5.js'?>"></script>
+    <script src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/toggleDD/scroller/mediaqueries.js'?>"></script>
+    <![endif]-->
+
+    <!-- custom scrollbar stylesheet -->
+    <link rel="stylesheet" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/toggleDD/scroller/jquery.mCustomScrollbar.css'?>">
+    <script src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/toggleDD/scroller/jquery.mCustomScrollbar.concat.min.js'?>"></script>
+
+<script type="text/javascript">
+    (function($){
+        jQuery(window).load(function(){
+
+      jQuery("#div_prb_fonts").ddslick({
+          onSelected: function(selectedData)
+          {
+            var fontFam = selectedData.selectedData.value;
+            svgCanvas.setFontFamily(fontFam);
+            jQuery("#prb_fonts").val(fontFam);
+          }
+      });
+
+      jQuery("#div_prb_title_fonts").ddslick({
+          onSelected: function(selectedData)
+          {
+            var fontFam = selectedData.selectedData.value;
+            svgCanvas.setFontFamily(fontFam);
+            jQuery("#prb_title_fonts").val(fontFam);
+          }
+      });
+
+      jQuery("#div_prb_extra_font").ddslick({
+          onSelected: function(selectedData)
+          {
+            var fontFam = selectedData.selectedData.value;
+            svgCanvas.setFontFamily(fontFam);
+            jQuery("#prb_extra_font").val(fontFam);
+          }
+      });
+
+          jQuery("ul.dd-options").mCustomScrollbar({
+               theme:"light",
+              scrollButtons:{
+              enable:true
+            }
+          });
+        });
+    })(jQuery);
+
+    window.mkPrbFontsSelected = function(name,prbfontsval)
+    {
+
+      jQuery('#div_prb_fonts').ddslick('destroy');
+      var textFonts  = jQuery('select[name=prb_fonts] option:contains('+prbfontsval+')').val();
+      jQuery('select[name="prb_fonts"] option[value="'+textFonts+'"]').attr("selected","selected");
+      jQuery('select[name=prb_fonts]').val(textFonts);
+
+      jQuery("#div_prb_fonts").ddslick({
+          onSelected: function(selectedData)
+          {
+            var fontFam = selectedData.selectedData.value;
+            svgCanvas.setFontFamily(fontFam);
+            jQuery("#prb_fonts").val(fontFam);
+          }
+      });
+      return textFonts;
+
+    }
+    window.mkPrbTitleSelected = function(name,prbtitlefontsval)
+    {
+
+      jQuery('#div_prb_title_fonts').ddslick('destroy');
+      var titleFonts  = jQuery('select[name=prb_title_fonts] option:contains('+prbtitlefontsval+')').val();
+      jQuery('select[name="prb_title_fonts"] option[value="'+titleFonts+'"]').attr("selected","selected");
+      jQuery('select[name=prb_title_fonts]').val(titleFonts);
+
+      jQuery("#div_prb_title_fonts").ddslick({
+          onSelected: function(selectedData)
+          {
+            var fontFam = selectedData.selectedData.value;
+            svgCanvas.setFontFamily(fontFam);
+            jQuery("#prb_title_fonts").val(fontFam);
+          }
+      });
+
+      return titleFonts;
+
+    }
+    window.mkPrbExtraSelected = function(name,prbextrafontsval)
+    {
+
+      jQuery('#div_prb_extra_font').ddslick('destroy');
+      var extraFonts  = jQuery('select[name=prb_extra_font] option:contains('+prbextrafontsval+')').val();
+      jQuery('select[name="prb_extra_font"] option[value="'+extraFonts+'"]').attr("selected","selected");
+      jQuery('select[name=prb_extra_font]').val(extraFonts);
+
+      jQuery("#div_prb_extra_font").ddslick({
+          onSelected: function(selectedData)
+          {
+            var fontFam = selectedData.selectedData.value;
+            svgCanvas.setFontFamily(fontFam);
+            jQuery("#prb_extra_font").val(fontFam);
+          }
+      });
+      return extraFonts;
+
+    }
+
+</script>
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function(){
+
+        if(isOnlyLabel){
+            jQuery("#c_addLabel").trigger('click');
+        }
+
+        if(cartEditMode == 1){
+            jQuery('#selectorGroup1').attr('display','none');
+        }
+        else{
+            prb_back_colourclickColour('#ffffff','White');
+        }
+    });
+
+</script>
+
+<script type="text/javascript">
+$jj = jQuery.noConflict();
+
+
+function get_total_qty(value){
+
+   //var quantity = parseInt($j('#qty').val()) + parseInt(qty); // get final quantity
+	 // var pprice1 = $jj('#pprice').val();
+	 // var cursym = $jj('#cursym').val();
+  //    var product_id = <?php echo $id; ?> // get product id
+  //    $jj.post("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>myscripts/ajaxPriceCal.php?set=true&value="+value, {cursym: cursym, price: pprice1, product: product_id },
+  //       function(data){
+		// //console.log(data);
+		// $jj('.price').html(data);
+  //   });
+
+}
+
+function get_total_qty_new(){
+  //  var pprice1 = $jj('#pprice').val();
+	 // var cursym = $jj('#cursym').val();
+  //    var product_id = <?php echo $id; ?> // get product id
+  //    $jj.post("<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>myscripts/ajaxPriceCal.php?set=false", {cursym: cursym, price: pprice1, product: product_id },
+  //       function(data){
+		// //console.log(data);
+		// $jj('.price').html(data);
+  //   });
+
+
+}
+
+$jj(document).ready(function(){
+  //   $jj('#addtimage').click(function(){
+  //      get_total_qty("image");
+
+  //   });
+	 // $jj('#addart').click(function(){
+  //      get_total_qty("icon");
+
+  //   });
+
+	 // $jj('#common-panel #tool_delete').click(function(){
+  //       <?php
+		// $session = Mage::getSingleton("core/session",  array("name"=>"frontend"));
+  //       $session->unsetData('device_id');?>
+  //        get_total_qty_new();
+  //   });
+
+
+//
+//       var data = [4, 8, 15, 16, 23, 42];
+//     var svg = $jj('#svgcontent g');
+//    $jj.each(data, function(index, value) {
+//        var bar = $jj(document.createElementNS("http://www.w3.org/2000/svg", "rect")).attr({
+//            x: 0,
+//            y: 0,
+//            width: "100%",
+//            height: "100%",
+//            stroke: "#d3d3d3",
+//            fill: "transparent",
+//			style: "pointer-events:none"
+//        });
+//        svg.append(bar);
+//    });
+//$jj('#addart').click(function(){
+//var txtcls = $jj('text[id="svg_2"]').attr('y'));
+//});
+
+});
+</script>

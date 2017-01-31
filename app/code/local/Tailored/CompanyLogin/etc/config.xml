@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <modules>
+        <Tailored_CompanyLogin>
+            <version>0.1.0</version>
+        </Tailored_CompanyLogin>
+    </modules>
+     
+   <frontend>
+        <routers>
+            <company>
+                <use>standard</use>
+                <args>
+                    <module>Tailored_CompanyLogin</module>
+                    <frontName>company</frontName>
+                </args>
+            </company>
+        </routers>
+        <layout>
+            <updates>
+                <companylogin>
+                    <file>companylogin.xml</file>
+                </companylogin>
+            </updates>
+        </layout>
+    </frontend>
+</config>

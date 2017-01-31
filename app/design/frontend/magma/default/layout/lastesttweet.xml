@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+			<action method="addCss" ifconfig="lastesttweet/lastesttweet_config/enabled"><stylesheet>w3themes/css/lastesttweet.css</stylesheet></action>
+			<action method="addJs" ifconfig="lastesttweet/lastesttweet_config/enabled"><script>w3themes/jq.slide.js</script></action>
+        </reference>
+        <reference name="left">
+            <!--<block type="core/template" after="-" name="lastesttweet" template="w3themes/lastesttweet/lastesttweet.phtml" />-->
+        </reference>
+    </default>
+</layout> 

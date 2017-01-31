@@ -1,0 +1,27 @@
+<div class="anchorFrame" style="display:none;">
+<a class="fancybox fancybox.iframe" rel="productBuilderLink" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'product-builder'?>"><span>Product Builder</span></a>
+</div>
+
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/fancybox/jquery.fancybox.js?v=2.1.5'?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'js/fancybox/jquery.fancybox.css?v=2.1.5'?>" media="screen" />
+
+
+<script type="text/javascript">
+  jQuery(document).ready(function()
+  {
+    window.redirectUrl = "<?php echo Mage::getBaseUrl().'personalize/?product=26&qty=1' ?>";
+    jQuery('.fancybox').fancybox();
+    jQuery(".anchorFrame a") .trigger("click");
+    jQuery(".fancybox.iframe").click(function() {
+      jQuery.fancybox.open({
+        href : mediapath+'product-builder',
+        type : 'iframe',
+        padding : 5
+      });
+    });
+  });
+</script>
+<style type="text/css">
+    .fancybox-inner{ width: 100% !important;}
+    .fancybox-opened{ width: 65% !important;}
+</style> 

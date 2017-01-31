@@ -1,0 +1,9 @@
+<?php if(count($this->getStores())>1): ?>
+<div class="language-switcher flag_wrp" id="easyflags">
+    <?php foreach ($this->getStores() as $_lang): ?>
+        <a title="<?php echo $this->htmlEscape($_lang->getName()) ?>" href="<?php echo $_lang->getCurrentUrl() ?>">
+		<i class="gen_flg <?php echo $this->htmlEscape($_lang->getCode())?>_flag"></i>
+</a>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?> 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<siteMapNode url="index.php" title="Upload Suite 8 Demo Applications" description="">
+    <siteMapNode url="" title="Quick start">
+      <siteMapNode url="BasicDemo/index.php" title="Basic demo" demo="basicdemo">
+        <siteMapNode url="BasicDemo/gallery.php" title="Uploaded files" demo="basicdemo"/>
+				<siteMapNode url="BasicDemo/upload.php" demo="basicdemo"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="" title="Images">
+      <siteMapNode url="ImageUploadDemo/ResizedPhotoUploadDemo/index.php" title="Resized photo upload demo" demo="resizeimages">
+        <siteMapNode url="ImageUploadDemo/ResizedPhotoUploadDemo/gallery.php" title="Uploaded files" demo="resizeimages"/>
+				<siteMapNode url="ImageUploadDemo/ResizedPhotoUploadDemo/upload.php" demo="resizeimages"/>
+      </siteMapNode>
+      <siteMapNode url="ImageUploadDemo/WatermarkDemo/index.php" title="Watermark demo" demo="addingwatermark">
+        <siteMapNode url="ImageUploadDemo/WatermarkDemo/gallery.php" title="Uploaded files" demo="addingwatermark"/>
+				<siteMapNode url="ImageUploadDemo/WatermarkDemo/upload.php" demo="addingwatermark"/>
+      </siteMapNode>
+      <siteMapNode url="ImageUploadDemo/ExifDemo/index.php" title="EXIF demo" demo="extractexif">
+        <siteMapNode url="ImageUploadDemo/ExifDemo/gallery.php" title="Uploaded files" demo="extractexif"/>
+				<siteMapNode url="ImageUploadDemo/ExifDemo/upload.php" demo="extractexif"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="" title="Files">
+      <siteMapNode url="FileUploadDemo/AuxiliaryDataUploadDemo/index.php" title="Auxiliary data upload demo" demo="auxiliarydata">
+        <siteMapNode url="FileUploadDemo/AuxiliaryDataUploadDemo/gallery.php" title="Uploaded files" demo="auxiliarydata"/>
+				<siteMapNode url="FileUploadDemo/AuxiliaryDataUploadDemo/upload.php" demo="auxiliarydata"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="" title="Customization">
+      <siteMapNode url="LocalizationDemo/index.php" title="Localization demo" demo="localization">
+        <siteMapNode url="LocalizationDemo/gallery.php" title="Uploaded files" demo="localization"/>
+				<siteMapNode url="LocalizationDemo/upload.php" demo="localization"/>
+      </siteMapNode>
+      <siteMapNode url="CustomizationDemo/FileRestrictionsDemo/index.php" title="File restrictions demo" demo="restrictions">
+        <siteMapNode url="CustomizationDemo/FileRestrictionsDemo/gallery.php" title="Uploaded files" demo="restrictions"/>
+				<siteMapNode url="CustomizationDemo/FileRestrictionsDemo/upload.php" demo="restrictions"/>
+      </siteMapNode>
+      <siteMapNode url="CustomizationDemo/CustomUIDemo/index.php" title="Custom user interface demo" demo="customuidemo">
+        <siteMapNode url="CustomizationDemo/CustomUIDemo/gallery.php" title="Uploaded files" demo="customuidemo"/>
+				<siteMapNode url="CustomizationDemo/CustomUIDemo/upload.php" demo="customuidemo"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="" title="Photo business">
+      <siteMapNode url="PhotoBusinessDemo/PhotoOptimizationDemo/index.php" title="Photo optimization demo" demo="photooptimization">
+        <siteMapNode url="PhotoBusinessDemo/PhotoOptimizationDemo/gallery.php" title="Uploaded files" demo="photooptimization"/>
+				<siteMapNode url="PhotoBusinessDemo/PhotoOptimizationDemo/upload.php" demo="photooptimization"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="" title="More...">
+      <siteMapNode url="AjaxDemo/index.php" title="AJAX demo" demo="ajaxdemo">
+      </siteMapNode>
+    </siteMapNode>
+</siteMapNode>

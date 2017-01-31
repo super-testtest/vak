@@ -1,0 +1,31 @@
+<?php
+$_code=$this->getMethodCode();
+$_lang=$this->getLanguageCode();
+?>
+<!-- <img id="pbb_logo_<?php echo $_code; ?>" src="<?php echo $this->getSkinUrl('paybybill/'.strtolower($_lang).'_logo_faktura.png'); ?>" /> -->
+<?php if ($this->isApproved()): ?>
+  <p class="pbb-credit-approved">
+  <?php if ($this->getApprovedCredits()): ?>
+    <?php echo $this->__('You have been approved a credit limit of %s', $this->getApprovedCredits()); ?>
+  <?php else: ?>
+    <?php echo $this->__('Your credit information has been approved.'); ?>
+  <?php endif; ?>
+  </p>
+
+<?php else: ?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <li>
+      <p><?php echo $this->__('%s days credit. Always get the goods home before you pay.', $this->getInvoiceDueDays()); ?>
+      <a href="#" onclick="paybybill.showterms('<?php echo Mage::getBaseUrl('link',true).'paybybill/terms/invoice';?>','<?php echo $this->__('Close');?>'); return false;"><?php echo $this->__('More information.'); ?></a></p>
+    </li>
+    <li>
+        <?php echo $this->getFormHtml(); ?>
+    </li>
+    <?php if ($_lang != "DE"):  // Don't show the button for Germany ?>
+<!--    <li>
+      <button type="button" id="pbb_button_<?php echo $_code; ?>" class="button" onclick="paybybill.magic('<?php echo $_code ?>','<?php echo $this->getUrl('paybybill/customer/check') ?>')"><span><span><?php echo $this->__('Check credit')?></span></span></button>
+      <div id="pbb_progress_<?php echo $_code; ?>" style="display:none"><?php echo $this->__('Running credit check, please wait ...') ?></div>
+    </li>-->
+    <?php endif; ?>
+</ul>
+<?php endif; ?>

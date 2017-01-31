@@ -1,0 +1,69 @@
+<?php $this->getProducts() ?>
+<?php $_productCollection=$this->getProductCollection() ?>
+<div class="brand-slider-contain">
+    <?php
+        $slide = $this->getDataBrandslider();
+		$path = Mage::getBaseUrl('media');	
+        //$items = $this->getConfig('items');
+        //$w_item = $width_slider/$items;
+        $qty_Item = $this->getConfig('qty');
+        /* Get max item & qty item */
+        if ($qty_Item > count($slide)) {
+            $qty_Item = count($slide);
+        }
+    ?>
+        <div class="flexslider carousel">			
+            <ul class="slides">
+				<?php
+					$i = 1;
+					foreach($slide as $s)
+					{
+						if($i <= $qty_Item) {
+							//Get images slide show
+							$st1 = $s['image'];
+							$p1 = strpos($st1,'brandslider');
+							$st2 = substr($st1,$p1+11);
+							$p2 = strpos($st2,'"');
+							$imag = substr($st2,0,$p2);
+				?>
+                    <li class="item">						    																																		    <?php if( $s['link'] ) { ?>
+							<a href="<?php echo $s['link']?>" title=""><img src="<?php echo $path.'w3themes/brandslider'.$imag;?>" alt="" /></a>												
+						<?php } else { ?>
+							<img src="<?php echo $path.'w3themes/brandslider'.$imag;?>" alt="" />
+						<?php } ?>																																	             
+                        <?php if( $this->getConfig('description')): ?>
+                            <div class="des">
+                                <div class="des-title"><h2><?php echo $s['title'] ?></h2></div>
+                                <div class="des-content"><?php echo $s['description'] ?></div>
+                            </div>
+                        <?php endif; ?>
+                    </li>
+				<?php
+                    }//end if
+					$i++;
+                    } // end foreach
+				?>
+            </ul>
+            <script type="text/javascript">
+            //<![CDATA[
+					$jq('.brand-slider-contain .flexslider').flexslider({
+						slideshow: true,
+						itemWidth: <?php echo $this->getConfig('item_width') ?>,
+						itemMargin: 5,
+						minItems: 2,
+						maxItems: <?php echo $this->getConfig('items_show') ?>,
+						slideshowSpeed: <?php echo $this->getConfig('speed') ?>,
+						animationSpeed: <?php echo $this->getConfig('interval') ?>,
+						<?php if (!$this->getConfig('nav_ctrl')) { ?>
+						controlNav: false,
+						<?php } ?>
+						<?php if (!$this->getConfig('next_back')) { ?>
+						directionNav: false,
+						<?php } ?>
+						move:1,
+						animation: "slide"
+					});
+            //]]>
+            </script>
+        </div>		
+</div> 

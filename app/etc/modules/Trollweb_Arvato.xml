@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<config>
+  <modules>
+    <Trollweb_Arvato>
+      <active>false</active>
+      <codePool>community</codePool>
+    </Trollweb_Arvato>
+  </modules>
+</config>

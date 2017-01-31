@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <W3Themes_Newproductslider>
+            <active>true</active>
+            <codePool>local</codePool>
+        </W3Themes_Newproductslider>
+    </modules>
+</config> 

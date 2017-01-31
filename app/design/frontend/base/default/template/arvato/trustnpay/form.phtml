@@ -1,0 +1,19 @@
+<fieldset class="form-list">
+    <?php $logoUrl = $this->getLogoUrl() ?>
+    <?php if (!empty($logoUrl)): ?>
+        <img src="<?php echo $logoUrl ?>" />
+    <?php endif;?>
+    <?php $_code=$this->getMethodCode() ?>
+    <?php if(strlen($this->getMethod()->getInfoText())): ?>
+    <ul id="payment_form_<?php echo $_code ?>" style="display:none">
+        <!--
+        <li>
+            <input type="text" name="payment[tnp_ssn]" />
+        </li>
+        -->
+        <li>
+            <?php echo $this->getMethod()->getInfoText(); ?>
+        </li>
+    </ul>
+    <?php endif; ?>
+</fieldset>

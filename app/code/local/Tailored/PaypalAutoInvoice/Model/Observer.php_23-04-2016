@@ -1,0 +1,42 @@
+<?php
+class Tailored_PaypalAutoInvoice_Model_Observer
+{
+	public function generateInvoice(Varien_Event_Observer $observer)
+	{
+		$order = Mage::getModel('sales/order')->load(Mage::getSingleton('checkout/session')->getLastOrderId());
+		$payment_method = $order->getPayment()->getMethodInstance()->getCode();
+		
+
+
+		if($payment_method == 'paypal_standard' || $payment_method == 'Dibspw' || $payment_method == 'paypal_express'){
+			try {
+
+				if(!$order->canInvoice()){
+					Mage::throwException(Mage::helper('core')->__('Cannot create an invoice.'));
+				}
+				 
+				$invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
+				 
+				if (!$invoice->getTotalQty()) {
+					Mage::throwException(Mage::helper('core')->__('Cannot create an invoice without products.'));
+				}
+				 
+				$invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+				$invoice->register();
+				$transactionSave = Mage::getModel('core/resource_transaction')
+				->addObject($invoice)
+				->addObject($invoice->getOrder());
+				 
+				$transactionSave->save();
+
+				$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
+				$order->setStatus('processing', false);
+				$order->save();
+			}
+			catch (Mage_Core_Exception $e) {
+				Mage::log($e,null,'generateInvoice.log');	 
+			}	
+		}
+		
+	}
+}

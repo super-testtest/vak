@@ -1,0 +1,67 @@
+.new-vertscroller-wrap .jcarousel-container {
+}
+#new-vertscroller-right, #new-vertscroller-left {
+	height: 5555px !important;
+}
+
+.new-vertscroller-wrap  .jcarousel-container-vertical {
+    width: auto !important;
+    height: 345px;
+    padding: 5px 0;
+}
+.new-vertscroller-wrap  .jcarousel-clip {
+    overflow: hidden;
+}
+.new-vertscroller-wrap  .jcarousel-clip-vertical {
+    width: auto !important;
+    height: 345px;
+}
+.new-vertscroller-wrap  .jcarousel-item {
+    width: 100% !important;
+    height: 130px;
+	padding: 0 !important; 
+}
+.new-vertscroller-wrap .product-image {
+	float: left;
+	width: 75px;
+	margin: 0 15px 10px 0;
+}
+.new-vertscroller-wrap .product-name  {
+	margin: 0 0 5px;
+}
+
+.new-vertscroller-wrap  .jcarousel-item-placeholder {
+    background: #fff;
+    color: #000;
+}
+.new-vertscroller-wrap .block-content li.item {
+	padding: 0;
+}
+
+/**
+ *  Vertical Buttons
+ */
+.new-vertscroller-wrap .jcarousel-next-vertical, 
+.new-vertscroller-wrap  .jcarousel-prev-vertical {
+	width: 22px;
+	height: 22px;
+	position: absolute;
+	top: -44px;
+	cursor: pointer;
+	display: none !important;
+}
+.new-vertscroller-wrap .jcarousel-next-vertical {
+	right: 0;
+}
+
+.new-vertscroller-wrap  .jcarousel-next-vertical:hover,
+.new-vertscroller-wrap  .jcarousel-next-vertical:focus {
+
+}
+.new-vertscroller-wrap  .jcarousel-prev-vertical {
+	right: 25px;
+}
+.new-vertscroller-wrap  .jcarousel-prev-vertical:hover,
+.new-vertscroller-wrap  .jcarousel-prev-vertical:focus {
+
+}

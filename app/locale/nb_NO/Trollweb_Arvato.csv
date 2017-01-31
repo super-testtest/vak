@@ -1,0 +1,7 @@
+"Unable to run credit check, please try again later or use different payment method.","Unable to run credit check, please try again later or use different payment method."
+"Unable to create TrustnPay order, please try again later or use different payment method.","Unable to create TrustnPay order, please try again later or use different payment method."
+"Amount of %s approved by payment gateway. Transaction ID: %s.","Amount of %s approved by payment gateway. Transaction ID: %s."
+"Your payment request was declined, please use different payment method.","Your payment request was declined, please use different payment method."
+"arvato_trustnpay_trans_id","Transaction ID"
+"arvato_trustnpay_checkout_id","Checkout ID"
+"arvato_trustnpay_customer_no","Customer NO"

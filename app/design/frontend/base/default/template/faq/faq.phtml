@@ -1,0 +1,192 @@
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<div class="page-title">
+	<h1 id="pagehtitle"><?php echo $this->__('Frequently Asked Question')?></h1>
+</div>
+<style type="text/css">
+	.faq-content span{ font: 12px/1.55 'Open Sans', sans-serif !important; }
+	.faq-content p{ font: 12px/1.55 'Open Sans', sans-serif !important; }
+	.faq-content h4{ font: 16px/16px 'Open Sans', sans-serif;}
+	.faq-content h3{ font: 16px/16px 'Open Sans', sans-serif;}
+	#pagehtitle{ font: 16px/16px 'Open Sans', sans-serif;}
+	.faq-content strong{ font: 16px/16px 'Open Sans', sans-serif;}
+	.faq-ul{ width: 100%; float: left;}
+	.faq-ul li{ width: 24%; float: left; margin-top: 20px;}
+	.faq-ul .faq-cat-name{ text-align: center; width: 100%; padding: 4%;}
+	.faq-ul .faq-cat-name:hover{ background-color: #f5f5f5;}
+	.faq-container{ float: left;}
+	.faq-container .panel-collapse{ height: auto;}
+	.panel-title a{ cursor: pointer;}
+	.reply{ display: none; width: 50%;overflow: hidden;}
+	.question{ margin-top: 5px;}
+	.category_panel{ display: none; margin-bottom: 0px !important; margin-top: 10px !important;}
+	.cursor{ cursor: pointer;}
+	#accordion h3{ float: left;width: 100%;padding-left: 10px !important; border-radius: 0px !important; background: none !important; margin-bottom: 10px;}
+	#accordion h3:focus{ outline: none !important;}
+	#nav ul, #nav div{ left: 0px !important;}
+	.faq-div-que{ border: 0px !important; padding-left: 10px !important;}
+	.que_img{ width: 20px; margin-right: 10px;}
+	.ui-accordion-header-icon{ position: relative !important; float: right !important; margin-top: 2px !important; margin-right: 15px !important;}
+
+	#faq-accordion{ margin-bottom: 0px !important; margin-top: 10px !important;}
+	.faq-index-index h1{  display: block !important; }
+
+</style>
+<div class="faq-content">
+
+	<div class="description">
+	<?php $isUseJavascript 	= Mage::helper('faq')->getUseJavascript();?>
+	<?php $isUseJavascript = true; ?>
+	<?php $allQuestion=$this->getAllQuestion()?>
+
+	<?php if(!empty($allQuestion)):?>
+		<?php $category = $this->getCategories()->getData(); ?>	
+		<?php if(count($category) > 0): ?>
+			<ul class="faq-ul">
+			<?php $i=0;foreach ($category as $obj): ?>
+				
+				<?php $questions=$this->getFaqsData($obj['category_id']) ?>
+				<?php $questions = $questions->getData();?>
+				<?php if(count($questions)): ?>
+				<?php $i=$i+1?>
+				<li>
+					<a class="cursor" onclick="show_panel('panel_<?php echo $obj['category_id'] ?>')">
+						<div class="faq-cat-name">
+							<img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$obj['category_image']; ?>">
+							<h4><?php echo $obj['category_name']?></h4>
+						</div>
+					</a>
+				</li>
+					
+				<?php endif ?>
+
+			<?php endforeach ?>
+			</ul>
+		<?php else: ?>
+			<?php echo $this->__('There are no FAQs matching the selection.') ?>
+		<?php endif?>
+	<?php else: ?>
+		<p class="note-msg"><?php echo $this->__('There are no FAQs matching the selection.') ?></p>
+	<?php endif ?>
+	</div>
+
+
+	<div class="container faq-container">
+
+		<div id="accordion">
+
+			<?php if(!empty($allQuestion)):?>
+				<?php $category = $this->getCategories()->getData(); ?>	
+				<?php if(count($category) > 0): ?>
+					<?php foreach ($category as $cat): ?>
+						<h3 style="display:none;" class="category_panel" id="panel_<?php echo $cat['category_id'] ?>"><?php echo $cat['category_name'] ?></h3>
+						<div class="category_view_panel" style="disply:none;">
+							<?php $questions=$this->getFaqsData($cat['category_id']) ?>
+							<?php $questions = $questions->getData();?>
+							<?php if(!empty($questions)) : ?>
+								<div class="accordion_cat">
+									<?php foreach ($questions as $que) : ?>
+										<h3>
+											<img class="que_img" src="<?php echo $this->getSkinUrl("images/que.png") ?>">
+											<strong><?php echo $que['question'] ?></strong>
+										</h3>
+										<div class="faq-div-que">
+											<p><?php echo $que['answer'] ?></p>
+										</div>
+									<?php endforeach; ?>
+								</div>
+							<?php endif; ?>
+
+						</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			<?php endif; ?>
+
+
+
+
+
+			<h3 id="faq-accordion"><?php echo $this->__('FAQ') ?></h3>
+			<div>
+				<?php if(!empty($allQuestion)) : ?>
+					<div id="accordion_que_all">
+					<?php foreach ($allQuestion as $que) : ?>
+						<h3>
+							<img class="que_img" src="<?php echo $this->getSkinUrl("images/que.png") ?>">
+							<strong><?php echo $que['question'] ?> </strong>
+						</h3>
+						<div class="faq-div-que"><p><?php echo $que['answer'] ?></p></div>
+					<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script> 
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  
+  <script>
+	  $(function() {
+	    $( "#accordion" ).accordion({ heightStyle: "content",collapsible: true});
+	    $( "#accordion_que_all" ).accordion({ heightStyle: "content",collapsible: true});
+	    $( ".accordion_cat" ).accordion({ heightStyle: "content",collapsible: true});
+	    $('#faq-accordion').trigger('click');
+	    
+	  });
+  </script>
+
+
+<?php if ($isUseJavascript): ?>
+<script type="text/javascript">
+
+	function show_panel(id){
+		jQuery('.category_panel').hide();
+		jQuery('.category_view_panel').hide();
+		jQuery('#'+id).show();
+		jQuery('#'+id).trigger('click');
+		return false;
+	}
+
+	function show_slide(id){
+		jQuery('#'+id).slideToggle();
+		return false;
+	}
+
+	function show_div(id){
+		jQuery('.reply').hide();
+		jQuery('#'+id).css('width','50%');
+		jQuery('#'+id).show();
+		jQuery('#'+id).focus();
+		jQuery('#'+id).animate({
+            left: '250px',
+            opacity: '0.7',
+            width: '100%'
+        });
+	}
+
+	function showanswer(faq_id) {
+		$$('div.faq_answer').each(
+			function (e) {
+				if (e.id != 'faq_answer_'+faq_id) {
+					e.hide();
+				}
+			}
+		);
+		
+		if ($('faq_answer_'+faq_id).getStyle('display') == 'none') {
+			$('faq_answer_'+faq_id).show();
+		}
+		else {
+			$('faq_answer_'+faq_id).hide();
+		}
+	}
+	//<![CDATA[
+		var dataForm = new VarienForm('faq-search-form', true);
+	//]]>
+</script>
+<?php endif;?>

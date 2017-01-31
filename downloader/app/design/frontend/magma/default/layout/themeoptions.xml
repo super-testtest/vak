@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+<!-- color tool -->
+<!--
+        <reference name="head">
+            <action method="addCss"><stylesheet>w3themes/colortool/css/mcltool.css</stylesheet></action>
+            <action method="addCss"><stylesheet>w3themes/colortool/css/colorpicker.css</stylesheet></action>
+            <action method="addJs"><script>w3themes/jq.slide.js</script></action>
+            <action method="addJs"><script>w3themes/colortool/colorpicker.js</script></action>
+            <action method="addJs"><script>w3themes/colortool/jquery.cookie.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="themeoptions/themeoptions" name="colortool" template="w3themes/colortool/colortool.phtml" />
+        </reference>
+-->
+<!-- color tool-->
+    </default>
+</layout> 

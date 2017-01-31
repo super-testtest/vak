@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Tailored_PaypalAutoInvoice>
+      <version>0.1.0</version>
+    </Tailored_PaypalAutoInvoice>
+  </modules>
+  <global>
+    <helpers>
+      <paypalautoinvoice>
+        <class>Tailored_PaypalAutoInvoice_Helper</class>
+      </paypalautoinvoice>
+    </helpers>
+	<models>
+	  <paypalautoinvoice>
+		<class>Tailored_PaypalAutoInvoice_Model</class>
+		<resourceModel>paypalautoinvoice_mysql4</resourceModel>
+	  </paypalautoinvoice>
+	</models>
+    <events>
+        <controller_action_postdispatch_checkout_onepage_success>
+            <observers>
+                <controller_action_postdispatch_checkout_onepage_success_handler>
+                    <type>model</type>
+                    <class>paypalautoinvoice/observer</class>
+                    <method>generateInvoice</method>
+                    <args></args>
+                </controller_action_postdispatch_checkout_onepage_success_handler>
+            </observers>
+        </controller_action_postdispatch_checkout_onepage_success>
+
+        <controller_action_predispatch_checkout_onepage_success>
+            <observers>
+                <controller_action_predispatch_checkout_onepage_success_handler>
+                    <type>model</type>
+                    <class>paypalautoinvoice/observer</class>
+                    <method>clearCart</method>
+                    <args></args>
+                </controller_action_predispatch_checkout_onepage_success_handler>
+            </observers>
+        </controller_action_predispatch_checkout_onepage_success>
+    </events>
+  </global>
+</config> 

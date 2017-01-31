@@ -1,0 +1,64 @@
+<div class="block block-bestsellers">
+	<div class="block-title"><strong><?php  echo $this->title();?></strong></div>
+	<div class="block-content">
+	<?php $product_block  = $this->getLayout()->createBlock('catalog/product') ?>	
+	<?php $wee  = Mage::helper('weee');
+		  $_helper = $this->helper('catalog/output'); 
+		  $bestsellers = $this->getBestsellers();
+		  $_taxHelper  = Mage::helper('tax');
+	      if(count($bestsellers) > 0){
+		?>
+			<table>
+		<?php 		    
+		 	foreach($bestsellers as $product_array) {
+				$qty = $product_array[0];
+				$product = $product_array[1];
+				$product = Mage::getModel("catalog/product")->load($product->getId());	
+				
+				//$_finalPrice = $_taxHelper->getPrice($product, $product->getFinalPrice());
+				//$price_html = $product_block->getPriceHtml($product);
+				$price_html = Mage::helper('core')->currency($product->getFinalPrice(), true, false);				
+		?>	
+    				<tr>
+    					<td>
+    						<a href="<?php echo $product->getProductUrl() ?>" 
+    						   title="<?php echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>" 
+    						   class="product-image">
+    						   <?php if ($product->getTypeId() == "customproduct" && $product->getPreviewImage())
+			                    {
+			                        $imagePath = Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, false ) ."image.php?parameters=@width=100@height=75@quality=90@image=/media/catalog/product/previewImage/".$product->getPreviewImage(); 
+			                       
+			                    }
+			                    else{
+			                        $imagePath =  $this->helper('catalog/image')->init($product, 'small_image')->resize(75);
+			                    }
+			                    ?>
+
+    						   <img src="<?php echo $imagePath; ?>" />
+    						</a>
+    					</td>
+    					<td>    					
+    					<?php $tax = $wee->getAmountForDisplay($product); ?>    					 
+    						<div class="product-title"><a href="<?php echo $product->getProductUrl()?>"><span><?php echo $product->getName()?></span></a></div>
+    						<div class="bestsellers-price">
+    							<?php echo $price_html?>
+    						</div>
+    						<div class="more-info">
+    							<a href="<?php echo $product->getProductUrl()?>"><span><?php echo $this->__("More Info.")?></span></a>
+    						</div>
+    						<div style="clear:all"></div>
+    					</td>    					
+    				</tr>
+	    <?php } ?>
+	    	</table>
+	    <?php 
+			}else{
+				if(Mage::registry('current_category')){
+					echo $this->__('No best sold products present');
+				}else{
+					echo $this->__('No results');
+				}
+			}	
+		?>
+	</div>
+</div>

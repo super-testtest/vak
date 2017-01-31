@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Trollweb_Tripletex>
+			<version>1.3.3</version>
+		</Trollweb_Tripletex>
+	</modules>
+	
+	<global>
+		<models>
+			<tripletex>
+				<class>Trollweb_Tripletex_Model</class>
+      </tripletex>
+		</models>
+		
+    <blocks>
+        <tripletex><class>Trollweb_Tripletex_Block</class></tripletex>
+            <adminhtml>
+                <rewrite>
+                  <sales_invoice_grid>Trollweb_Tripletex_Block_Adminhtml_Sales_Invoice_Grid</sales_invoice_grid>
+                </rewrite>
+            </adminhtml>
+    </blocks>
+		
+    <helpers>
+      <tripletex>
+        <class>Trollweb_Tripletex_Helper</class>
+      </tripletex>
+    </helpers>
+
+    <resources>
+      <tripletex_setup>
+          <setup>
+            <module>Trollweb_Tripletex</module>
+            <class>Trollweb_Tripletex_Model_Setup</class>
+          </setup>
+          <connection>
+            <use>core_setup</use>
+          </connection>
+      </tripletex_setup> 
+    </resources>
+		
+	</global>
+	
+
+	<default>
+		<tripletex>
+			<tripletex_settings>
+				<active>0</active>
+				<testmode>1</testmode>
+				<transfermethod>invoice</transfermethod>
+				<due_days>14</due_days>
+                <fee_tax_class>3</fee_tax_class>
+				<feed_url><![CDATA[http://notifications.trollweb.no/?feed=rss2&plugin=tw-modules&module_identificator=tripletex]]></feed_url>
+				<frequency>1</frequency>
+			</tripletex_settings>
+		</tripletex>
+	</default>	
+
+<!-- 
+	<frontend>
+    <secure_url>
+      <tripletex_export>/tripletex/export</tripletex_export>
+    </secure_url>  
+		<routers>
+			<tripletex>
+				<use>standard</use>
+				<args>
+					<module>Trollweb_Tripletex</module>
+					<frontName>tripletex</frontName>
+				</args>
+			</tripletex>
+		</routers>
+	</frontend>
+ -->
+ 
+  <admin>
+    <routers>
+      <tripletex>
+        <use>admin</use>
+        <args>
+          <module>Trollweb_Tripletex</module>
+          <frontName>tripletex</frontName>
+        </args>
+      </tripletex>
+    </routers>    
+  </admin>
+
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <tripletex>
+                                            <title>Tripletex</title>
+                                        </tripletex>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <events>
+            <core_block_abstract_prepare_layout_after>
+                <observers>
+                    <tripletex_massaction>
+                        <type>singleton</type>
+                        <class>Trollweb_Tripletex_Model_Observer</class>
+                        <method>addMassAction</method>
+                    </tripletex_massaction>
+                </observers>
+            </core_block_abstract_prepare_layout_after>
+            <controller_action_predispatch>
+                <observers>
+                    <tripletex>
+                        <class>tripletex/observer</class>
+                        <method>preDispatch</method>
+                    </tripletex>
+                </observers>
+            </controller_action_predispatch>
+        </events>
+    </adminhtml>
+
+    <crontab>
+        <jobs>
+            <trollweb_tripletex>
+                <run><model>tripletex/cron::tripletex_export</model></run>
+            </trollweb_tripletex>
+            <trollweb_tripletex_checkinvoice>
+                <run><model>tripletex/cron::checkInvoiceStatus</model></run>
+            </trollweb_tripletex_checkinvoice>
+        </jobs>
+    </crontab>
+
+</config>

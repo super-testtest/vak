@@ -1,0 +1,33 @@
+<div class="category-products">
+    <?php $_categories=$this->getCurrentChildCategories(); ?>
+    <?php $_collectionSize = $_categories->count(); ?>
+    <?php $_grid_pro = 3; $_span = "span4"; ?>
+    <?php $_columnCount = $_grid_pro; //$this->getColumnCount(); ?>
+    <?php $i=0; foreach ($_categories as $_category): ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <div class="products-grid row-fluid">
+        <?php endif ?>
+            <div class="<?php echo $_span ?> item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+
+	             <?php $imageSrc = $_category->getImage();
+					   $ThumbnailUrl = Mage::getBaseUrl('media').'catalog/category/'.$imageSrc; ?>
+
+                <div class="item-inner" style="height : 200px !important;">
+		            <a href="<?php echo $_category->getURL() ?>" title="<?php echo $this->htmlEscape($_category->getName()) ?>"><img src="<?php echo $ThumbnailUrl ?>" alt="<?php echo $this->htmlEscape($_category->getName()) ?>" />
+					</a>
+
+                    <!-- <div class="product-details">      
+                            <h2 class="product-name">
+                            	<a href="<?php //echo $_category->getURL() ?>" title="<?php //echo $this->htmlEscape($_category->getName()) ?>">
+                            		<?php //echo $this->htmlEscape($_category->getName()) ?>
+							    </a>
+							</h2>
+                    </div> -->								
+                </div>
+            </div>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </div>
+        <?php endif ?>
+        <?php endforeach ?>
+       <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+</div>

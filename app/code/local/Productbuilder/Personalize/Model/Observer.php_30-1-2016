@@ -1,0 +1,466 @@
+<?php 
+class Productbuilder_Personalize_Model_Observer
+{
+    /**
+     * Flag to stop observer executing more than once
+     *
+     * @var static bool
+     */
+    static protected $_singletonFlag = false;
+
+    public function updateProductPrice(Varien_Event_Observer $observer){
+        $item = $observer->getQuoteItem();
+        if ($item->getParentItem()) {
+            $item = $item->getParentItem();
+        }
+
+        // Discounted 25% off
+        $percentDiscount = 0.25; 
+
+        // This makes sure the discount isn't applied over and over when refreshing
+        $specialPrice = $item->getOriginalPrice() - ($item->getOriginalPrice() * $percentDiscount);
+
+        // Make sure we don't have a negative
+        if ($specialPrice > 0) {
+            $item->setCustomPrice($specialPrice);
+            $item->setOriginalCustomPrice($specialPrice);
+            $item->getProduct()->setIsSuperMode(true);
+        }
+    }
+
+	public function saveAttributes(Varien_Event_Observer $observer)
+    {
+    	 $session = Mage::getSingleton('checkout/session');
+    	 return $this;
+    }
+
+    /**
+     * This method will run when the product is saved from the Magento Admin
+     * Use this function to update the product model, process the 
+     * data or anything you like
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function saveProductTabData(Varien_Event_Observer $observer)
+    {
+        if (!self::$_singletonFlag) {
+            self::$_singletonFlag = true;
+
+            $product = $observer->getEvent()->getProduct();
+			
+            if($_FILES['previewImage']['name'])
+            {
+              try 
+              {
+
+                $uploader = new Varien_File_Uploader('previewImage');
+
+                $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
+
+                $uploader->setAllowRenameFiles(true);
+
+                $uploader->setFilesDispersion(false);
+
+                $path = Mage::getBaseDir('media').'/catalog/product/previewImage' ;
+
+                $now = time();
+                $newName = $now.'_'.$_FILES['previewImage']['name'];
+                $newName = $uploader-> getCorrectFileName($newName);
+                if ($product->getPreviewImage())
+                {
+                	$oldImage = $path.'/'.$product->getPreviewImage();
+                	@unlink($oldImage);
+                }
+
+                $uploader->save($path, $newName);
+
+                $product->setPreviewImage($newName);
+                $product->save();
+              }
+                catch(Exception $e) 
+                {
+                    Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                }
+            }         
+        }
+    }
+      
+    /**
+     * Retrieve the product model
+     *
+     * @return Mage_Catalog_Model_Product $product
+     */
+    public function getProduct()
+    {
+        return Mage::registry('product');
+    }
+     
+    /**
+     * Shortcut to getRequest
+     *
+     */
+    protected function _getRequest()
+    {
+        return Mage::app()->getRequest();
+    }
+
+    public function indexcron()
+    {
+        Mage::log("Run Cron For Printer");
+        $baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+        $toDate = Mage::getSingleton('core/date')->gmtDate('Y-m-d H:i:s');
+        $fromDate = $this->date_subDate($toDate,1,0,0,0);
+        // $fromDate = date('2015-01-21 07:28:40');
+        
+        /* Get the collection */
+        $orders = Mage::getModel('sales/order_item')->getCollection()->addAttributeToFilter('created_at', array('from'=>$fromDate, 'to'=>$toDate));
+
+        $salesModel=Mage::getModel("sales/order_item");
+        $salesCollection = $salesModel->getCollection();
+        $items = array();
+        $inc = 1;
+        foreach($orders as $order)
+        {
+            $attributes = $order->getProductOptions();
+            if (isset($attributes['info_buyRequest']['prb_customized_image']))
+            {
+                $items[$inc] = $order;
+                $inc++;
+            }
+            $orderId= $order->getOrderId();
+        }
+        $count = count($items);
+
+        if ($count and $count > 0)
+        {
+            require_once("lib/ExcelClasses/PHPExcel.php");
+            // Create an instance
+            $workbook = new PHPExcel;
+            $sheet = $workbook->getActiveSheet();
+            $boldArray = array(
+                'font' => array(
+                    'bold' => true,
+                    'size' => 12,
+                ),
+            );
+            $borderArray = array(
+                'borders' => array(
+                    'left' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                    'right' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    ),
+                ),
+            );
+
+            $sheet->getStyle('A1:N1')->applyFromArray($boldArray);
+            $sheet->getStyle('A2:N2')->applyFromArray(array('font' => array('size' => 12)));
+
+            $sheet->getColumnDimension('J')->setWidth(20);
+            $sheet->getColumnDimension('M')->setWidth(20);
+            $sheet->getColumnDimension('N')->setWidth(25);
+            $sheet->getRowDimension('1')->setRowHeight(20);
+            $sheet->getRowDimension('2')->setRowHeight(20);
+
+            $sheet->getStyle('A1:N1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('A1:N1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+
+            $sheet->getStyle('B1:N1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+            
+            $sheet->getStyle('A1:A2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('B1:E2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('B1:E1')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            
+            $sheet->getStyle('F1:I2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('F1:I1')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            
+            $sheet->getStyle('J1:J2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('J1')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            
+            $sheet->getStyle('K1:K2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('K1')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            
+            $sheet->getStyle('L1:L2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('L1')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            
+            $sheet->getStyle('M1:M2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('M1')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+
+            $sheet->getStyle('N1:N2')->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('N1')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+            
+            //Header row 1 - Start
+            $sheet->setCellValue('A1','Badge');
+            $sheet->mergeCells('A1:A2');
+            
+            $sheet->setCellValue('B1','Text');
+            $sheet->mergeCells('B1:E1');
+            
+            $sheet->setCellValue('F1','Title');
+            $sheet->mergeCells('F1:I1');
+            
+            $sheet->setCellValue('J1','Background Color');
+            
+            $sheet->setCellValue('K1','Image');
+            
+            $sheet->setCellValue('L1','Emotion');
+            
+            $sheet->setCellValue('M1','Preview Image');     
+
+            $sheet->setCellValue('N1','High Resolution Image');     
+            //Header row 1 - End
+            
+            //Header row 2 - Start      
+            $sheet->setCellValue('B2','Name');
+            
+            $sheet->setCellValue('C2','Font-Size');
+            
+            $sheet->setCellValue('D2','Color');
+            
+            $sheet->setCellValue('E2','Font-Style');
+            
+            $sheet->setCellValue('F2','Name');
+            
+            $sheet->setCellValue('G2','Font-Size');
+            
+            $sheet->setCellValue('H2','Color');
+            
+            $sheet->setCellValue('I2','Font-Style');
+
+            $sheet->setCellValue('J2','Color');
+            
+            $sheet->setCellValue('K2','');
+            
+            $sheet->setCellValue('L2','');
+            
+            $sheet->setCellValue('M2','');
+            
+            //Header row 2 - End
+            
+            //Record View - Start
+            $alphabetArray = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N");
+            $orderModel = Mage::getModel('sales/order');
+            Mage::log("Sales Items Presrnt for Print");
+
+            for($i=1;$i<=$count;$i++) {
+                for($j=0;$j<count($alphabetArray);$j++) {
+                    $cellRow = $i+2;
+                    $index = $alphabetArray[$j].$cellRow;
+                    $productOptions = $items[$i]->getProductOptions();
+                    $orderID = $items[$i]->getOrderId();
+                    $orderAttr = $productOptions['info_buyRequest'];
+
+                    /*$order = $orderModel->load($orderID);$order->getCustomerName();*/
+
+                    switch ($alphabetArray[$j]) {
+                        case 'A':
+                            $val = $i;
+                            break;
+                        
+                        case 'B':
+                            $val = $orderAttr['prb_name_title'];
+                            break;
+                        
+                        case 'C':
+                            $val = $orderAttr['prb_text_size'];
+                            break;
+                        
+                        case 'D':
+                            $val = $orderAttr['prb_printer_text_colour'];
+                            break;
+                        
+                        case 'E':
+                            $val = $orderAttr['prb_fonts'];
+                            break;
+                        
+                        case 'F':
+                            $val = $orderAttr['prb_title'];
+                            break;
+                        
+                        case 'G':
+                            $val = $orderAttr['prb_title_size'];
+                            break;
+                        
+                        case 'H':
+                            $val = $orderAttr['prb_printer_title_colour'];
+                            break;
+                        
+                        case 'I':
+                            $val = $orderAttr['prb_title_fonts'];
+                            break;
+                        
+                        case 'J':
+                            $val = $orderAttr['prb_printer_back_colour'];
+                            break;
+                        
+                        case 'K':
+                            $val = $orderAttr['prb_product_image_path'];
+                            break;
+                        
+                        case 'L':
+                            $val = $orderAttr['prb_smiley_image_path'];
+                            break;
+                        
+                        case 'M':
+                            $val = $baseUrl.substr($orderAttr['prb_customized_image'],1,strlen($orderAttr['prb_customized_image'])-1);
+                            break;
+                        
+                        case 'N':
+                            $val = $baseUrl.str_replace('product_img_', 'label_img_',substr($orderAttr['prb_customized_image'],1,strlen($orderAttr['prb_customized_image'])-1));
+                            break;
+
+                        default:
+                            $val = '';
+                            break;
+                    }
+                    
+                    $sheet->setCellValue($index,$val);
+
+                }
+            }
+            //Record View - End
+            $bottomStart = $count+3;
+            $bottomEnd   = $count+7;
+            $sheet->getStyle('A'.$bottomStart.':I'.$bottomEnd)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $sheet->getStyle('A'.$bottomStart.':I'.$bottomEnd)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);                
+            $sheet->getStyle('A'.$bottomStart.':I'.$bottomEnd)->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
+            $sheet->getStyle('A'.$bottomStart.':I'.$bottomEnd)->applyFromArray(array('font' => array('size' => 16)));
+
+            //Footer - Start        
+            $sheet->setCellValue('A'.$bottomStart,'Requested by:  Vaktrommet As');
+            $sheet->mergeCells('A'.$bottomStart.':F'.$bottomEnd);
+            
+            $sheet->setCellValue('G'.$bottomStart,'Date:  '.date("d-m-Y",mktime(date('h'),date('i'),date('s'),date('m'),date('d')-1,date('Y'))).'');
+            $sheet->mergeCells('G'.$bottomStart.':I'.$bottomEnd);
+            //Footer - End      
+            
+            $writer = new PHPExcel_Writer_Excel5($workbook);
+            $date = date("d_m_Y_h_i_s");
+
+            //header('Content-type: application/vnd.ms-excel');
+            $xlsName = 'Badge_Order_Printer_'.$date.'.xlsx';
+            $xlsFile = 'media/export/'.$xlsName;
+
+
+            $writer->save($xlsFile);
+            Mage::log('Exported to xls');
+            
+            $templateId = 2;
+              /*Set sender information*/
+              $senderName = 'Support';// Mage::getStoreConfig('trans_email/ident_support/name');
+              $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email');
+              $sender = array('name' => $senderName,
+                            'email' => $senderEmail);
+             
+              /*Set recepient information*/
+              $recepientEmail = 'malin@d-sign.no';
+            $recepientName  =  'Malin Berg';   
+              // $is_allow = Mage::getStoreConfig('personalize/email/allow');
+              // if($is_allow == 1){
+              //   $recepientEmail = 'ankit.dobariya@tasolglobal.com';
+              //   $recepientName  =  'Ankit Dobariya';     
+              // }
+              // else{
+              //   $recepientEmail = Mage::getStoreConfig('personalize/email/emailId');
+              //   if($recepientEmail == ''){
+              //       $recepientEmail = 'ankit.dobariya@tasolglobal.com';
+              //       $recepientName  =  'Ankit Dobariya';     
+              //   }
+              //   else{
+              //       $recepientName  =  'Malin Berg';        
+              //   }
+                
+              // }
+              
+             
+              /*Get Store ID*/
+              $store = Mage::app()->getStore()->getId();
+             
+              /*Set variables that can be used in email template*/
+              $vars = array('subject' =>  'Printer Badge Daily Order Report 0n '.date("M d Y", mktime(0, 0, 0, date("m"),date("d"),date("Y"))));
+              
+              $translate  = Mage::getSingleton('core/translate');
+              $transactionalEmail = Mage::getModel('core/email_template')->setDesignConfig(array('area'=>'frontend', 'store'=>1));
+
+              $attachment = file_get_contents($xlsFile);
+
+              $transactionalEmail->getMail()->createAttachment($attachment,'text/UTF-8')->filename = $xlsName;
+              if($transactionalEmail->sendTransactional($templateId, $sender, $recepientEmail, "Admin", $vars))
+              {
+                    Mage::log('Sent mail');
+                    exit;
+              }
+              else
+              {
+                    Mage::log('Mail Failed');
+                    exit;
+              }
+        }
+        if($count == 0)
+        {
+            Mage::log('No Items to Print');
+            /*Send Mail To the Client describing that there were no orders today for the product builder*/
+            $templateId = 3;
+              /*Set sender information*/
+              $senderName = 'Support';// Mage::getStoreConfig('trans_email/ident_support/name');
+              $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email');
+              $sender = array('name' => $senderName,
+                            'email' => $senderEmail);
+             
+              /*Set recepient information*/
+              $recepientEmail = 'malin@d-sign.no';
+                $recepientName  =  'Malin Berg';   
+              // $is_allow = Mage::getStoreConfig('personalize/email/allow');
+              // if($is_allow == 1){
+              //   $recepientEmail = 'ankit.dobariya@tasolglobal.com';
+              //   $recepientName  =  'Ankit Dobariya';     
+              // }
+              // else{
+              //   $recepientEmail = Mage::getStoreConfig('personalize/email/emailId');
+              //   if($recepientEmail == ''){
+              //       $recepientEmail = 'ankit.dobariya@tasolglobal.com'
+              //       $recepientName  =  'Ankit Dobariya';     
+              //   }
+              //   else{
+              //       $recepientName  =  'Malin Berg';        
+              //   }
+                
+              // }
+
+             
+              /*Get Store ID*/
+              $store = Mage::app()->getStore()->getId();
+             
+              /*Set variables that can be used in email template*/
+              $vars = array('subject' =>  'Printer Badge Daily Order Report 0n '.date("M d Y", mktime(0, 0, 0, date("m"),date("d")-1,date("Y"))));
+              
+              $translate  = Mage::getSingleton('core/translate');
+              $transactionalEmail = Mage::getModel('core/email_template')->setDesignConfig(array('area'=>'frontend', 'store'=>1));
+
+              if($transactionalEmail->sendTransactional($templateId, $sender, $recepientEmail, "Admin", $vars))
+              {
+                    Mage::log('Sent mail');
+                    exit;
+              }
+              else
+              {
+                    Mage::log('Mail Failed');
+                    exit;
+              }
+        }
+
+    }
+
+    public function date_subDate($text, $da=0, $ma=0, $ya=0, $ha=0)
+    {
+        $h=date('H',strtotime($text));
+        $d=date('d',strtotime($text));
+        $m=date('m',strtotime($text));
+        $y=date('Y',strtotime($text));
+        $fromTime =date("Y-m-d H:i:s", mktime($h-$ha, 0, 0, $m-$ma, $d-$da, $y-$ya));
+        return $fromTime;
+    }
+
+}
+?>

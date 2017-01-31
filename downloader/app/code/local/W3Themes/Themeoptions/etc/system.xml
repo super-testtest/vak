@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<config>
+	<tabs>
+		<w3themes translate="label" module="themeoptions">
+			<label><![CDATA[<span class="w3-mainmenu-st">W3Themes</span>]]></label>
+			<sort_order>205</sort_order>
+		</w3themes>
+	</tabs>
+	<sections>
+		<themeoptions translate="label" module="themeoptions">
+			<label>Theme Options</label>
+			<tab>w3themes</tab>
+			<sort_order>131</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<themeoptions_config translate="label">
+					<label>Theme Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+                        <menu_style translate="label">
+                            <label>Menu Style: </label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>
+								themeoptions/config_menu
+							</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </menu_style>
+						<new_label translate="label comment">
+							<label>New Label: </label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</new_label>
+						<sale_label translate="label comment">
+							<label>Sale Label: </label>
+							<frontend_type>select</frontend_type>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</sale_label>                         
+                        <grid_product translate="label">
+                            <label>Grid Product Items: </label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>
+								themeoptions/config_grid
+							</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </grid_product>
+                        <account_icon translate="label comment">
+							<label>Account Icon: </label>
+							<frontend_type>select</frontend_type>
+							<comment>Show Account/Login icon in header. </comment>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</account_icon>
+                        <wishlist_icon translate="label comment">
+							<label>Wishlist Icon: </label>
+							<frontend_type>select</frontend_type>
+							<comment>Show wishlist icon in header. </comment>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</wishlist_icon>
+						<cart_icon translate="label comment">
+							<label>Shopping Cart Icon: </label>
+							<frontend_type>select</frontend_type>
+							<comment>Show Shopping Cart icon in header. </comment>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</cart_icon>
+
+						<related_products translate="label comment">
+							<label>Related Products: </label>
+							<frontend_type>select</frontend_type>
+							<comment>Show Related Products On Product Page. </comment>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</related_products>
+						
+						<social_buttons translate="label comment">
+							<label>Social Sharing Buttons: </label>
+							<frontend_type>select</frontend_type>
+							<comment>Show Social Sharing buttons On Product Page. </comment>
+							<source_model>
+								adminhtml/system_config_source_yesno
+							</source_model>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>							
+						</social_buttons>
+
+
+					</fields>
+				</themeoptions_config>						
+			</groups>
+			<groups>
+				<themeoptions_design translate="label">
+					<label>Theme Design</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>2</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<font>
+							<label>Font:</label>
+							<frontend_type>select</frontend_type>
+                            <source_model>themeoptions/config_customfieldfont</source_model>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldfont</frontend_model>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</font>
+                        <main_color>
+							<label>Main Color: </label>
+							<comment>This color will be used as main color for backgrounds and borders</comment>
+							<frontend_type>text</frontend_type>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldcolor</frontend_model>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</main_color>
+						<second_color>
+							<label>Secondary Color: </label>
+							<comment>This color will be used as secondary color backgrounds </comment>
+							<frontend_type>text</frontend_type>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldcolor</frontend_model>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</second_color>
+                        <link_color>
+							<label>Link Color: </label>
+							<comment>This color will be used for link</comment>
+							<frontend_type>text</frontend_type>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldcolor</frontend_model>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</link_color>
+
+						<maintext_color>
+							<label>Main Text Color: </label>
+							<comment>This color will be used as color for titles and text</comment>
+							<frontend_type>text</frontend_type>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldcolor</frontend_model>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</maintext_color>
+
+						<button_color>
+							<label>Button Color: </label>
+							<comment>This color will be used as color for buttons</comment>
+							<frontend_type>text</frontend_type>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldcolor</frontend_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</button_color>
+
+						<price_color>
+							<label>Price Color: </label>
+							<comment>This color will be used as color for prices</comment>
+							<frontend_type>text</frontend_type>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldcolor</frontend_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</price_color>
+
+                        <body_background>
+							<label>Background Color: </label>
+							<comment>This color will be used for body background</comment>
+							<frontend_type>text</frontend_type>
+							<frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldcolor</frontend_model>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</body_background>
+                        <bg_pattern>
+							<label>Background Pattern: </label>
+							<frontend_type>radios</frontend_type>
+							<source_model>themeoptions/config_customfieldpattern</source_model>
+                            <frontend_model>themeoptions/adminhtml_system_config_form_field_customfieldpattern</frontend_model>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</bg_pattern>
+
+					</fields>
+				</themeoptions_design>						
+			</groups>
+		</themeoptions>
+	</sections>
+</config>
+
+

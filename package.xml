@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+    <name>Nayati_ProductGift</name>
+    <version>1.0.0</version>
+    <stability>stable</stability>
+    <license>GNU General Public License (GPL)</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>The Buy X for Y extension will surely improve sales and motivate the customers to come back!</summary>
+    <description>A common requirement for an eCommerce store is the Buy X Get Y free sales product.&#xD;
+This extension allows the customers to choose bonus product Y in the pool of option if customer buys a quantity of product X. &#xD;
+We have built our module in the way that allows the admin to assign any number of gift products Y by using SKU to a single product X. The customer can choose one gift product from many options provided. &#xD;
+&#xD;
+The Buy X for Y extension will surely improve sales and motivate the customers to come back!</description>
+    <notes>This is Stable version</notes>
+    <authors><author><name>Benjamin</name><user>nayatisolutions</user><email>ben@nayatisolutions.com</email></author></authors>
+    <date>2014-05-09</date>
+    <time>10:01:16</time>
+    <contents><target name="magecommunity"><dir name="Nayati"><dir name="ProductGift"><dir name="Adminhtml"><dir name="Block"><dir name="Catalog"><dir name="Product"><dir name="Grid"><file name="Skus.php" hash="2cffb4d9ff84feb258e44e6f81a7af5c"/></dir><file name="Grid.php" hash="9dacc248161c1985d02b24c3ca95f7f7"/></dir></dir></dir></dir><dir name="Block"><file name="Giftview.php" hash="66096778a92d9ec46b70d9ae0eed5d72"/></dir><dir name="Helper"><file name="Data.php" hash="fabf29f39cc45d615a0b3d2beafd9eec"/></dir><dir name="Model"><file name="Giftskus.php" hash="74fb3fd8fe1c7352a4034889602b24a2"/><file name="Observer.php" hash="4a1260eff1184ef1ba5a1227b62a4c7d"/><dir name="Resource"><dir name="Eav"><dir name="Mysql4"><file name="Setup.php" hash="bdf001c2941783efbbc55894d74be170"/></dir></dir><dir name="Giftskus"><file name="Collection.php" hash="f1ec565d652a490a3de37fa475163569"/></dir><file name="Giftskus.php" hash="8febc9e54613a7561de5edae6b741f92"/></dir><dir name="System"><dir name="Config"><dir name="Source"><dir name="Dropdown"><file name="Values.php" hash="cc6f76d5fff904610c1299fbe30aab8a"/></dir><file name="Enabledisable.php" hash="5cceddb4306dbcc0f4e5cd665544c41e"/></dir></dir></dir></dir><dir name="controllers"><file name="CartController.php" hash="b26a0396a250cebc916d16b23ee1a8f9"/></dir><dir name="etc"><file name="adminhtml.xml" hash="8a78147e11cb9c319c03f19bb16da795"/><file name="config.xml" hash="697dbb9781c75311283abb37f445f8fa"/><file name="system.xml" hash="90ce6df8d6b1585eaea7a8225c95e8a2"/></dir><dir name="sql"><dir name="productgift_setup"><file name="mysql4-install-1.0.0.php" hash="8510e5d748b3098c0c41536a54f22132"/><file name="mysql4-upgrade-1.0.0-1.1.0.php" hash="795e5faedc9662d5a2aff4aad7f5c937"/></dir></dir></dir></dir></target><target name="magedesign"><dir name="frontend"><dir name="base"><dir name="default"><dir name="layout"><file name="cataloggift.xml" hash="8d90e34666a5c49dc2780ae2f606cdf0"/></dir><dir name="template"><dir name="freegift"><dir name="catalog"><dir name="product"><file name="image.phtml" hash="94f0fc1877adf2d50591dab6c4128798"/><file name="list.phtml" hash="e9015609d993e3ff2bf61d75bba4db44"/></dir></dir><file name="default.phtml" hash="3931771a6f171242131e516eb3607e1b"/><file name="gifts.phtml" hash="6d4b578fbca7117def8240f8fb1c80b6"/></dir></dir></dir></dir></dir><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="layout"><file name="salesitem.xml" hash="66010bfb7e6f303364fa4a127bea9a1d"/></dir><dir name="template"><dir name="freegift"><file name="default.phtml" hash="637976dfbbe2df106255ad84a39d1f68"/><file name="items.phtml" hash="47d4bb042f7106d9960a4fbe5e81b835"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Nayati_ProductGift.xml" hash="d9e3807267cac7fda81300722a58ddb0"/></dir></target><target name="mageskin"><dir name="frontend"><dir name="default"><dir name="default"><dir name="images"><file name="free.png" hash="800e606e2c9104dd6d5375f887f6d939"/><file name="gift_list.png" hash="e2a00524603dd69933243ee97741ea37"/></dir><dir name="css"><file name="giftproduct.css" hash="85e8bb49e54aeb5a47840cb94891900e"/></dir></dir></dir></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.2.0</min><max>5.3.28</max></php></required></dependencies>
+</package>

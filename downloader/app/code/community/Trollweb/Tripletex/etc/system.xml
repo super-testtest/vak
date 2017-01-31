@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<config>
+  <tabs>
+    <trollweb translate="label" module="tripletex">
+      <label>Trollweb</label>
+      <sort_order>400</sort_order>
+    </trollweb>
+  </tabs>
+  <sections>
+    <tripletex translate="label" module="tripletex">
+      <label>Tripletex</label>
+      <tab>trollweb</tab>
+      <frontend_type>text</frontend_type>
+      <sort_order>400</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+      <groups>
+
+        <tripletex_settings translate="label comment">
+          <label>Innstillinger</label>
+          <frontend_type>text</frontend_type>
+          <frontend_model>tripletex/adminhtml_title</frontend_model>
+          <sort_order>1</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <active translate="label">
+              <label>Aktiv</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>2</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </active>
+
+            <testmode translate="label">
+              <label>Testmodus</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Dersom testmodus er aktiv blir det bare genert en fil i var/log.]]></comment>                
+            </testmode>
+          
+            <transfermethod translate="label">
+              <label>Overfør fakturaer som</label>
+              <frontend_type>select</frontend_type>
+              <source_model>tripletex/config_source_transfermethods</source_model>
+              <sort_order>4</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Velg om fakturaene skal overføres som Tripletex faktura eller ordrer.]]></comment>                
+            </transfermethod>
+          
+            <username translate="label">
+              <label>Brukernavn</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Brukernavnet ditt hos Tripletex]]></comment>                
+            </username>
+						
+            <password translate="label">
+              <label>Passord</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>11</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Ditt Tripletex passord]]></comment>                
+            </password>
+
+            <start_invoice translate="label">
+              <label>Start fakturanummer</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Fakturanummeret som du ønsker å starte importen fra. Sett det blankt eller 0 dersom du ønsker å importere alt.]]></comment>                
+            </start_invoice>
+
+            <due_days translate="label">
+              <label>Antall dager til forfall</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Antall dager til forfall for uoppgjorte fakturaer.]]></comment>                
+            </due_days>
+
+            <b2b_mode translate="label">
+              <label>Bruk firmanavn som kundenavn</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Bruk firmanavn i Magento som kundenavn i Tripletex.]]></comment>                
+            </b2b_mode>
+
+            <b2b_field translate="label">
+              <label>Attributt for firmanavn</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>51</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Hvilken attributt skal brukes for firmanavn.]]></comment>
+              <depends><b2b_mode>1</b2b_mode></depends>                
+            </b2b_field>
+
+            <transfer_email translate="label">
+              <label>Alltid overfør epost adresse</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Overfører e-post adressen til Tripletex selv om fakturaen er oppgjort.]]></comment>
+            </transfer_email>
+            
+            <use_invoice_email translate="label">
+              <label>Bruk epost fra fakturaadresse</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>65</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Overfører e-post adressen fra fakturaadresse til Tripletex.]]></comment>
+            </use_invoice_email>
+
+
+            <customerno translate="label">
+              <label>Kundenummer serie i Tripletex</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>60</sort_order>
+              <show_in_default>0</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Nye kunder blir opprettet i Tripletex med denne kundenummeret.]]></comment>
+            </customerno>
+
+            <transfer_customernote translate="label">
+              <label>Overfør kunde kommentar</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>65</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Overfør kundens kommentar som en del av faktura kommentaren. Denne teksten vil vise før "Generell fakturakommentar" (se feltet under).]]></comment>
+            </transfer_customernote>
+
+            <invoicecomment>
+              <label>Generell fakturakommentar</label>
+              <frontend_type>textarea</frontend_type>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Denne teksten vil vise på alle fakturaer.]]></comment>
+            </invoicecomment>
+
+            <department>
+                <label>Avdeling</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>80</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <comment><![CDATA[Fyll inn avdelingsnummeret som fakturaene skal importeres til. Kan være blank dersom det bare er en avdeling.]]></comment>
+            </department>
+
+            <fee_tax_class>
+                <label>Momskode for gebyr</label>
+                <frontend_type>select</frontend_type>
+                <source_model>tripletex/config_source_vatcodes</source_model>
+                <sort_order>85</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <comment><![CDATA[Velg momskode som skal brukes på gebyrer.]]></comment>
+            </fee_tax_class>            
+
+<!-- 
+			<feed_url translate="label comment">
+				<label>Notification Feeds URL</label>
+				<frontend_type>text</frontend_type>
+				<sort_order>80</sort_order>
+				<show_in_default>1</show_in_default>
+				<show_in_website>1</show_in_website>
+				<show_in_store>1</show_in_store>
+				<comment>The URL where you will be getting new notifications regarding this module from.</comment>
+			</feed_url>
+			<frequency translate="label comment">
+				<label>Frequency of new Feeds quering</label>
+				<frontend_type>text</frontend_type>
+				<sort_order>90</sort_order>
+				<show_in_default>1</show_in_default>
+				<show_in_website>1</show_in_website>
+				<show_in_store>1</show_in_store>
+				<comment>The interval in hours which will be used for new feeds fetching for this module</comment>
+			</frequency>
+--> 
+		  </fields>
+        </tripletex_settings>       
+        
+        <tripletex_mapping>
+          <label>Betalingstyper</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>10</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+        
+          
+          <fields>
+            <mapping translate="label">
+              <label>Mappingtabell</label>
+              <frontend_model>tripletex/adminhtml_form_field_paymentmethods</frontend_model>
+              <backend_model>tripletex/config_backend_paymentmethods</backend_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <comment><![CDATA[Betalingstype mapping]]></comment>                
+            </mapping>
+          
+            <giftcard>
+               <label>Regnskapskonto for gavekort i Tripletex</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>30</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <comment><![CDATA[Skriv inn kontonr du ønsker at gavekort skal føres mot.]]></comment>
+            </giftcard>
+          </fields>
+          
+        </tripletex_mapping>
+
+        <tripletex_cron>
+          <label>Cron (Automatisk overføring til Tripletex)</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>20</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>0</show_in_website>
+          <show_in_store>0</show_in_store>
+        
+          
+          <fields>
+            <active translate="label">
+              <label>Eksport Aktiv</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+              <comment><![CDATA[Aktiver cron jobb]]></comment>                
+            </active>
+            <crontime translate="label">
+                <label>Eksport Interval</label>
+                 <frontend_type>select</frontend_type>
+                 <source_model>tripletex/config_backend_croninterval</source_model> 
+                 <backend_model>tripletex/config_backend_cron</backend_model>
+                 <sort_order>11</sort_order>
+                 <show_in_default>1</show_in_default>
+                 <show_in_website>0</show_in_website>
+                 <show_in_store>0</show_in_store>
+                 <comment>Hvor ofte skal syncen mot Tripletex kjøre.</comment>
+             </crontime>
+            <import_active translate="label">
+              <label>Import Aktiv</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </import_active>
+            <import_crontime translate="label">
+                <label>Import Interval</label>
+                 <frontend_type>select</frontend_type>
+                 <source_model>tripletex/config_backend_cronimportinterval</source_model> 
+                 <backend_model>tripletex/config_backend_cronimport</backend_model>
+                 <sort_order>21</sort_order>
+                 <show_in_default>1</show_in_default>
+                 <show_in_website>0</show_in_website>
+                 <show_in_store>0</show_in_store>
+                 <comment>Hvor ofte skal sjekk av åpne fakturaer mot Tripletex kjøre.</comment>
+             </import_crontime>
+          </fields>
+        </tripletex_cron>
+
+        
+      </groups>
+    </tripletex>
+  </sections>
+</config>

@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<config>
+	<modules>
+		<Productbuilder_Personalize>
+			<version>0.0.1</version>
+		</Productbuilder_Personalize>
+	</modules>
+	
+	<frontend>
+		<routers>
+			<personalize>
+				<use>standard</use>
+				<args>
+					<module>Productbuilder_Personalize</module>
+					<frontName>personalize</frontName>
+				</args>
+			</personalize>
+		</routers>
+        <translate>
+            <modules>
+                <Productbuilder_Personalize>
+                    <files>
+                        <default>Productbuilder_Personalize.csv</default>
+                    </files>
+                </Productbuilder_Personalize>
+            </modules>
+        </translate>		
+        <!-- This node contains module layout configuration -->
+		<layout>
+			<updates>
+				<!-- module alias -->
+				<personalize>
+					<!-- File for loading -->
+					<file>personalize.xml</file>
+				</personalize>
+			</updates>
+		</layout>
+	</frontend>
+	<global>
+        <blocks>
+            <personalize>
+                <class>Productbuilder_Personalize_Block</class>
+            </personalize>
+			<!-- <catalog>
+	            <rewrite>
+	                <navigation>Productbuilder_Personalize_Block_Navigation</navigation>
+	            </rewrite>
+            </catalog> -->
+            <adminhtml>
+            	<rewrite>
+            		<catalog_product_edit_tabs>Productbuilder_Personalize_Block_Tabs</catalog_product_edit_tabs>
+            	</rewrite>
+            </adminhtml>
+        </blocks>
+		<helpers>
+            <personalize>
+                <class>Productbuilder_Personalize_Helper</class>
+            </personalize>
+        </helpers>       
+        <models>  
+			<Productbuilder_Personalize>
+				<class>Productbuilder_Personalize_Model</class>
+			</Productbuilder_Personalize>  
+		</models> 
+		<events>
+			<checkout_cart_product_add_after>
+				<observers>
+					<productbuilder_personalize_saveAtt>
+	                    <class>Productbuilder_Personalize_Model_Observer</class>
+	                    <method>saveAttributes</method>
+	                    <type>singleton</type>
+	                </productbuilder_personalize_saveAtt>
+	            </observers>
+			</checkout_cart_product_add_after>
+			<!-- <checkout_cart_save_before>
+				<observers>
+					<productbuilder_personalize_test>
+	                    <class>Productbuilder_Personalize_Model_Observer</class>
+	                    <method>saveAttributes</method>
+	                    <type>singleton</type>
+	                </productbuilder_personalize_test>
+	            </observers>
+			</checkout_cart_save_before> -->
+        	<!-- <catalog_product_load_after>
+        		<observers>
+                	<Productbuilder_Personalize_lockAttributes>
+                    	<type>singleton</type>
+                    	<class>Productbuilder_Personalize/Observer</class>
+                    	<method>lockAttributes</method>
+                	</Productbuilder_Personalize_lockAttributes>
+            	</observers>
+        	</catalog_product_load_after> -->
+			
+			<!-- <core_block_abstract_prepare_layout_after>
+				<observers>
+					<core_block_removetabs>
+	                    <class>Productbuilder_Personalize/Observer</class>
+	                    <method>removeTabs</method>
+	                    <type>singleton</type>
+	                </core_block_removetabs>
+	            </observers>
+			</core_block_abstract_prepare_layout_after> -->
+		</events> 
+	    <sales>
+    	    <quote>
+        	    <item>
+            	    <product_attributes>
+                	    <prb_back_colour/>
+                	    <prb_fonts/>
+                	    <prb_logo/>
+                	    <prb_logo_path/>
+                	</product_attributes>
+            	</item>
+        	</quote>
+    	</sales>
+    </global>
+    <adminhtml>
+    	<layout>
+			<updates>
+				<personalize>
+					<file>personalize.xml</file>
+				</personalize>
+			</updates>
+		</layout>
+    </adminhtml>
+</config>

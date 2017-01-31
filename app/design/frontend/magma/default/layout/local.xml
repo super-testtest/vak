@@ -1,0 +1,49 @@
+<layout version="0.1.0">
+	   
+    
+
+    <default>
+
+	    <reference name="left">
+			<remove name="catalog.compare.sidebar" />
+	    </reference>
+	    <remove name="catalog_product_compare_index"/>
+	    <remove name="customer_account_index"/>
+        <reference name="right">
+        	<remove name="right.reports.product.compared" />
+        	<remove name="catalog.compare.sidebar" />
+        </reference>
+
+	</default>
+
+    <customer_logged_out>
+        <reference name="top.links">
+            <action method="removeLinkByUrl"><url helper="customer/getLoginUrl"/></action>
+        </reference>
+    </customer_logged_out>
+
+	<checkout_cart_index>
+        <reference name="content">
+            <block name="checkout.cart">
+                    <remove name="checkout.cart.shipping"/>
+            </block>
+        </reference>
+	</checkout_cart_index>
+	<customer_account>
+		<reference name="left">
+			<remove name="catalog.compare.sidebar" />
+		</reference>
+        <reference name="customer_account_navigation">
+            <action method="removeLinkByName"><name>recurring_profiles</name></action>
+            <action method="removeLinkByName"><name>reviews</name></action>
+            <action method="removeLinkByName"><name>downloadable_products</name></action>
+            <action method="removeLinkByName"><name>wishlist</name></action>
+            <action method="removeLinkByName"><name>OAuth Customer Tokens</name></action>
+        </reference>
+	</customer_account>
+	<catalog_product_view>
+		<reference name="content">
+			<remove name="product.info.upsell" />
+		</reference>
+	</catalog_product_view>
+</layout>

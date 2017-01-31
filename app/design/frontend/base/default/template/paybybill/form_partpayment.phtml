@@ -1,0 +1,32 @@
+<?php
+$_code=$this->getMethodCode();
+$_lang=$this->getLanguageCode();
+?>
+<img id="pbb_logo_<?php echo $_code; ?>" src="<?php echo $this->getSkinUrl('paybybill/'.strtolower($_lang).'_logo_partpayment.png'); ?>" />
+<br />
+<?php echo $this->__('price_example'); ?>
+<br />
+<?php if ($this->isApproved()): ?>
+  <div id="payment_form_<?php echo $_code ?>">
+  <?php if ($this->getApprovedCredits()): ?>
+  <p class="pbb-credit-approved"><?php echo $this->__('You have been approved a credit limit of %s', $this->getApprovedCredits()); ?></p>
+  <?php else: ?>
+  <p class="pbb-credit-approved"><?php echo $this->__('Your credit information has been approved.'); ?></p>
+  <?php endif; ?>
+  <label for="<?php echo $_code ?>_approveterms>"></label><input type="checkbox" id="<?php echo $_code ?>_approveterms" name="payment[approveterms]" class="" /><a href="#" onclick="paybybill.showpartpaymentterms('<?php echo $this->getUrl('paybybill/terms/PartPaymentTerms');?>','<?php echo $this->__('Close');?>'); return false;"><?php echo $this->__('Accept our terms and conditions') ?></a></label>
+  </div>
+<?php else: ?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <li>
+      <p><?php echo $this->__('Split the payment.'); ?>
+      <a href="#" onclick="paybybill.showterms('<?php echo $this->getUrl('paybybill/terms/partpayment');?>','<?php echo $this->__('Close');?>'); return false;"><?php echo $this->__('More information.'); ?></a></p>
+    </li>
+    <li>
+        <?php echo $this->getFormHtml(); ?>
+    </li>
+    <li>
+      <button type="button" id="pbb_button_<?php echo $_code; ?>" class="button" onclick="paybybill.magic('<?php echo $_code ?>','<?php echo $this->getUrl('paybybill/customer/check') ?>')"><span><span><?php echo $this->__('Check credit')?></span></span></button>
+      <div style="display:none" id="pbb_progress_<?php echo $_code; ?>">Checking data. Please wait ..</div>
+    </li>
+</ul>
+<?php endif; ?>

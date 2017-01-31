@@ -1,0 +1,65 @@
+Add Text,Lisää teksti
+Apply Background,Käytä taustaa
+Choose Art,Valitse taide
+Add Title,Lisää otsikko 
+Add,lisätä 
+Background,tausta 
+Image,kuva 
+Art,taide
+smb://192.168.5.10/html/vaktrommet/app/design/frontend/magma/default/locale/nb_NO/translate.csv,Lisää kuva 
+Choose Product,Valitse tuote 
+Edit,muokata 
+Edit Panel,edit Panel 
+"Ungroup does one level layering, so to do further layering, ungroup again until you can select the element you want to change color for.","Pura ei yksi taso kerrospukeutuminen, niin tehdä edelleen kerrospukeutuminen, Pura uudelleen, kunnes voit valita elementti, jonka haluat vaihtaa väriä. "
+Select any layer to change color of complete layer.,Valitse mikä tahansa kerros vaihtaa väriä täydellisen kerroksen. 
+"You can add only one element (i.e. Smiley, Text, Image) at a time.","Voit lisätä vain yksi tekijä (eli Smiley, teksti, kuva) kerrallaan. "
+Please select the element to edit/delete it.,Valitse elementti muokata / poistaa sen. 
+You can change the designer product directly from here,Voit muuttaa suunnittelija tuotteen suoraan täältä 
+Note: But the changes you made in the previous product wont be saved.,Huom: Mutta muutokset tehty aiempaan tuotteen tapana pelastua. 
+Select any color from the dropdown to change color of the design area. ,Valitse mikä tahansa väri avattavasta vaihtaa väriä suunnittelun alueella. 
+You can also change the font and the color of the font.,Voit myös vaihtaa fontin ja fontin väriä. 
+You can add text from here,Voit lisätä tekstiä täältä 
+You can add title from here,Voit lisätä otsikon täältä 
+Upload Images,ladata kuvia 
+Upload images from your local storage.,Kuvat suoraan paikallista tallennusta. 
+Choose and click the image you want to use in design.,"Valitse ja valitse kuva, jota haluat käyttää suunnittelussa. "
+You can resize and rotate the image further using editing controls.,Voit muuttaa ja kiertää kuvaa edelleen käyttämällä muokkaussäätimet. 
+Images Gallery,Valokuvagalleria 
+ADD TO CART,LISÄÄ OSTOSKORIIN 
+APPLY BACKGROUND COLOR,KÄYTÄ TAUSTAVÄRI 
+Add Art,Lisää Art 
+ADD IMAGE,Lisää kuva 
+Apply Background Color,Levitä taustaväri 
+Change Text Color,Muuta tekstin väri 
+Change Text Size,Muuta tekstin kokoa 
+Your Name,Nimesi 
+Font Style,fonttityyli 
+Change Title Color,Muuta otsikon väri
+Change Title Size,Muuta Otsikko Koko
+Your Title,Otsikossa
+QTY,Antall
+Item number,Artikkelnummer
+ADD IMAGE,Legg til bilde
+Add Image,Legg til bilde
+Last opp bilder fra din lokal lagring.,Last opp bilde fra din harddisk (on information box for images)
+In cart - NAME TITLE,Navn Title - Tittel
+Clear handlevogn,Tøm handlevogn
+Personilized,Tilpass ditt PenHygenic skilt
+Product code,Artikkelnummer
+Text Font Style,Teksti Fonttityyli
+Your Text,Your Text
+Add file,Lisää tiedosto 
+Upload,Lähetä
+Choosing new product will scrap your existing design in design area. Do you want to proceed?,Valitsemalla Uusi tuote romuttaa olemassa olevien mallien suunnittelussa alueella. Haluatko jatkaa?
+Emotions,tunteet 
+Animals,Eläimet 
+Family,perhe 
+Flowers,kukkia
+"Ungroup does one level layering, so to do further layering, ungroup again until you select the final color you want to change.","Pura ei yksi taso kerrospukeutuminen, niin tehdä edelleen kerrospukeutuminen, Pura uudelleen, kunnes valitset lopullisen värin haluat muuttaa."
+No files to upload,Ei lähetettävät tiedostot
+Title Font Style,Otsikko Fonttityyli
+Add Scissor,Lisää Scissor
+Change Scissor Colour,Vaihda Scissor Väri
+Change Product,Vaihda tuotetta
+Change Scissor Color,Vaihda Scissor Väri
+text colour,Tekstin väri

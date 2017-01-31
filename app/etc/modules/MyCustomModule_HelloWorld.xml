@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <MyCustomModule_HelloWorld>
+            <active>true</active>
+            <codePool>local</codePool>
+            <!-- this node point to dependency from other modules -->
+            <depends>
+                <!-- specifying that out module should be loaded after Mage_Catalog -->
+                <Mage_Catalog />
+            </depends>
+        </MyCustomModule_HelloWorld>
+    </modules>
+</config>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Tailored_LocationBasedStore>
+            <version>0.1.0</version>
+        </Tailored_LocationBasedStore>
+    </modules>
+    <global>
+        <helpers>
+            <locationbasedstore>
+                <class>Tailored_LocationBasedStore_Helper</class>
+            </locationbasedstore>
+        </helpers>
+
+        <models>
+            <locationbasedstore>
+                <class>Tailored_LocationBasedStore_Model</class>
+                <resourceModel>locationbasedstore_mysql4</resourceModel>
+            </locationbasedstore>
+        </models>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <controller_action_predispatch_handler>
+                        <type>model</type>
+                        <class>locationbasedstore/observer</class>
+                        <method>redirectToIpLocationBasedStore</method>
+                        <args></args>
+                    </controller_action_predispatch_handler>
+                </observers>
+            </controller_action_predispatch>
+        </events>
+    </global>
+</config>

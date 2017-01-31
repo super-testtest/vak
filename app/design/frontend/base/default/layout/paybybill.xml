@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+  <default>
+    <reference name="head">
+      <action method="addJs"><script>paybybill.js</script></action>
+      <action method="addCss"><script>css/paybybill.css</script></action> 
+    </reference>
+
+    <paybybill_forms>
+      <block output="toHtml" type="paybybill/form" name="paybybill.form" template="paybybill/form.phtml">
+        <block type="paybybill/form" name="paybybill.form.de" as="de" template="paybybill/forms/de.phtml"/>
+      </block>
+    </paybybill_forms>
+
+  </default>
+
+  <sales_order_print>
+      <reference name="order_totals">
+          <block name="pbb_invoice_fee" type="paybybill/order_fee" before="tax"/>
+      </reference>
+  </sales_order_print>
+
+  <sales_order_view>
+      <reference name="order_totals">
+          <block name="pbb_invoice_fee" type="paybybill/order_fee" before="tax"/>
+      </reference>
+  </sales_order_view>
+
+  <sales_order_invoice>
+      <reference name="invoice_totals">
+          <block name="pbb_invoice_fee" type="paybybill/invoice_fee" before="tax"/>
+      </reference>
+  </sales_order_invoice>
+
+  <sales_order_printinvoice>
+      <reference name="invoice_totals">
+          <block name="pbb_invoice_fee" type="paybybill/invoice_fee" before="tax"/>
+      </reference>
+  </sales_order_printinvoice>
+
+  <sales_email_order_items>
+      <reference name="order_totals">
+          <block name="pbb_invoice_fee" type="paybybill/order_fee" before="tax"/>
+      </reference>
+  </sales_email_order_items>
+
+  <sales_email_order_invoice_items>
+      <reference name="invoice_totals">
+          <block name="pbb_invoice_fee" type="paybybill/invoice_fee" before="tax"/>
+      </reference>
+  </sales_email_order_invoice_items>
+
+</layout>

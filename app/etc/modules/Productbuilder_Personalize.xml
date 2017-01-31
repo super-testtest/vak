@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Productbuilder_Personalize>
+			<active>true</active>
+			<codePool>local</codePool>
+			<!-- this node point to dependency from other modules -->
+			<depends>
+				<!-- specifying that out module should be loaded after Mage_Catalog -->
+                <Mage_Catalog />
+            </depends>
+		</Productbuilder_Personalize>
+	</modules>
+</config>

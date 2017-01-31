@@ -1,0 +1,40 @@
+<div>
+	<label for="custom_field"><b><?php echo $this->__('Note : This image will be used in category page and product detail page');?></b></label>
+</div>
+<div>
+<table>
+	<tr>
+		<td class="label"><label for="custom_field"><?php echo $this->__('Image');?></label></td>
+	    <td class="value">
+	        <input type="file" class="input-file" value="" name="previewImage" id="previewImage">
+	    </td>
+	</tr>
+</table>
+</div>
+<div class="clear"></div>
+ <?php 
+$product = Mage::registry('product');
+if ($product->getTypeId() == "customproduct") : 
+	$image = @$product->getPreviewImage();
+	if (!empty($image)) : 
+		list($Imgwidth, $Imgheight)  = getimagesize(Mage::getBaseUrl('media').'catalog/product/previewImage/'.$image); ?>
+	<div class="image" style="margin: 10px; padding: 5px;">
+	<?php
+	if($Imgwidth > 500 || $Imgheight > 500)
+	{
+		$image = Mage::getBaseUrl('media').'catalog/product/previewImage/'.$product->getPreviewImage();
+	?>
+		<img src="<?php echo Mage::getBaseUrl('media').'catalog/product/previewImage/'.$product->getPreviewImage();?>" alt="previewImage" width="500px" height="500px" />
+	<?php
+	}
+	else
+	{
+	?>
+		<img src="<?php echo Mage::getBaseUrl('media').'catalog/product/previewImage/'.$product->getPreviewImage();?>" alt="previewImage" />		
+	<?php
+	}
+	?>
+	</div>
+<?php
+	endif;
+endif; ?>

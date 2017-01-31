@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Tailored_Cronjobtable>
+      <version>0.1.0</version>
+    </Tailored_Cronjobtable>
+  </modules>
+  <global>
+    <helpers>
+      <cronjobtable>
+        <class>Tailored_Cronjobtable_Helper</class>
+      </cronjobtable>
+    </helpers>
+	<resources>
+	  <cronjobtable_setup>
+		<setup>
+		  <module>Tailored_Cronjobtable</module>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </cronjobtable_setup>
+	  <cronjobtable_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </cronjobtable_write>
+	  <cronjobtable_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </cronjobtable_read>
+	</resources>
+  </global>
+</config> 

@@ -1,0 +1,73 @@
+span.w3-mainmenu {
+    background: url('w3themes/icon.png') 75px 4px no-repeat !important;
+    padding: 0 20px 0 0px !important;
+    width: 100% !important;
+    text-transform: uppercase;
+    
+    text-shadow: 1px 1px #333333;
+    font-weight: bold;
+}
+
+span.w3-mainmenu-st {
+    background: url('w3themes/icon-s.png') 75px -1px no-repeat !important;
+    color: #645B6E;
+    padding: 0 0 0 0px !important;
+    text-shadow: 1px 1px #B1BCBD;
+    
+}
+
+#dresscodeconfig_dresscodeconfig_mainfront table,
+#dresscodeconfig_dresscodeconfig_socials table,
+#dresscodeconfig_dresscodeconfig_productlabels table{
+    border-spacing:0 3px;
+
+}
+#dresscodeconfig_dresscodeconfig_mainfront tr{position:relative;}
+
+#dresscodeconfig_dresscodeconfig_mainfront  td,
+#dresscodeconfig_dresscodeconfig_socials  td,
+#dresscodeconfig_dresscodeconfig_productlabels  td{
+    padding:15px !important;
+    border-bottom:1px solid #E9E9E9 !important;
+    border-top:1px solid #E9E9E9 !important;
+    border-right:1px solid #E9E9E9 !important;
+    background-color:#F5F5F5 !important;
+}
+#dresscodeconfig_dresscodeconfig_mainfront  td.label,
+#dresscodeconfig_dresscodeconfig_socials  td.label,
+#dresscodeconfig_dresscodeconfig_productlabels  td.label{
+    font-weight:bold;
+    font-size:15px;
+    border-left:1px solid #E9E9E9 !important;
+    border-right:none !important;
+
+}
+#dresscodeconfig_dresscodeconfig_mainfront  td.value,
+#dresscodeconfig_dresscodeconfig_socials  td.value,
+#dresscodeconfig_dresscodeconfig_productlabels  td.value{
+    border-right:none !important;
+    border-left:none !important;
+
+}
+#dresscodeconfig_dresscodeconfig_mainfront  td.use-default,
+#dresscodeconfig_dresscodeconfig_socials  td.use-default,
+#dresscodeconfig_dresscodeconfig_productlabels  td.use-default{
+    border-right:none !important;
+    border-left:none !important;
+
+}
+#dresscodeconfig_dresscodeconfig_mainfront  td.scope-label,
+#dresscodeconfig_dresscodeconfig_socials  td.scope-label,
+#dresscodeconfig_dresscodeconfig_productlabels  td.scope-label{
+    border-right:none !important;
+    border-left:none !important;
+
+}
+
+.columns .form-list td.value {
+    width: 320px;
+}
+
+#row_dresscodeconfig_dresscodeconfig_mainfront_imagehover .f-left{
+    margin: 0 40px 0 0;
+}

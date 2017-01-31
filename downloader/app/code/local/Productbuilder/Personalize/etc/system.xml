@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <tabs>
+        <personalize>
+            <label>personalize</label>
+            <sort_order>405</sort_order>
+        </personalize>
+    </tabs>
+    <sections>
+        <personalize translate="label" module="personalize">
+            <label>Print Order Cron</label>
+            <tab>personalize</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>120</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <email translate="label">
+                    <label>Cron Email configuration</label>
+                        <frontend_type>text</frontend_type>
+                        <sort_order>1</sort_order>
+                        <show_in_default>1</show_in_default>
+                        <show_in_website>1</show_in_website>
+                        <show_in_store>1</show_in_store>                           
+                        <fields>
+                            <allow translate="label">
+                                <label>Use Admin Email?</label>
+                                <frontend_type>select</frontend_type>
+                                <source_model>adminhtml/system_config_source_yesno</source_model>
+                                <sort_order>10</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>0</show_in_store>
+                                <can_be_empty>1</can_be_empty>
+                            </allow>
+                            <emailId translate="label">
+                                <label>Custom Email Address :</label>
+                                <frontend_type>text</frontend_type>
+                                <depends><allow>0</allow></depends>
+                                <sort_order>20</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <can_be_empty>1</can_be_empty>
+                            </emailId>
+                        </fields>
+                </email>
+            </groups>
+        </personalize>
+    </sections>
+</config>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  <pms_adminhtml_pmsbackend_index>
+	<reference name="content">
+	  <block type="pms/adminhtml_pmsbackend" name="pmsbackend" template="pms/pmsbackend.phtml"/>
+	</reference>
+  </pms_adminhtml_pmsbackend_index>
+  <pms_adminhtml_pms_index>
+	<reference name="content">
+	  <block type="pms/adminhtml_pms" name="pms" />
+	</reference>
+  </pms_adminhtml_pms_index>
+</layout>

@@ -1,0 +1,33 @@
+<div id ="mini_cart_block">
+    <div class="icon-cart-big"><a class="cart-url" href="<?php echo $this->getUrl('checkout/cart'); ?>"><span><?php echo Mage::helper('checkout/cart')->getSummaryCount(); ?></span></a></div>
+    <div class="block-cart mini_cart_ajax">
+        <?php $_cartQty = $this->getSummaryCount() ?>
+        <!--<span class="top-cart-icon"></span>-->
+        <span class="top-cart-title">
+            <?php echo $this->__('My Cart') ?><?php //echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
+        </span>
+        <span class="cart-arrow"></span>
+        <div class="top-cart-content">
+            <?php $_items = $this->getRecentItems() ?>
+            <?php if(count($_items)): ?>
+                <ol id="cart-sidebar" class="mini-products-list">
+                <?php foreach($_items as $_item): ?>
+                    <?php echo $this->getItemHtml($_item) ?>
+                <?php endforeach; ?>
+                </ol>
+                <script type="text/javascript">decorateList('cart-sidebar', 'none-recursive')</script>
+            <?php else: ?>
+                <p class="empty"><?php echo $this->__('You have no items in your shopping cart.') ?></p>
+            <?php endif ?>
+            <div class="subtotal"><?php echo $this->__('Subtotal') ?>: <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?></div>
+             
+            <?php if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
+                <div class="top-subtotal"><button type="button" title="<?php echo $this->__('View Cart') ?>" class="button" onclick="setLocation('<?php echo $this->getUrl('checkout/cart'); ?>')"><span><span><?php echo $this->__('View Cart') ?></span></span></button></div>
+            <div class="actions">
+                <?php echo $this->getChildHtml('extra_actions') ?>
+                <button type="button" title="<?php echo $this->__('Checkout') ?>" class="button" onclick="setLocation('<?php echo $this->getCheckoutUrl() ?>')"><span><span><?php echo $this->__('Checkout') ?></span></span></button>
+            </div>
+            <?php endif ?>
+        </div>
+    </div>
+</div>

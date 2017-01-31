@@ -1,0 +1,311 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_item = $this->getItem() ?>
+<?php $_order = $this->getItem()->getOrder();
+$session = Mage::getSingleton("core/session",  array("name"=>"frontend"));
+$myDeviceId = $session->getData("device_id");
+$myDeviceId1 = $session->getData("device_id1");
+?>
+
+<tr>
+    <td align="left" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;">
+        <strong style="font-size:11px;"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+        <?php if ($this->getItemOptions()): ?>
+        <dl style="margin:0; padding:0;">
+
+            <?php 
+                $_product = Mage::getModel('catalog/product')->load($_item->getProduct()->getID());
+                $productType = $_product->getTypeId();
+                $customOptionId = '';
+                if($productType == 'customproduct'){
+                    $image_price = '';
+                    $image_price_currency = '';
+                    
+                    $_taxHelper  = new Mage_Tax_Helper_Data;
+                    $CustomOptions = $_product->getOptions();
+                    $optionsAvail = count($CustomOptions);
+                   
+                    if ($optionsAvail && $optionsAvail == 1){
+                        foreach($CustomOptions as $optionKey => $optionVal)
+                        {
+
+                            foreach($optionVal->getValues() as $valuesKey => $valuesVal)
+                            {
+                                $optionPrice            = $valuesVal->getPrice(); // -208
+                                if($valuesVal->getSku() == Mage::helper('personalize')->getImageSku()){
+                                    $main_img_price         = $_taxHelper->getPrice($_product,$optionPrice,true);
+                                    $image_price            = $_taxHelper->getPrice($_product,$optionPrice,true);
+                                    $image_price_currency   = Mage::helper('core')->currency($image_price, true, false);
+                                    $image_price            = Mage::helper('core')->currency($image_price, false, false);
+                                    $imageOptionTypeId      = $valuesVal->getOptionTypeId();
+                                    $customOptionId         = $valuesVal->getOptionId();
+                                    // echo '<pre>';print_r($customOptionId);exit;
+                                }
+                            }
+                        }
+                    }
+                }
+            ?>
+
+            <?php foreach ($this->getItemOptions() as $option): ?>
+            <dt style="color: #808080;float: left; font: 600 10px 'Open Sans'; margin-right: 7px;text-transform: uppercase;"><strong><em><?php echo $option['label'] ?></em></strong></dt>
+            <dd style="font: 600 10px 'Open Sans';text-transform: uppercase;">
+                <?php echo nl2br($option['value']) ?>
+               
+                <?php if($option['option_id'] == $customOptionId && $productType == 'customproduct') : ?>
+                    <?php 
+                        $value_array = explode(',', $option['value']);
+                        $value_cnt = count($value_array);
+                        $total_price_w_c = $main_img_price * $value_cnt;
+                        $total_price   = Mage::helper('core')->currency($total_price_w_c, true, false);
+                    ?>
+                    
+                    <?php echo ' - '.$image_price_currency.' X '.$value_cnt.' = '.$total_price; ?>
+                <?php endif; ?>
+            </dd>
+
+            <?php endforeach; ?>
+
+            <?php
+            $replace1 = array("prb_","_");
+            $replace2 = array(""," ");
+
+            $attributesArray = $_item->getProductOptions();
+            
+            $excludeArray = array(
+                    'prb_img_x1',
+                    'prb_img_x2',
+                    'prb_img_y1',
+                    'prb_img_y2',
+                    'prb_customized_image',
+                    'prb_printer_back_colour',
+                    'prb_printer_title_colour',
+                    'prb_printer_text_colour',
+                    'prb_fa_text',
+                    'prb_printer_extratext_colour',
+                    'prb_printer_fa_colour',
+                    'prb_fonts',
+                    'prb_text_size',
+                    'prb_title_size',
+                    'prb_title_fonts',
+                    'prb_fa_size',
+                    'prb_extra_field',
+                    'prb_extra_font',
+                    'prb_extra_size',
+                    'prb_fa_image_path',
+                    'prb_smiley_image_path',
+                );
+            
+            foreach($attributesArray['info_buyRequest'] as $key=>$val) {
+                if (strpos($key,'prb_') !== false && $val != '') {
+                ?>
+
+                         <?php if(filter_var($val, FILTER_VALIDATE_URL)) :
+                                   $path = parse_url($val, PHP_URL_PATH);
+                                   $a    = explode('/' , $path);
+                                   $img  = $a[count($a)-1];
+                                   $ext  = pathinfo($img, PATHINFO_EXTENSION);
+                                   if (in_array($ext, array('svg','jpg','jpeg','png')))
+                                   {
+                                   }
+                                ?>
+                     <?php else : 
+                     if (!in_array($key, $excludeArray)):
+                     ?>
+                             <dt style="color: #808080;float: left; font: 600 10px 'Open Sans'; margin-right: 7px;text-transform: uppercase;">
+                                <?php $key = str_replace($replace1,$replace2,$key); ?>
+                                <?php $key = str_replace('tweezer', 'Forceps', $key); ?>
+                                <?php echo $this->__($key); ?>
+                            </dt>
+                             <dd style="font: 600 10px 'Open Sans';text-transform: uppercase;"><?php echo $val ?></dd>
+                    <?php endif;endif; ?>
+                <?php 
+                }
+            }
+            ?>
+
+        </dl>
+        <?php else : ?>
+        <dl style="margin:0; padding:0;">
+            <?php
+            $replace1 = array("prb_","_");
+            $replace2 = array(""," ");
+
+            $attributesArray = $_item->getProductOptions();
+            
+            $excludeArray = array(
+                    'prb_img_x1',
+                    'prb_img_x2',
+                    'prb_img_y1',
+                    'prb_img_y2',
+                    'prb_customized_image',
+                    'prb_printer_back_colour',
+                    'prb_printer_title_colour',
+                    'prb_printer_text_colour',
+                    'prb_fa_text',
+                    'prb_printer_extratext_colour',
+                    'prb_printer_fa_colour',
+                    'prb_name_title',
+                    'prb_fonts',
+                    'prb_title',
+                    'prb_text_size',
+                    'prb_title_size',
+                    'prb_title_fonts',
+                    'prb_fa_size',
+                    'prb_extra_field',
+                    'prb_extra_font',
+                    'prb_extra_size',
+                    'prb_fa_image_path',
+                    'prb_smiley_image_path',
+                );
+            
+            foreach($attributesArray['info_buyRequest'] as $key=>$val) {
+                if (strpos($key,'prb_') !== false && $val != '') {
+                ?>
+
+                         <?php if(filter_var($val, FILTER_VALIDATE_URL)) :
+                                   $path = parse_url($val, PHP_URL_PATH);
+                                   $a    = explode('/' , $path);
+                                   $img  = $a[count($a)-1];
+                                   $ext  = pathinfo($img, PATHINFO_EXTENSION);
+                                   if (in_array($ext, array('svg','jpg','jpeg','png')))
+                                   {
+                                   }
+                                ?>
+                     <?php else : 
+                     if (!in_array($key, $excludeArray)):
+                     ?>
+                             <dt style="color: #808080;float: left; font: 600 10px 'Open Sans'; margin-right: 7px;text-transform: uppercase;">
+                                 <?php $key = str_replace($replace1,$replace2,$key); ?>
+                                <?php $key = str_replace('tweezer', 'Forceps', $key); ?>
+                                <?php echo $this->__($key); ?>
+
+                            </dt>
+                             <dd style="font: 600 10px 'Open Sans';text-transform: uppercase;"><?php echo $val ?></dd>
+                    <?php endif;endif; ?>
+                <?php 
+                }
+            }
+            ?>
+        </dl>
+        <?php endif; ?>
+        <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
+        <?php if ($addInfoBlock) :?>
+            <?php echo $addInfoBlock->setItem($_item)->toHtml(); ?>
+        <?php endif; ?>
+        <?php echo $this->escapeHtml($_item->getDescription()) ?>
+    </td>
+    <td align="left" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;">
+        <?php echo str_replace(array('_','-'), ' ', $this->escapeHtml($this->getSku($_item))) ?></td>
+    <td align="center" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;"><?php echo $_item->getQtyOrdered()*1 ?></td>
+    <td align="right" valign="top" style="font-size:11px; padding:3px 9px; border-bottom:1px dotted #CCCCCC;">
+        <?php if ($this->helper('tax')->displaySalesPriceExclTax($_order->getStore()) || $this->helper('tax')->displaySalesBothPrices($_order->getStore())): ?>
+            <?php if ($this->helper('tax')->displaySalesBothPrices($_order->getStore())): ?>
+                <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax'); ?>:</span>
+            <?php endif; ?>
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'email', $_order->getStore())): ?>
+                <?php echo $_order->formatPrice($_item->getRowTotal()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()+$myDeviceId+$myDeviceId1); ?>
+            <?php else: ?>
+                <?php echo $_order->formatPrice($_item->getRowTotal()+$myDeviceId+$myDeviceId1) ?>
+            <?php endif; ?>
+
+
+            <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+                <br />
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'email', $_order->getStore())): ?>
+                    <small>
+                    <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount']+$myDeviceId+$myDeviceId1,true,true); ?></span><br />
+                    <?php endforeach; ?>
+                    </small>
+                <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'email', $_order->getStore())): ?>
+                    <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                        <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount']+$myDeviceId+$myDeviceId1,true,true); ?></small></span><br />
+                    <?php endforeach; ?>
+                <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'email', $_order->getStore())): ?>
+                    <small>
+                    <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount']+$myDeviceId+$myDeviceId1,true,true); ?></span><br />
+                    <?php endforeach; ?>
+                    </small>
+                <?php endif; ?>
+
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'email', $_order->getStore())): ?>
+                    <br />
+                    <span class="nobr"><?php echo Mage::helper('weee')->__('Total'); ?>:<br /> <?php echo $_order->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()+$myDeviceId+$myDeviceId1); ?></span>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endif; ?>
+
+
+        <?php if ($this->helper('tax')->displaySalesPriceInclTax($_order->getStore()) || $this->helper('tax')->displaySalesBothPrices($_order->getStore())): ?>
+            <?php if ($this->helper('tax')->displaySalesBothPrices($_order->getStore())): ?>
+                <br /><span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax'); ?>:</span>
+            <?php endif; ?>
+            <?php $_incl = $this->helper('checkout')->getSubtotalInclTax($_item); ?>
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'email', $_order->getStore())): ?>
+                    <?php echo $_order->formatPrice($_incl + Mage::helper('weee')->getRowWeeeTaxInclTax($_item)+$myDeviceId+$myDeviceId1); ?>
+                <?php else: ?>
+                    <?php echo $_order->formatPrice($_incl-$_item->getWeeeTaxRowDisposition()) ?>
+                <?php endif; ?>
+            <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+                <br />
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'email', $_order->getStore())): ?>
+                    <small>
+                    <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount_incl_tax']+$myDeviceId+$myDeviceId1,true,true); ?></span><br />
+                    <?php endforeach; ?>
+                    </small>
+                <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'email', $_order->getStore())): ?>
+                    <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                        <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount_incl_tax']+$myDeviceId+$myDeviceId1,true,true); ?></small></span><br />
+                    <?php endforeach; ?>
+                <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'email', $_order->getStore())): ?>
+                    <small>
+                    <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                        <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount_incl_tax']+$myDeviceId+$myDeviceId1,true,true); ?></span><br />
+                    <?php endforeach; ?>
+                    </small>
+                <?php endif; ?>
+
+                <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'email', $_order->getStore())): ?>
+                    <span class="nobr"><?php echo Mage::helper('weee')->__('Total incl. tax'); ?>:<br /> <?php echo $_order->formatPrice($_incl + Mage::helper('weee')->getRowWeeeTaxInclTax($_item)+$myDeviceId+$myDeviceId1); ?></span>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    </td>
+</tr>
+<?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('giftmessage/message')->getGiftMessage($_item->getGiftMessageId())): ?>
+<tr>
+    <td colspan="4" style=" border-bottom:2px solid #CCCCCC; padding:3px 9px;">
+        <strong style="color:#444444; font-size:11px;"><?php echo $this->__('Gift Message') ?></strong>
+        <?php echo $this->__('From:'); ?> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?><br />
+        <?php echo $this->__('To:'); ?> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?><br />
+        <strong><?php echo $this->__('Message:'); ?></strong><br /><?php echo $this->escapeHtml($_giftMessage->getMessage()) ?>
+    </td>
+</tr>
+<?php endif; ?>

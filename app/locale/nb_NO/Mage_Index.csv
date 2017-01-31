@@ -1,0 +1,47 @@
+%s Index process is working now. Please try run this process later.,%s Index prosessen fungerer nå . Vennligst prøv kjøre denne prosessen senere .
+%s index was rebuilt.,%s indeksen ble gjenoppbygd .
+'%s' Index Process Information,%s' Index Process Information
+Action,handling
+Cannot initialize the indexer process.,Kan ikke initialisere indekseringsprosessen .
+Change Index Mode,Endre indeksmodus
+"Click here to go to <a href=""%s"">Cache Management</a> and refresh cache types.","Klikk her for å gå til <a href=""%s""> Bufferadministrasjon</a> og oppdatere cache typer."
+"Click here to go to <a href=""%s"">Index Management</a> and rebuild required indexes.","Klikk her for å gå til <a href=""%s""> indeksforvaltning</a> og gjenoppbygge nødvendige indekser ."
+Delete,Slett
+Description,Beskrivelse
+Disable,Deaktiver
+Enable,aktiver
+General,Generelt
+Index,Hovedsiden
+Index Description,Indeks Beskrivelse
+Index Management,indeksforvaltning
+Index Mode,indeksmodus
+Index Name,Index Navn
+Index mode,indeksmodus
+Indexer code is not defined.,Indekser kode er ikke definert .
+Indexer model is not defined.,Indekser modellen er ikke definert .
+Indexer model should extend Mage_Index_Model_Indexer_Abstract.,Indekser modell bør utvide Mage_Index_Model_Indexer_Abstract .
+Manual Update,manuell oppdatering
+Mode,modus
+Never,aldri
+No,Nei
+One or more of the Indexes are not up to date:,En eller flere av de Indekser er ikke oppdatert :
+Please select Index(es),Vennligst velg Index ( es )
+Please select Indexes,Vennligst velg avskriftene
+Process Information,Process Information
+Processing,Processing
+Ready,Ready
+Refresh,Oppdater
+Reindex Data,Reindex data
+Reindex Required,Reindex Påkrevd
+Revoke,Tilbakekall
+Status,status
+System,system
+The index has been saved.,Indeksen har blitt lagret .
+There was a problem with reindexing process.,Det var et problem med reindekseringsprosessen .
+There was a problem with saving process.,Det var et problem med lagringsprosessen .
+Total of %d index(es) have changed index mode.,Totalt %d indeksen (e ) har endret indeksmodus .
+Total of %d index(es) have reindexed data.,Totalt %d indeksen (e ) har indekseres data .
+Update Required,Oppdater Påkrevd
+Update on Save,Oppdater på Lagre
+Updated At,Oppdatert På
+Yes,Ja

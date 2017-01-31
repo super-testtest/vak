@@ -1,0 +1,19 @@
+<p><?php echo $this->htmlEscape($this->getMethod()->getTitle()) ?></p>
+
+<?php if ($_specificInfo = $this->getPBBInfo()):?>
+<table>
+    <tbody>
+    <?php foreach ($_specificInfo as $_label => $_value):?>
+        <tr>
+            <th><?php echo $this->__($this->escapeHtml($_label))?>:</th>
+            <td><?php echo $this->escapeHtml($_value)?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php endif;?>
+<?php if ($_link = $this->getInvoiceLink()): ?>
+<a href="<?php echo $_link; ?>"><?php echo $this->__('Fetch the invoice'); ?></a>
+<?php endif; ?>
+
+<?php echo $this->getChildHtml()?>

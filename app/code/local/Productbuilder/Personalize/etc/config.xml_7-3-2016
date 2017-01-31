@@ -1,0 +1,164 @@
+<?xml version="1.0" ?>
+<config>
+	<modules>
+		<Productbuilder_Personalize>
+			<version>0.0.1</version>
+		</Productbuilder_Personalize>
+	</modules>
+	
+	<frontend>
+		<routers>
+			<personalize>
+				<use>standard</use>
+				<args>
+					<module>Productbuilder_Personalize</module>
+					<frontName>personalize</frontName>
+				</args>
+			</personalize>
+		</routers>
+        <translate>
+            <modules>
+                <personalize>
+                    <files>
+                        <default>Productbuilder_Personalize.csv</default>
+                    </files>
+                </personalize>
+            </modules>
+        </translate>		
+        <!-- This node contains module layout configuration -->
+		<layout>
+			<updates>
+				<!-- module alias -->
+				<personalize>
+					<!-- File for loading -->
+					<file>personalize.xml</file>
+				</personalize>
+			</updates>
+		</layout>
+	</frontend>
+	<global>
+        <blocks>
+            <personalize>
+                <class>Productbuilder_Personalize_Block</class>
+            </personalize>
+            <catalog>
+                <rewrite>
+                    <navigation>Productbuilder_Personalize_Block_Navigation</navigation>
+                </rewrite>
+            </catalog>
+	    <checkout>
+                <rewrite>
+                    <cart_totals>Productbuilder_Personalize_Block_Cart_Totals</cart_totals>
+                </rewrite>
+            </checkout>
+            <adminhtml>
+            	<rewrite>
+            		<catalog_product_edit_tabs>Productbuilder_Personalize_Block_Tabs</catalog_product_edit_tabs>
+            	</rewrite>
+            </adminhtml>
+        </blocks>
+		<helpers>
+            <personalize>
+                <class>Productbuilder_Personalize_Helper</class>
+            </personalize>
+        </helpers>       
+        <models>  
+			<personalize>
+				<class>Productbuilder_Personalize_Model</class>
+			</personalize>  
+			<sales>
+				<rewrite>
+					<quote>Productbuilder_Personalize_Model_Quote</quote>
+					<quote_item>Productbuilder_Personalize_Model_Quote_Item</quote_item>
+				</rewrite>
+			</sales>
+            <catalog>
+                <rewrite>
+                    <product_url>Productbuilder_Personalize_Model_Product_Url</product_url>
+                </rewrite>
+            </catalog>
+		</models> 
+		<events>
+			<!-- <checkout_cart_product_add_after>
+				<observers>
+					<productbuilder_personalize_saveAtt>
+	                    <class>Productbuilder_Personalize_Model_Observer</class>
+	                    <method>saveAttributes</method>
+	                    <type>singleton</type>
+	                </productbuilder_personalize_saveAtt>
+	            </observers>
+			</checkout_cart_product_add_after> -->
+
+            <!-- <checkout_cart_product_add_after>
+                <observers>
+                    <productbuilder_personalize_saveAtt>
+                        <class>Productbuilder_Personalize_Model_Observer</class>
+                        <method>updateProductPrice</method>
+                        <type>singleton</type>
+                    </productbuilder_personalize_saveAtt>
+                </observers>
+            </checkout_cart_product_add_after> -->
+
+            <catalog_product_save_after>
+                <observers>
+                    <personalize_save_product_data>
+                        <type>singleton</type>
+                        <class>Productbuilder_Personalize_Model_Observer</class>
+                        <method>saveProductTabData</method>
+                    </personalize_save_product_data>
+                </observers>
+            </catalog_product_save_after>
+
+            <!-- <catalog_product_view_config>
+                <observers>
+                    <personalize_save_product_datas>
+                        <type>singleton</type>
+                        <class>Productbuilder_Personalize_Model_Observer</class>
+                        <method>indexcron</method>
+                    </personalize_save_product_datas>
+                </observers>
+            </catalog_product_view_config> -->
+
+		</events> 
+	    <sales>
+    	    <quote>
+        	    <item>
+            	    <product_attributes>
+                	    <prb_back_colour/>
+                	    <prb_fonts/>
+                	    <prb_logo/>
+                	    <prb_logo_path/>
+                	</product_attributes>
+            	</item>
+        	</quote>
+    	</sales>
+    </global>
+    <adminhtml>
+    	<layout>
+			<updates>
+				<personalize>
+					<file>personalize.xml</file>
+				</personalize>
+			</updates>
+		</layout>
+    </adminhtml>
+    <default>
+    	<personalize>
+    		<email>
+    			<allow>1</allow>
+    		</email>
+    	</personalize>
+    </default>
+    <crontab>
+        <jobs>
+            <print_daily_order_reports>
+                <schedule>
+                    <cron_expr>30 23 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>personalize/observer::indexcron</model>
+                </run>
+            </print_daily_order_reports>
+        </jobs>
+    </crontab>
+</config>

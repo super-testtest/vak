@@ -1,0 +1,11 @@
+<layout version="0.1.0">
+    <adminhtml_catalog_product_edit>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/popup/popup.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/popup/imgareaselect-default.css</stylesheet></action>
+            <action method="addJs"><script>html5/jquery.js</script></action>
+            <action method="addJs"><script>popup/popup.js</script></action>
+            <action method="addJs"><script>popup/imgareasel/jquery.imgareaselect.pack.js</script></action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+</layout>

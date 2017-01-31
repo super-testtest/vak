@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<config>
+	<modules>
+		<Tasol_Catalog>
+			<version>0.0.1</version>
+		</Tasol_Catalog>
+	</modules>	
+	<global>
+        <helpers>
+            <catalog>
+                <rewrite>
+                    <product_compare>Tasol_Catalog_Helper_Product_Compare</product_compare>
+                </rewrite>
+            </catalog>
+        </helpers>
+    </global>
+</config>

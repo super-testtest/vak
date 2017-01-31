@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<!-- Root node for Magento layout configuration -->
+<layout version="0.1.0">
+	<!--Page handle -->
+	<personalize_index_index>
+		<!-- <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Contacts</crumbName>
+                <crumbInfo>
+                    <label>Personalized</label>
+                    <title>Personalized</title>
+                </crumbInfo>
+            </action>
+        </reference> -->
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/1column.phtml</template>
+			</action>
+		</reference>
+
+		<!-- Add Css for Upsell Products -->
+		<reference name="head">
+			<!-- <action method="addItem">
+				<type>js_css</type>
+				<name>slick/slick.css</name>
+			</action> -->
+			<!-- <action method="addItem"><type>js</type><name>html5/jQuery.min.1.10.2.js</name></action> -->
+			<action method="addItem"><type>js</type><name>html5/script.js</name></action> 
+			<action method="addItem"><type>js_css</type><name>lightSlider/css/lightSlider.css</name></action>
+            <action method="addJs" ifconfig="upsellslider/upsellslider_config/enabled"><script>w3themes/jq.slide.js</script></action>
+            <action method="addJs" ifconfig="upsellslider/upsellslider_config/enabled"><script>w3themes/flexslider.js</script></action>
+        </reference>
+
+		<!-- reference tag specifies the block where we a going to add child block -->
+		<reference name="content">
+			<!-- Our page content block -->
+		<block type="personalize/view" name="personalize" template="personalize/view.phtml">
+				<action method="setTierPriceTemplate"><template>catalog/product/view/tierprices.phtml</template></action>
+				<block type="catalog/product_list_related" name="catalog.product.related" as="related_products" template="catalog/product/list/builderrelated.phtml"/>
+		</block>
+		</reference>
+	</personalize_index_index>
+
+	<personalize_index_select>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/1column.phtml</template>
+			</action>
+		</reference>
+		<reference name="content">
+			<remove name="left"/>
+			<remove name="right"/>			
+			<remove name="footer"/>
+			<block type="core/template" name="personalize.select" template="personalize/select.phtml" />
+		</reference>
+	</personalize_index_select>
+</layout>

@@ -1,0 +1,29 @@
+--------------------------------------------------------------------------------
+AURIGMA HTML5/FLASH UPLOADER
+--------------------------------------------------------------------------------
+The /ImageUploaderPHP/ folder contains HTML5/Flash Uploader PHP files. HTML5/Flash Uploader PHP 
+is a collection of classes designed to embed the uploader into a PHP application and to handle 
+uploaded data. Using this collection of PHP scripts developers can add HTML5/Flash Uploader on 
+a page in a standardized way as an arbitrary PHP object.
+	
+To add HTML5/Flash Uploader PHP to your web application you just need to perform the following steps:
+
+1. Copy the /ImageUploaderPHP/ folder to an application.
+2. Link the Uploader.class.php file to a page which hosts HTML5/Flash Uploader.
+
+	<?php 
+		require_once "ImageUploaderPHP/Uploader.class.php";
+	?>
+
+3. Create a new instance of the Uploader class. Then configure HTML5/Flash Uploader and call the render() 
+method which generates HTML5/Flash Uploader code and writes it into a page.
+
+	<?php
+		$uploader = new Uploader("Uploader1");
+		//configure HTML5/Flash Uploader
+		$uploader->render();
+	?>
+
+Note: Call the render() method at the position on a PHP page where you want to insert the HTML5/Flash Uploader.
+
+Read the "Quick Start with HTML5/Flash Uploader PHP" topic in the documentation for details.

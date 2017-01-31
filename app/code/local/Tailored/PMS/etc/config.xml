@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Tailored_PMS>
+      <version>0.1.0</version>
+    </Tailored_PMS>
+  </modules>
+  <global>
+    <helpers>
+      <pms>
+        <class>Tailored_PMS_Helper</class>
+      </pms>
+    </helpers>
+	<blocks>
+	  <pms>
+		<class>Tailored_PMS_Block</class>
+	  </pms>
+	</blocks>
+	<models>
+	  <pms>
+		<class>Tailored_PMS_Model</class>
+		<resourceModel>pms_mysql4</resourceModel>
+	  </pms>
+	  <pms_mysql4>
+		<class>Tailored_PMS_Model_Mysql4</class>
+		<entities>		  
+			  <pms>
+				<table>pms</table>
+			  </pms>
+		</entities>
+	  </pms_mysql4>
+	</models>
+	<resources>
+	  <pms_setup>
+		<setup>
+		  <module>Tailored_PMS</module>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </pms_setup>
+	  <pms_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </pms_write>
+	  <pms_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </pms_read>
+	</resources>
+  </global>
+  <admin>
+	<routers>
+	  <pms>
+	    <use>admin</use>
+		<args>
+		  <module>Tailored_PMS</module>
+		  <frontName>admin_pms</frontName>
+		</args>
+	  </pms>
+	</routers>
+  </admin>
+  <adminhtml>
+	<menu>
+	  <pms module="pms">
+		<title>PMS</title>
+		<sort_order>100</sort_order>
+		<children>
+		  <!-- <pmsbackend module="pms">
+			<title>PMS Codes</title>
+			<sort_order>0</sort_order>
+			<action>admin_pms/adminhtml_pmsbackend</action>
+		  </pmsbackend> -->
+		  <pms module="pms">
+		    <title>Manage Pms</title>
+			<sort_order>0</sort_order>
+			<action>admin_pms/adminhtml_pms</action>
+		  </pms>
+		</children>
+	  </pms>
+	</menu>
+	<acl>
+	  <resources>
+		<all>
+		  <title>Allow Everything</title>
+		</all>
+		<admin>
+		  <children>
+			<pms translate="title" module="pms">
+			  <title>PMS</title>
+			  <sort_order>1000</sort_order>
+			  <children>
+		  <pmsbackend translate="title">
+			<title>PMS Codes</title>
+		  </pmsbackend>
+		  <pms translate="title">
+			<title>Manage Pms</title>
+			<sort_order>0</sort_order>
+		  </pms>
+			  </children>
+			</pms>
+		  </children>
+		</admin>
+	  </resources>
+	</acl>
+	<layout>
+	  <updates>
+		<pms>
+		  <file>pms.xml</file>
+		</pms>
+	  </updates>
+	</layout>
+  </adminhtml>
+</config> 

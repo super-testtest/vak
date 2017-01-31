@@ -1,0 +1,8 @@
+<config>
+	<modules>
+		<Enova_Mymodule>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Enova_Mymodule>
+	</modules>
+</config>

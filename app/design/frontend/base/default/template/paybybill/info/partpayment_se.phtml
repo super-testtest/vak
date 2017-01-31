@@ -1,0 +1,22 @@
+<h2>PayByBill Delbetalning</h2>
+<p>Med PayByBill och arvato Finance AB finns möjligheten att dela upp betalningen med PayByBill Konto. Du väljer själv vilket belopp du vill betala varje månad. Du kan när som helst utan extra kostnad välja att avsluta din delbetalning genom att betala in hela det resterande beloppet.</p>
+<p>För att betala med konto måste beställaren ha fyllt 18 år och vara folkbokförd i Sverige samt godkännas enligt den kreditprövning som görs vid köpet.</p>
+<p>Vid försenad betalning debiteras dröjsmålsränta om <?php echo $this->getPartpaymentLateFee(); ?> % per månad från fakturans förfallodag. Vid påminnelse debiteras lagstadgad avgift om för närvarande 60 kr.</p>
+<p>Arvato kommer att behandla beställarens personuppgifter i enlighet med personuppgiftslagen. Uppgifter kommer att insamlas och behandlas i syfte att slutföra den aktuella beställningen, identifiera beställaren, genomföra kreditkontroll samt för statistiska syften. Genom att välja betalning mot faktura, PayByBill Konto eller PayByBill delbetalning ger beställaren arvato rätt att via externa och interna databaser genomföra identifikations- och kreditkontroll.</p>
+
+<p><strong>Enkelt och översiktligt</strong></p>
+
+<p>När du handlar för mer än kr 400:-, får du ett erbjudande om delbetalning antingen
+i webbshopen eller på fakturan. Du väljer om du vill skapa ett konto genom
+att betala "Aktiveringsbelopp" som anges på fakturan. Du får då löpande månadsfakturor.
+Betalar du "Aktiveringsbelopp" kommer eventuella framtida köp läggas till ditt konto hos arvato.</p>
+
+<p>
+<?php if ($this->getInvoiceFee()): ?>
+En administrationsavgift på kr <?php echo $this->getInvoiceFee(); ?>:- tillkommer, i tillägg till
+en startavgift på kr 95:- om du inte tidigare har använt delbetalning hos arvato Finance.
+<?php else: ?>
+En startavgift på kr 95:- tillkommer om du inte tidigare har använt delbetalning hos arvato Finance.
+<?php endif; ?>
+Utöver detta betalar du en månatlig ränta på (för närvarande) 1,63% av kreditbeloppet. Räntan kapitaliseras månadsvis.
+</p>

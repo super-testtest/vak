@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<default>
+		<reference name="left">
+			<block type="Ecomwise_FreeBestsellerssidebar/bestsellers" name="ecomwise.freebestsellerssidebar.bestsellers" as="bestsellers"/>
+			<block type="fbfanbox/fbfanbox" name="fbfanbox.fbfanbox" template="w3themes/fbfanbox/fbfanbox.phtml"/>
+		</reference>
+	</default>
+    <freebestsellerssidebar_index_index>
+        <reference name="content">
+            <block type="Ecomwise_FreeBestsellerssidebar/bestsellers" name="ecomwise.freebestsellerssidebar.bestsellers" as="bestsellers"/>
+            <block type="fbfanbox/fbfanbox" name="fbfanbox.fbfanbox" template="w3themes/fbfanbox/fbfanbox.phtml"/>
+        </reference>
+    </freebestsellerssidebar_index_index>
+</layout> 

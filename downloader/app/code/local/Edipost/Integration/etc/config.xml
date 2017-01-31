@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+
+	<!-- Register module -->
+	<modules>
+		<Edipost_Integration>
+			<version>0.1.0</version>
+		</Edipost_Integration>
+	</modules>
+
+	<global>
+		<!-- Add a button to the shipment page -->
+		<blocks>
+			<adminhtml>
+				<rewrite>
+					<sales_order_view>Edipost_Integration_Block_Adminhtml_Sales_Order_View</sales_order_view>
+				</rewrite>
+			</adminhtml>
+		</blocks>
+	</global>
+
+
+		<!-- Add controller to the admin front end -->
+		<admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Edipost_Integration after="Mage_Adminhtml">Edipost_Integration</Edipost_Integration>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+</config>

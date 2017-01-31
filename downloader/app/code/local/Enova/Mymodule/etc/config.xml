@@ -1,0 +1,32 @@
+<config>
+	<modules>
+		<Enova_Mymodule>
+			<version>0.1.0</version>
+		</Enova_Mymodule>
+	</modules>
+	<frontend>
+		<routers>
+			<mymodule>
+				<use>standard</use>
+				<args>
+					<module>Enova_Mymodule</module>
+					<frontName>mymodule</frontName>
+				</args>
+			</mymodule>
+		</routers>
+		<layout>
+			<updates>
+				<mymodule>
+					<file>mymodule.xml</file>
+				</mymodule>
+			</updates>
+		</layout>
+	</frontend>
+	<global>
+		<blocks>
+			<mymodule>
+				<class>Enova_Mymodule_Block</class>
+			</mymodule>
+		</blocks>
+	</global>
+</config>

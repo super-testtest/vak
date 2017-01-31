@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<config>
+	<modules>
+		<Tasol_Customerlink>
+			<version>0.0.1</version>
+		</Tasol_Customerlink >
+	</modules>	
+    <global>
+        <blocks>
+            <customer>
+                <rewrite>
+                    <account_navigation>Tasol_Customerlink_Block_Account_Navigation</account_navigation>
+                </rewrite>
+            </customer>
+        </blocks>
+    </global>
+</config>

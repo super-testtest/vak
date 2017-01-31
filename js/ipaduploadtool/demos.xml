@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- The key attribute used to link demo data to site node in Web.sitemap. -->
+<demos>
+	<demoGroup title="HTML5/Flash Uploader">
+		<demo key="basicdemo">
+			<shortDescription>
+                This simple application is a quick start demo with minimum settings.
+            </shortDescription>
+			<fullDescription>
+				<p>
+                    This demo application is quick start demo with a minimum set of settings. 
+                    The application demonstrates how to:
+                </p>
+				<ul>
+					<li>Upload files from client machines.</li>
+					<li>Receive files on a server and put them into a destination folder.</li>
+					<li>Redirect to another page after successful upload.</li>
+				</ul>
+				<p>
+                    After the upload process completes, uploader redirects you to a page containing 
+                    links to the uploaded files.
+                </p>
+				<p class="license-description">
+					This demo application works with any edition of Upload Suite (<strong>Express</strong>, 
+					<strong>Professional</strong>, and <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP">
+					<file name="Default.asp" location="~/_DemoPortal/SourceCode/ASP/Samples_ImageUploaderFlashJavaScript/BasicDemo/Default.asp" />
+					<file name="Upload.asp" location="~/_DemoPortal/SourceCode/ASP/Samples_ImageUploaderFlashJavaScript/BasicDemo/Upload.asp" />
+					<file name="Gallery.asp" location="~/_DemoPortal/SourceCode/ASP/Samples_ImageUploaderFlashJavaScript/BasicDemo/Gallery.asp" />
+				</platform>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/BasicDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/BasicDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/BasicDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/BasicDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="ColdFusion">
+					<file name="index.cfm" location="~/_DemoPortal/SourceCode/ColdFusion/Samples_ImageUploaderFlashJavaScript/BasicDemo/index.cfm" />
+					<file name="upload.cfm" location="~/_DemoPortal/SourceCode/ColdFusion/Samples_ImageUploaderFlashJavaScript/BasicDemo/upload.cfm" />
+					<file name="gallery.cfm" location="~/_DemoPortal/SourceCode/ColdFusion/Samples_ImageUploaderFlashJavaScript/BasicDemo/gallery.cfm" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/BasicDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/BasicDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/BasicDemo/gallery.php" />
+				</platform>
+				<platform title="JSP">
+					<file name="index.jsp" location="~/_DemoPortal/SourceCode/JSP/Samples_ImageUploaderFlashJavaScript/web/BasicDemo/index.jsp" />
+					<file name="upload.jsp" location="~/_DemoPortal/SourceCode/JSP/Samples_ImageUploaderFlashJavaScript/web/BasicDemo/upload.jsp" />
+					<file name="gallery.jsp" location="~/_DemoPortal/SourceCode/JSP/Samples_ImageUploaderFlashJavaScript/web/BasicDemo/gallery.jsp" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/BasicDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/BasicDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/BasicDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="resizeimages">
+			<shortDescription>
+                Resize images on the client-side before uploading them.
+            </shortDescription>
+			<fullDescription>
+				<p>
+					This demo application demonstrates how HTML5/Flash Uploader can be used to resize images 
+                    on the client's machines before uploading them to the Web server. The following key features 
+                    are used in the application:
+				</p>
+				<ul>
+					<li>
+						Three resized copies are prepared for each photo selected for upload (small, medium, and large) 
+                        and sent to the Web server.
+					</li>
+					<li>
+						The uploader allows the filtering based on photo formats.
+					</li>
+				</ul>
+				<p class="support-notice">
+					This demo application is supported by <strong>HTML5 Uploader</strong> (Firefox, Chrome, IE 10) and <strong>Flash Uploader</strong> (IE 9 and earlier, Opera, Safari, ...).
+				</p>
+				<p class="license-description">
+					Different editions of Flash Uploader apply different limitations to output thumbnail size:
+					<strong>Express</strong> - up to 3 Mpix. <strong>Professional</strong> - up to 5Mpix,
+					<strong>Premium</strong> - no limits.
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/ImageUploadDemo/ResizedPhotoUploadDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/ImageUploadDemo/ResizedPhotoUploadDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/ImageUploadDemo/ResizedPhotoUploadDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/ImageUploadDemo/ResizedPhotoUploadDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/ResizedPhotoUploadDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/ResizedPhotoUploadDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/ResizedPhotoUploadDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/ResizedPhotoUploadDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/ResizedPhotoUploadDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/ResizedPhotoUploadDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="addingwatermark">
+			<shortDescription>
+                Apply watermarks on photos on the client-side before uploading them.
+            </shortDescription>
+			<fullDescription>
+				<p>
+                    This demo application illustrates how to put watermarks on images uploaded with Flash Uploader.
+                    It places the text or image watermark in the bottom right corner of the image. Additionally, 
+                    in this demo you will see the following features in action:
+                </p>
+				<ul>
+                    <li>Upload original image along with a small thumbnail. </li>
+					<li>File filter.</li>
+				</ul>
+				<p class="support-notice">
+					This demo application is supported by <strong>Flash Uploader</strong> only (IE, Firefox, Chrome, Opera, Safari, ...), HTML5 Uploader cannot be used for watermarking images.
+				</p>
+				<p class="license-description">
+					The demo requires any edition of Upload Suite (<strong>Express</strong>,
+					<strong>Professional</strong>, or <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/ImageUploadDemo/WatermarkDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/ImageUploadDemo/WatermarkDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/ImageUploadDemo/WatermarkDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/ImageUploadDemo/WatermarkDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/WatermarkDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/WatermarkDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/WatermarkDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/WatermarkDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/WatermarkDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/WatermarkDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="extractexif">
+			<shortDescription>
+				This sample application demonstrates how to extract EXIF metadata from photos using Flash Uploader.
+			</shortDescription>
+			<fullDescription>
+				<p>
+                    In this demo application users can upload photos to a Web site and then view places where the images were made on Google Maps:
+                </p>
+				<ul>
+					<li>Extract and pass geographical information stored in EXIF to the server.</li>
+					<li>Create and send high and low resolution thumbnails along with the original image.</li>
+					<li>Add a comment to every uploaded image.</li>
+				</ul>
+				<p>
+					Make sure that photos selected to upload have GPS data in EXIF.
+				</p>
+				<p class="support-notice">
+					This demo application is supported by <strong>Flash Uploader</strong> only (IE, Firefox, Chrome, Opera, Safari, ...), HTML5 Uploader cannot be used for working with EXIF information.
+				</p>
+				<p class="license-description">
+					This demo application works with any edition of Upload Suite (<strong>Express</strong>,
+					<strong>Professional</strong>, or <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/ImageUploadDemo/ExifDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/ImageUploadDemo/ExifDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/ImageUploadDemo/ExifDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/ImageUploadDemo/ExifDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/ExifDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/ExifDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/ImageUploadDemo/ExifDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/ExifDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/ExifDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/ImageUploadDemo/ExifDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="auxiliarydata">
+			<shortDescription>
+                This application demonstrates how to pass additional data along with uploaded files.
+            </shortDescription>
+			<fullDescription>
+				<p>
+                    This sample application demonstrates how to pass additional data required by a Web site along with files
+                    uploaded with HTML5/Flash Uploader. Just specify the server-side folder name where to save the uploaded files and the uploader 
+                    will upload files there. The application illustrates the following key features:
+                </p>
+				<ul>
+					<li>Uploading additional data in HTTP POST fields.</li>
+					<li>
+                        Getting user descriptions uploaded along with files. Users specify descriptions for several files and they will be uploaded to a Web server.
+                    </li>
+				</ul>
+				<p class="support-notice">
+					This demo application is supported by <strong>HTML5 Uploader</strong> (Firefox, Chrome, Safari, IE 10) and <strong>Flash Uploader</strong> (IE 9 and earlier, Opera, ...).
+				</p>
+				<p class="license-description">
+					The demo requires any edition of Upload Suite (<strong>Express</strong>,
+					<strong>Professional</strong>, or <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/FileUploadDemo/AuxiliaryDataUploadDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/FileUploadDemo/AuxiliaryDataUploadDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/FileUploadDemo/AuxiliaryDataUploadDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/FileUploadDemo/AuxiliaryDataUploadDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/FileUploadDemo/FoldersUploadDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/FileUploadDemo/FoldersUploadDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/FileUploadDemo/FoldersUploadDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/FileUploadDemo/FoldersUploadDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/FileUploadDemo/FoldersUploadDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/FileUploadDemo/FoldersUploadDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="localization">
+			<shortDescription>
+				Translate HTML5/Flash Uploader to various languages.
+			</shortDescription>
+			<fullDescription>
+				<p>
+                    This demo application demonstrates how to use HTML5/Flash Uploader on international websites when several languages need to be supported.
+                </p>
+				<p class="support-notice">
+					This demo application is supported by <strong>HTML5 Uploader</strong> (Firefox, Chrome, Safari, IE 10) and <strong>Flash Uploader</strong> (IE 9 and earlier, Opera, ...).
+				</p>
+				<p class="license-description">
+					The demo requires any edition of Upload Suite (<strong>Express</strong>,
+					<strong>Professional</strong>, or <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/LocalizationDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/LocalizationDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/LocalizationDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/LocalizationDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/LocalizationDemo/index.php" />
+					<file name="upload.php" location="~/LocalizationDemo/upload.php" />
+					<file name="gallery.php" location="~/LocalizationDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/LocalizationDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/LocalizationDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/LocalizationDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="restrictions">
+			<shortDescription>
+                Restrict files that can be uploaded.
+            </shortDescription>
+			<fullDescription>
+				<p>
+                    This sample application demonstrates how to specify restrictions on the files before uploading them to a Web server, such as:
+                </p>
+				<ul>
+					<li>Filtering files by names and types.</li>
+					<li>Setting limitations to single file size, number of uploaded files, and total upload size.</li>
+				</ul>
+				<p class="support-notice">
+					This demo application is supported by <strong>HTML5 Uploader</strong> (Firefox, Chrome, IE 10) and <strong>Flash Uploader</strong> (IE 9 and earlier, Opera, Safari, ...).
+				</p>
+				<p class="license-description">
+					The demo requires any edition of Upload Suite (<strong>Express</strong>,
+					<strong>Professional</strong>, or <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/CustomizationDemo/FileRestrictionsDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/CustomizationDemo/FileRestrictionsDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/CustomizationDemo/FileRestrictionsDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/CustomizationDemo/FileRestrictionsDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/CustomizationDemo/FileRestrictionsDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/CustomizationDemo/FileRestrictionsDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/CustomizationDemo/FileRestrictionsDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/FileRestrictionsDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/FileRestrictionsDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/FileRestrictionsDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="customuidemo">
+			<shortDescription>
+				Customize HTML5/Flash Uploader colors, fonts, icons, and buttons.
+			</shortDescription>
+			<fullDescription>
+				<p>
+					This sample application demonstrates how to customize the user interface of HTML5/Flash Uploader.
+				</p>
+				<p class="support-notice">
+					This demo application is supported by <strong>HTML5 Uploader</strong> (Firefox, Chrome, Safari, IE 10) and <strong>Flash Uploader</strong> (IE 9 and earlier, Opera, ...).
+				</p>
+				<p class="license-description">
+					The demo requires any edition of Upload Suite (<strong>Express</strong>,
+					<strong>Professional</strong>, or <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/CustomizationDemo/CustomUIDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/CustomizationDemo/CustomUIDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/CustomizationDemo/CustomUIDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/CustomizationDemo/CustomUIDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/CustomizationDemo/CustomUIDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/CustomizationDemo/CustomUIDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/CustomizationDemo/CustomUIDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/CustomUIDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/CustomUIDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/CustomizationDemo/CustomUIDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="photooptimization">
+			<shortDescription>
+                Optimize photos for specified print size before uploading them with Flash Uploader.
+            </shortDescription>
+			<fullDescription>
+				<p>
+                    This sample application demonstrates how to optimize photos for different print sizes with Flash Uploader.
+                    You just specify on which paper size photos are going to be printed, and after that the application calculates the optimal image size.
+                    Flash Uploader then resizes images to this calculated size before it uploads them.
+                    This approach allows users to reduce the amount of traffic sent from client machines to a Web server.
+                    Other Flash Uploader features demonstrated here are:
+                </p>
+				<ul>
+					<li>Copying EXIF data from original to the optimized photo.</li>
+					<li>Automatic rotation of photos depending on EXIF information in the file.</li>
+					<li>Changing thumbnail size dynamically at run-time.</li>
+				</ul>
+				<p class="support-notice">
+					This demo application is supported by <strong>Flash Uploader</strong> only (IE, Firefox, Chrome, Opera, Safari, ...), HTML5 Uploader cannot be used for working with EXIF information.
+				</p>
+				<p class="license-description">
+					The demo requires the <strong>Professional</strong> or <strong>Premium</strong> edition of Flash Uploader.
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/PhotoBusinessDemo/PhotoOptimizationDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/PhotoBusinessDemo/PhotoOptimizationDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/PhotoBusinessDemo/PhotoOptimizationDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/PhotoBusinessDemo/PhotoOptimizationDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/PhotoBusinessDemo/PhotoOptimizationDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/PhotoBusinessDemo/PhotoOptimizationDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/PhotoBusinessDemo/PhotoOptimizationDemo/gallery.php" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/PhotoBusinessDemo/PhotoOptimizationDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/PhotoBusinessDemo/PhotoOptimizationDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/PhotoBusinessDemo/PhotoOptimizationDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+		<demo key="ajaxdemo">
+			<shortDescription>
+                This example shows how to use HTML5/Flash Uploader in AJAX-enabled applications.                
+            </shortDescription>
+			<fullDescription>
+				<p>
+                    This sample application demonstrates how to update an uploaded files list in 
+                    "real time". Other features involved in this application are listed here:                    
+                </p>
+				<ul>
+					<li>The uploader allows selecting only image formats with a pre-configured file filter.</li>
+					<li>Resize and rotate image before upload.</li>
+					<li>Create and send a low resolution thumbnail along with the original image.</li>
+				</ul>
+				<p class="support-notice">
+					This demo application is supported by <strong>HTML5 Uploader</strong> (Firefox, Chrome, IE 10) and <strong>Flash Uploader</strong> (IE 9 and earlier, Opera, Safari, ...).
+				</p>
+				<p class="license-description">
+					This demo application works with any edition of Upload Suite (<strong>Express</strong>,
+					<strong>Professional</strong>, or <strong>Premium</strong>).
+				</p>
+			</fullDescription>
+			<files>
+				<platform title="ASP.NET - C#">
+					<file name="default.aspx" location="~/AjaxDemo/Default.aspx" />
+					<file name="default.aspx.cs" location="~/AjaxDemo/Default.aspx.cs" />
+					<file name="gallery.aspx" location="~/AjaxDemo/Gallery.aspx" />
+					<file name="gallery.aspx.cs" location="~/AjaxDemo/Gallery.aspx.cs" />
+				</platform>
+				<platform title="JavaScript">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/AjaxDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/AjaxDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashJavaScript/AjaxDemo/gallery.php" />
+				</platform>
+				<platform title="JSP">
+					<file name="index.jsp" location="~/_DemoPortal/SourceCode/JSP/Samples_ImageUploaderFlashJavaScript/web/AjaxDemo/index.jsp" />
+					<file name="upload.jsp" location="~/_DemoPortal/SourceCode/JSP/Samples_ImageUploaderFlashJavaScript/web/AjaxDemo/upload.jsp" />
+					<file name="gallery.jsp" location="~/_DemoPortal/SourceCode/JSP/Samples_ImageUploaderFlashJavaScript/web/AjaxDemo/gallery.jsp" />
+				</platform>
+				<platform title="PHP">
+					<file name="index.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/AjaxDemo/index.php" />
+					<file name="upload.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/AjaxDemo/upload.php" />
+					<file name="gallery.php" location="~/_DemoPortal/SourceCode/PHP/Samples_ImageUploaderFlashPHP/AjaxDemo/gallery.php" />
+				</platform>
+			</files>
+		</demo>
+	</demoGroup>
+</demos>

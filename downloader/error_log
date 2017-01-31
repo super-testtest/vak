@@ -1,0 +1,2 @@
+[12-Apr-2016 06:53:14 America/Chicago] PHP Warning:  simplexml_load_file(): I/O warning : failed to load external entity &quot;/home/vaktromm/public_html/app/etc/local.xml&quot; in /home/vaktromm/public_html/app/Mage.php on line 767
+[12-Apr-2016 11:53:14 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/vaktromm/public_html/app/Mage.php:767) in /home/vaktromm/public_html/downloader/Maged/Controller.php on line 795

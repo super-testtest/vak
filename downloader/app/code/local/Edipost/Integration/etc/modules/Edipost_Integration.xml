@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Edipost_Integration>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Edipost_Integration>
+    </modules>
+</config>

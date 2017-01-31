@@ -1,0 +1,102 @@
+<div>
+	<button class="scissorpopup" onclick="openPopUp()"><?php echo $this->__('Select Area with Scissors');?></button>
+	<div id="scissorpopup">
+		<div class="closeScissor"></div>
+        
+	   	<span class="ecs_tooltip">Press Esc to close <span class="arrow"></span></span>
+        
+		<div id="popup_content_scissor">
+		<?php $product = Mage::registry('product');?>
+
+		 <h5 class="boxtite1"><?php echo $this->__('You can Select the Area either by Drag & Drop or by changing the Co-ordinates Input ');?></h5>
+		 <h5 class="boxtite2"><?php echo $this->__('Note : Please save the product once you finish editing ');?></h5>
+
+		<input type="hidden" name="scissorx1Val" id="scissorx1Val" value="<?php echo $product->getPrbImgSciX1();?>" ></input>
+		<input type="hidden" name="scissorx2Val" id="scissorx2Val" value="<?php echo $product->getPrbImgSciX2();?>"></input>
+		<input type="hidden" name="scissory1Val" id="scissory1Val" value="<?php echo $product->getPrbImgSciY1();?>"></input>
+		<input type="hidden" name="scissory2Val" id="scissory2Val" value="<?php echo $product->getPrbImgSciY2();?>"></input>
+        <div class="boximg">
+            <?php list($Imgwidth, $Imgheight)  = getimagesize(Mage::helper('catalog/image')->init($product, 'image'));
+
+				if($Imgwidth > 395 && $Imgheight > 770)
+				{
+			?>
+
+				<img id="imgScissorSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image')->resize(395,770); ?>"/>
+			<?php } 
+				else if($Imgwidth > 395 && $Imgheight < 770)
+				{
+				?>
+					<img id="imgScissorSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image')->resize(395,$Imgheight); ?>"  > 
+				<?php
+				}
+
+				else if($Imgwidth < 395 && $Imgheight > 770)
+				{
+				?>
+					<img id="imgScissorSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image')->resize($Imgwidth,770); ?>"  > 
+				<?php
+				}
+
+				else 
+				{
+				?>
+					<img id="imgScissorSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image'); ?>"  > 
+				<?php
+				}
+			?>
+            
+            <?php /*list($Imgwidth, $Imgheight)  = getimagesize(Mage::helper('catalog/image')->init($product, 'image'));
+
+				if($Imgwidth > 395 || $Imgheight > 770)	//if($Imgwidth > 395 || $Imgheight > 570)
+				{
+			?>
+
+				<img id="imgScissorSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image')->resize(395,770); ?>"/>
+			<?php } 
+				else 
+				{
+				?>
+					<img id="imgScissorSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image'); ?>"  > 
+				<?php
+				}
+			*/?>
+</div>
+
+		<div style class="poprightbox" ="float:right;">	
+			<div style="float:left";>
+			<label for="x1">X1:</label>
+			<input type="text" name="showscissorx1" id="showscissorx1" value="<?php echo $product->getPrbImgSciX1() ? $product->getPrbImgSciX1() : '' ;?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+
+			<div style="float:left";>
+			<label for="x1">X2:</label>
+			<input type="text" name="showscissory1" id="showscissory1" value="<?php echo ($product->getPrbImgSciY1()) ? $product->getPrbImgSciY1() :'';?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+
+			<div style="float:left";>
+			<label for="x1">Y1:</label>		
+			<input type="text" name="showscissorx2" id="showscissorx2" value="<?php echo ($product->getPrbImgSciX2()) ? $product->getPrbImgSciX2() : '';?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+
+			<div style="float:left";>
+			<label for="x1">Y2:</label>
+			<input type="text" name="showscissory2" id="showscissory2" value="<?php echo ($product->getPrbImgSciY2()) ? $product->getPrbImgSciY2() : '';?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+		</div>	
+
+		</div>
+	</div>
+		<div class="loader"></div>
+	   	<div id="backgroundScissorPopup"></div>
+</div>
+
+<script type="text/javascript">
+$j = jQuery.noConflict();
+
+	function openPopUp()
+	{
+		return false;
+	}
+
+</script>

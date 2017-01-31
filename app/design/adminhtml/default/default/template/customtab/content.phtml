@@ -1,0 +1,100 @@
+<?php $product = Mage::registry('product');
+$image =  @$product->getImage();
+?>
+<?php if(Mage::helper('catalog/image')->init($product, 'image',$image) && Mage::helper('catalog/image')->init($product, 'image',$image) != "")
+{
+?>
+<div>
+	<button class="topopup" onclick="openPopUp()">Select Area</button>
+	<div id="toPopup">
+		<div class="close"></div>
+        
+	   	<span class="ecs_tooltip">Press Esc to close <span class="arrow"></span></span>
+        
+		<div id="popup_content">
+
+		 <h5 class="boxtite1"><?php echo $this->__('You can Select the Area either by Drag & Drop or by changing the Co-ordinates Input ');?></h5>
+		 <h5 class="boxtite2"><?php echo $this->__('Note : Please save the product once you finish editing ');?></h5>
+
+		<input type="hidden" name="x1Val" id="x1Val" value="<?php echo $product->getPrbImgX1();?>" ></input>
+		<input type="hidden" name="x2Val" id="x2Val" value="<?php echo $product->getPrbImgX2();?>"></input>
+		<input type="hidden" name="y1Val" id="y1Val" value="<?php echo $product->getPrbImgY1();?>"></input>
+		<input type="hidden" name="y2Val" id="y2Val" value="<?php echo $product->getPrbImgY2();?>"></input>
+        <div class="boximg">
+            <?php //print"<pre/>";print_r(Mage::helper('catalog/image')->init($product, 'image'));exit;?>
+            <?php list($Imgwidth, $Imgheight)  = getimagesize(Mage::helper('catalog/image')->init($product, 'image',$image));
+
+				if($Imgwidth > 395 && $Imgheight > 770)
+				{
+			?>
+
+				<img id="imgSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image',$image)->resize(395,770); ?>"/>
+			<?php } 
+				else if($Imgwidth > 395 && $Imgheight < 770)
+				{
+				?>
+					<img id="imgSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image',$image)->resize(395,$Imgheight); ?>"  > 
+				<?php
+				}
+
+				else if($Imgwidth < 395 && $Imgheight > 770)
+				{
+				?>
+					<img id="imgSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image',$image)->resize($Imgwidth,770); ?>"  > 
+				<?php
+				}
+
+				else 
+				{
+				?>
+					<img id="imgSel" src="<?php echo Mage::helper('catalog/image')->init($product, 'image',$image); ?>"  > 
+				<?php
+				}
+			?>
+</div>
+			<?php /*  <img id="imgSel" src="<?php echo  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product/'.$product->getImage(); ?>" height = "490px" width="400px"> */ ?>
+
+		<div style class="poprightbox" ="float:right;">	
+			<div style="float:left";>
+			<label for="x1">X1:</label>
+			<input type="text" name="showx1" id="showx1" value="<?php echo $product->getPrbImgX1() ? $product->getPrbImgX1() : '' ;?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+
+			<div style="float:left";>
+			<label for="x1">X2:</label>
+			<input type="text" name="showy1" id="showy1" value="<?php echo ($product->getPrbImgY1()) ? $product->getPrbImgY1() :'';?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+
+			<div style="float:left";>
+			<label for="x1">Y1:</label>		
+			<input type="text" name="showx2" id="showx2" value="<?php echo ($product->getPrbImgX2()) ? $product->getPrbImgX2() : '';?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+
+			<div style="float:left";>
+			<label for="x1">Y2:</label>
+			<input type="text" name="showy2" id="showy2" value="<?php echo ($product->getPrbImgY2()) ? $product->getPrbImgY2() : '';?>" style="width:50px;" ></input></div>
+			<div style="clear:both"></div>
+		</div>	
+
+		</div>
+	</div>
+		<div class="loader"></div>
+	   	<div id="backgroundPopup"></div>
+</div>
+
+<script type="text/javascript">
+$j = jQuery.noConflict();
+
+	function openPopUp()
+	{
+		return false;
+	}
+
+</script>
+<?php
+}
+else
+{
+	echo $this->__("Please upload base image for the product to select the product builder area");
+}
+?>

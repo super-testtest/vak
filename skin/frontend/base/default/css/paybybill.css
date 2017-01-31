@@ -1,0 +1,98 @@
+#container_payment_method_pbbinvoice p {
+    margin: 4px 0;
+}
+#container_payment_method_pbbpartpay input[type='checkbox'] {
+    margin: 6px 5px 8px 0;
+}
+#container_payment_method_pbbpartpay .form-list p,
+#container_payment_method_pbbinvoice .form-list p {
+  margin: 4px 0;
+  padding: 0;
+}
+#pbb_terms {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid black;
+ /*   height: 400px;*/
+    min-height:400px;
+    padding: 20px;
+    position: absolute;
+    width: 500px;
+    z-index: 99999;
+}
+#pbb_terms_text {
+    height: 95%;
+    text-align: left;
+    width: 100%;
+}
+#pbb_terms > a {
+    font-size: 16px;
+    font-weight: bold;
+}
+#pbb_terms_text h2 {
+    color: #0071A5;
+    font-size: 22px;
+    font-weight: normal;
+    margin: 0 0 10px;
+}
+#pbb_terms p {
+    margin: 0 0 10px;
+}
+
+
+#pbb_ppterms {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid black;
+    height: 600px;
+    padding: 5px;
+    padding-bottom: 20px;
+    position: absolute;
+    width: 800px;
+    z-index: 99999;
+}
+#pbb_ppterms_text {
+    height: 95%;
+    text-align: left;
+    width: 100%;
+}
+
+#pbb_ppterms_text iframe {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+#pbb_terms_text ul {
+  margin-left: 16px;
+  list-style-type: disc;
+}
+
+#pbb_ppterms a {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+div#pptLoading {
+    background-image: url("../paybybill/ajax-loader.gif");
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding: 0 20px;
+}
+
+
+div#pbb_progress {
+    background-image: url("../paybybill/ajax-loader.gif");
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding: 0 20px;
+}
+.payment-methods dt {
+	padding-top: 12px;
+}	
+
+p.pbb-credit-approved {
+    color: green;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #f0f0f0;
+    padding: 6px 10px;
+}

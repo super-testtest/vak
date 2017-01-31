@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0.0">
+  <default>
+    <reference name="head">
+      <action method="addCss">
+        <stylesheet>arvato/css/trustnpay.css</stylesheet>
+      </action>
+    </reference>
+    <reference name="content">
+      <block type="arvato/trustnpay_info" name="arvato_trustnpay_info"/>
+      <block type="arvato/trustnpay_form" name="arvato_trustnpay_form"/>
+    </reference>
+  </default>
+</layout>
+

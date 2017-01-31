@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Tasol_Customerlink>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Tasol_Customerlink>
+    </modules>
+</config>

@@ -1,0 +1,265 @@
+<?xml version="1.0" ?>
+<config>
+  <modules>
+    <Trollweb_Paybybill>
+      <version>1.2.1</version>
+    </Trollweb_Paybybill>
+  </modules>
+  
+  <frontend>
+    <secure_url>
+      <paybybill_invoice>/paybybill/invoice</paybybill_invoice>
+      <paybybill_customer>/paybybill/customer</paybybill_customer>
+      <paybybill_terms>/paybybill/terms</paybybill_terms>
+    </secure_url>  
+	  <routers>
+		  <paybybill>
+			  <use>standard</use>
+			  <args>
+				  <module>Trollweb_Paybybill</module>
+				  <frontName>paybybill</frontName>
+			  </args>
+		  </paybybill>
+		</routers>
+    <layout>
+      <updates>
+        <paybybill>
+          <file>paybybill.xml</file>
+        </paybybill>
+      </updates>
+    </layout>   
+    <translate>
+      <modules>
+        <Trollweb_Paybybill>
+          <files>
+            <default>Trollweb_PayByBill.csv</default>
+          </files>
+        </Trollweb_Paybybill>
+      </modules>
+    </translate>
+  </frontend>
+
+  <adminhtml>
+    <translate>
+      <modules>
+        <Trollweb_Paybybill>
+          <files>
+            <default>Trollweb_PayByBill.csv</default>
+          </files>
+        </Trollweb_Paybybill>
+      </modules>
+    </translate>
+    <layout>
+      <updates>
+        <paybybill>
+          <file>paybybill.xml</file>
+        </paybybill>
+      </updates>
+    </layout>
+  </adminhtml>
+
+  <global>
+    <models>
+      <paybybill>
+        <class>Trollweb_Paybybill_Model</class>
+        <resourceModel>paybybill_mysql4</resourceModel>
+      </paybybill>
+      <paybybill_mysql4>
+        <class>Trollweb_Paybybill_Model_Mysql4</class>
+        <entities>
+          <orderdata>
+            <table>paybybill_orderdata</table>
+          </orderdata>
+          <invoicedata>
+            <table>paybybill_invoicedata</table>
+          </invoicedata>
+        </entities>
+      </paybybill_mysql4>
+    </models>
+
+    <helpers>
+      <paybybill>
+        <class>Trollweb_Paybybill_Helper</class>
+      </paybybill>
+    </helpers>
+    
+    <blocks>
+      <paybybill>
+        <class>Trollweb_Paybybill_Block</class>
+      </paybybill>
+    </blocks>
+  
+    <resources>
+      <paybybill_setup>
+        <setup>
+          <module>Trollweb_Paybybill</module>
+          <class>Trollweb_Paybybill_Model_Setup</class>
+        </setup>
+        <connection>
+          <use>core_setup</use>
+        </connection>
+      </paybybill_setup>
+    </resources>
+
+    <sales>
+      <quote>
+        <totals>
+          <paybybill_fee>
+            <class>paybybill/payment_quote_total</class>
+            <after>subtotal,discount,shipping</after>
+            <before>tax,grand_total</before> 
+            <renderer>paybybill/payment_quote_fee</renderer>
+          </paybybill_fee>
+          <paybybill_tax>
+            <class>paybybill/payment_quote_tax</class>
+            <after>subtotal,discount,shipping,tax</after>
+            <before>grand_total</before>
+          </paybybill_tax>
+        </totals>
+      </quote>
+       
+      <order_invoice>
+        <totals>
+          <paybybill_fee>
+            <class>paybybill/payment_invoice_total</class>
+            <after>subtotal,discount,shipping</after>
+            <before>tax</before> 
+          </paybybill_fee>
+          <paybybill_tax>
+            <class>paybybill/payment_invoice_tax</class>
+            <after>subtotal,discount,shipping,tax</after>
+            <before>grand_total</before>
+          </paybybill_tax>
+        </totals>
+      </order_invoice>
+       
+      <order_creditmemo>
+        <totals>
+          <paybybill_fee>
+            <class>paybybill/payment_creditmemo_total</class>
+          </paybybill_fee>
+        </totals>
+      </order_creditmemo>
+        <order>
+            <statuses>
+                <pending_invoice translate="label">
+                    <label>Pending Batch Invoice</label>
+                </pending_invoice>
+            </statuses>
+        </order>
+    </sales>
+    
+    
+    <events>
+      <sales_order_invoice_save_after>
+        <observers>
+          <trollweb_paybybill_save_invoice>
+            <class>paybybill/observer</class>
+            <method>sales_order_invoice_save_after</method>
+          </trollweb_paybybill_save_invoice>
+        </observers>
+      </sales_order_invoice_save_after>
+      <sales_order_creditmemo_save_after>
+        <observers>
+          <trollweb_paybybill_save_creditmemo>
+            <class>paybybill/observer</class>
+            <method>sales_order_creditmemo_save_after</method>
+          </trollweb_paybybill_save_creditmemo>
+        </observers>
+      </sales_order_creditmemo_save_after>
+      <order_cancel_after>
+        <observers>
+          <trollweb_paybybill_cancel_order>
+            <class>paybybill/observer</class>
+            <method>order_cancel_after</method>
+          </trollweb_paybybill_cancel_order>
+        </observers>
+      </order_cancel_after>
+    </events>
+    
+  </global>
+  
+
+  <admin>
+    <routers>
+      <paybybill>
+        <use>admin</use>
+        <args>
+            <module>Trollweb_Paybybill</module>
+            <frontName>paybybill</frontName>
+        </args>
+      </paybybill>
+    </routers>
+  </admin>  
+  
+  <default>
+    <sales>
+      <totals_sort>
+        <paybybill_fee>39</paybybill_fee>
+      </totals_sort>
+    </sales>
+    <payment>
+      <pbbinvoice>
+        <model>Trollweb_Paybybill_Model_Payment_Invoice</model>
+        <active>0</active>
+        <title>PayByBill Invoice</title>
+        <username backend_model="adminhtml/system_config_backend_encrypted" />
+        <password backend_model="adminhtml/system_config_backend_encrypted" />
+        <clientid backend_model="adminhtml/system_config_backend_encrypted" />
+        <payment_action>authorize</payment_action>
+        <order_status>processing</order_status>
+        <invoice_profile>1</invoice_profile>
+        <allowspecific>1</allowspecific>
+        <specificcountry>NO,SE,DK,FI</specificcountry>
+        <sort_order>0</sort_order>
+      </pbbinvoice>
+      <pbbpartpay>
+        <model>Trollweb_Paybybill_Model_Payment_Partpayment</model>
+        <active>0</active>
+        <title>PayByBill Partpayment</title>
+        <username backend_model="adminhtml/system_config_backend_encrypted" />
+        <password backend_model="adminhtml/system_config_backend_encrypted" />
+        <clientid backend_model="adminhtml/system_config_backend_encrypted" />
+        <payment_action>authorize</payment_action>
+        <order_status>processing</order_status>
+        <invoice_profile>1</invoice_profile>
+        <allowspecific>1</allowspecific>
+        <specificcountry>NO,SE,DK,FI</specificcountry>
+        <sort_order>0</sort_order>
+      </pbbpartpay>
+      <pbbdirect>
+        <model>Trollweb_Paybybill_Model_Payment_Directdebet</model>
+        <active>0</active>
+        <title>PayByBill DirectDebet</title>
+        <username backend_model="adminhtml/system_config_backend_encrypted" />
+        <password backend_model="adminhtml/system_config_backend_encrypted" />
+        <clientid backend_model="adminhtml/system_config_backend_encrypted" />
+        <payment_action>authorize</payment_action>
+        <order_status>processing</order_status>
+        <invoice_profile>1</invoice_profile>
+        <allowspecific>1</allowspecific>
+        <specificcountry>DE</specificcountry>
+        <sort_order>0</sort_order>
+      </pbbdirect>
+    </payment>
+    <advanced>
+      <paybybill>
+        <demo>0</demo>
+        <rawlog>0</rawlog>
+      </paybybill>
+    </advanced>    
+  </default>
+    <crontab>
+        <jobs>
+            <paybybill_run_batch>
+                <schedule>
+                    <cron_expr>30 23 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>paybybill/observer::runBatch</model>
+                </run>
+            </paybybill_run_batch>
+        </jobs>
+    </crontab>
+  
+</config>

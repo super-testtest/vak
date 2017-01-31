@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Productbuilder_Tab>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Productbuilder_Tab>
+    </modules>
+</config>

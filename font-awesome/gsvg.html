@@ -1,0 +1,28 @@
+<svg id="svgroot" xmlns="http://www.w3.org/2000/svg" xlinkns="http://www.w3.org/1999/xlink" width="452" height="704" x="30" y="5" overflow="visible">
+<defs>
+<filter id="canvashadow" filterUnits="objectBoundingBox">
+	<feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+	<feOffset in="blur" dx="5" dy="5" result="offsetBlur"/>
+	<feMerge>
+		<feMergeNode in="offsetBlur"/>
+		<feMergeNode in="SourceGraphic"/>
+	</feMerge>
+</filter>
+</defs>
+
+<svg id="canvasBackground" width="335" height="155" x="30" y="5" overflow="visible" style="pointer-events:none">
+	<rect width="100%" height="155" x="15" y="15" stroke="#000" fill="transparent" style="pointer-events:none"/>
+</svg>
+
+<animate attributeName="opacity" begin="indefinite" dur="1" fill="freeze"/>
+
+<svg id="svgcontent" width="335" height="378" x="30" y="5" overflow="hidden" xmlns="http://www.w3.org/2000/svg" xmlns:se="http://svg-edit.googlecode.com" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<g style="pointer-events:all">
+		<text x="250" y="150" 
+        font-family="FontAwesome" font-size="55" fill="red" >
+    &#xf164
+  </text>
+	</g>
+</svg>
+
+<g id="selectorParentGroup" transform="translate(30,5)" style="display: none;"><rect id="selectorRubberBand" fill="#56B9E9" fill-opacity="0.15" stroke="#56B9E9" stroke-width="0.5" display="none" style="pointer-events:none"/><g id="selectorGroup0" transform="" display="inline"><path id="selectedBox0" fill="none" stroke="#3399FF" stroke-dasharray="5,5" style="pointer-events:none" d="M108,274.5 L227,274.5 227,309.5 108,309.5z"/><g display="inline"><circle id="selectorGrip_resize_nw" fill="#56B9E9" r="4" style="cursor:nw-resize" stroke-width="2" pointer-events="all" cx="108" cy="274.5"/><circle id="selectorGrip_resize_n" fill="#56B9E9" r="4" style="cursor:n-resize" stroke-width="2" pointer-events="all" cx="167.5" cy="274.5"/><circle id="selectorGrip_resize_ne" fill="#56B9E9" r="4" style="cursor:ne-resize" stroke-width="2" pointer-events="all" cx="227" cy="274.5"/><circle id="selectorGrip_resize_e" fill="#56B9E9" r="4" style="cursor:e-resize" stroke-width="2" pointer-events="all" cx="227" cy="292"/><circle id="selectorGrip_resize_se" fill="#56B9E9" r="4" style="cursor:se-resize" stroke-width="2" pointer-events="all" cx="227" cy="309.5"/><circle id="selectorGrip_resize_s" fill="#56B9E9" r="4" style="cursor:s-resize" stroke-width="2" pointer-events="all" cx="167.5" cy="309.5"/><circle id="selectorGrip_resize_sw" fill="#56B9E9" r="4" style="cursor:sw-resize" stroke-width="2" pointer-events="all" cx="108" cy="309.5"/><circle id="selectorGrip_resize_w" fill="#56B9E9" r="4" style="cursor:w-resize" stroke-width="2" pointer-events="all" cx="108" cy="292"/><line id="selectorGrip_rotateconnector" stroke="#56B9E9" x1="167.5" y1="274.5" x2="167.5" y2="254.5"/><circle id="selectorGrip_rotate" fill="lime" r="4" stroke="#56B9E9" stroke-width="2" style="cursor:url(http://192.168.5.10/vaktrommet/js/html5/images/rotate.png) 12 12, auto;" cx="167.5" cy="254.5"/></g></g></g></svg>
